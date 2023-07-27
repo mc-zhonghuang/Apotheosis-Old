@@ -14,6 +14,7 @@ public class PacketDigging implements Packet {
     public void encode() {
         if (PacketChannel.sendLoginPacket) {
             PacketManager.sendPacket(new PacketRegister("3.4.2", UuidUtil.getUuid()));
+            PacketChannel.sendLoginPacket = false;
             PacketManager.debug("login was successful!");
         }
     }
