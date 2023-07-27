@@ -68,7 +68,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
             }
         } else if (packet instanceof C0DPacketCloseWindow) {
             inventoryOpen = false;
-            if (mc.currentScreen instanceof GuiChest) {
+            if (((C0DPacketCloseWindow) packet).windowId != 0) {
                 chestCloseTicks = 0;
                 event.setCancelled();
                 chestId = ((C0DPacketCloseWindow) packet).windowId;

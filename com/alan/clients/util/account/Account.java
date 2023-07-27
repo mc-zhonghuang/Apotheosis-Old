@@ -32,4 +32,9 @@ public class Account {
         this.username = username;
         this.uuid = SkinUtil.uuidOf(username);
     }
+
+    public void setOfflineUsername(String username) {
+        this.username = username;
+        this.uuid = SkinUtil.uuidOf("Steve");
+    }
 }

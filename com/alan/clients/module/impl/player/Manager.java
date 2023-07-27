@@ -34,7 +34,7 @@ import util.time.StopWatch;
 @ModuleInfo(name = "module.player.manager.name", description = "module.player.manager.description", category = Category.PLAYER)
 public class Manager extends Module {
 
-    private final BoundsNumberValue delay = new BoundsNumberValue("Delay", this, 100, 150, 50, 500, 50);
+    private final BoundsNumberValue delay = new BoundsNumberValue("Delay", this, 100, 150, 0, 500, 50);
 
     private final BooleanValue legit = new BooleanValue("Legit", this, false);
 

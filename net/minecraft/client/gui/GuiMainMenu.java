@@ -28,6 +28,7 @@ import net.optifine.reflect.Reflector;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.UuidUtil;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
@@ -292,6 +293,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, Instance
             MicrosoftLogin.getRefreshToken(refreshToken -> {
                 if (refreshToken != null) {
                     final MicrosoftLogin.LoginData login = MicrosoftLogin.login(refreshToken);
+                    if (login.uuid.equalsIgnoreCase("0")) login.uuid = UuidUtil.getTimeBasedUuid().toString();
                     mc.session = new Session(login.username, login.uuid, login.mcToken, "microsoft");
                 }
             });

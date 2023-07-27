@@ -32,13 +32,4 @@ public class WatchdogSprint extends Mode<Scaffold> {
         mc.thePlayer.motionX *= 1.01 - Math.random() / 50f;
         mc.thePlayer.motionZ *= 1.01 - Math.random() / 50f;
     };
-
-    @EventLink
-    public final Listener<PacketSendEvent> onPacketSend = event -> {
-        Packet<?> p = event.getPacket();
-
-        if (p instanceof C03PacketPlayer) {
-            ((C03PacketPlayer) p).onGround = false;
-        }
-    };
 }

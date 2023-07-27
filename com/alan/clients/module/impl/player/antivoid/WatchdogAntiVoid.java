@@ -11,6 +11,7 @@ import com.alan.clients.newevent.impl.other.TeleportEvent;
 import com.alan.clients.newevent.impl.other.WorldChangeEvent;
 import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.util.packet.PacketUtil;
+import com.alan.clients.util.player.MoveUtil;
 import com.alan.clients.util.player.PlayerUtil;
 import com.alan.clients.value.Mode;
 import com.alan.clients.value.impl.NumberValue;
@@ -73,7 +74,7 @@ public class WatchdogAntiVoid extends Mode<AntiVoid> {
                     PacketUtil.sendNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(position.xCoord, position.yCoord + 0.1, position.zCoord, false));
                 }
             } else {
-                if (mc.thePlayer.onGround) {
+                if (PlayerUtil.isBlockUnder(0.1) || mc.thePlayer.onGround) {
                     position = new Vec3(wrapper.x, wrapper.y, wrapper.z);
                 }
 

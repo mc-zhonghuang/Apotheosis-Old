@@ -2,6 +2,7 @@ package net.minecraft.client.network;
 
 import com.alan.clients.Client;
 import com.alan.clients.newevent.impl.other.TeleportEvent;
+import com.alan.clients.protocol.hyt.germmod.PacketManager;
 import com.alan.clients.ui.menu.impl.main.MainMenu;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
@@ -1410,6 +1411,11 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
      */
     public void handleCustomPayload(final S3FPacketCustomPayload packetIn) {
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
+
+        if (packetIn.getChannelName().equals(PacketManager.serverChannelName)) {
+            PacketManager.processPacket(packetIn.getBufferData());
+            return;
+        }
 
         if ("MC|TrList".equals(packetIn.getChannelName())) {
             final PacketBuffer packetbuffer = packetIn.getBufferData();

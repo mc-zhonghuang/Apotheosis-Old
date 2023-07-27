@@ -712,6 +712,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
                                         }
                                     } catch (Exception exception) {
                                         exception.printStackTrace();
+                                        if (entity2 == null) return;
                                         ChatUtil.display("Check console entity: " + entity2.getCommandSenderName());
                                         System.out.println("Removing entity because of error");
                                         mc.theWorld.removeEntity(entity2);
