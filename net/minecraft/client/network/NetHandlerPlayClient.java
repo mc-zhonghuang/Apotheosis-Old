@@ -1412,6 +1412,13 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
     public void handleCustomPayload(final S3FPacketCustomPayload packetIn) {
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
 
+        if (packetIn.getChannelName().equalsIgnoreCase("REGISTER")) {
+            final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+            buffer.writeBytes("FML|HS FML FML|MP FML FORGE germplugin-netease hyt0 armourers".getBytes());
+            this.netManager.sendPacket(new C17PacketCustomPayload("REGISTER", buffer));
+            return;
+        }
+
         if (packetIn.getChannelName().equals(PacketManager.serverChannelName)) {
             PacketManager.processPacket(packetIn.getBufferData());
             return;

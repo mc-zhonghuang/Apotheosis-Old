@@ -32,6 +32,7 @@ import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.newevent.impl.render.MouseOverEvent;
 import com.alan.clients.newevent.impl.render.Render2DEvent;
 import com.alan.clients.newevent.impl.render.RenderItemEvent;
+import com.alan.clients.protection.manager.TargetManager;
 import com.alan.clients.util.RandomUtil;
 import com.alan.clients.util.RayCastUtil;
 import com.alan.clients.util.chat.ChatUtil;
@@ -84,6 +85,7 @@ public final class KillAura extends Module {
             .add(new SubMode("NCP"))
             .add(new SubMode("Watchdog"))
             .add(new SubMode("Watchdog HvH"))
+            .add(new SubMode("GrimAC"))
             .add(new SubMode("Legit"))
             .add(new SubMode("Intave"))
             .add(new SubMode("Old Intave"))
@@ -143,7 +145,7 @@ public final class KillAura extends Module {
     private final StopWatch clickStopWatch = new StopWatch();
 
     private float randomYaw, randomPitch, angle;
-    private boolean blocking, swing, allowAttack;
+    public boolean blocking, swing, allowAttack;
 
     private long nextSwing;
 
@@ -236,7 +238,21 @@ public final class KillAura extends Module {
             return;
         }
 
-        target = targets.get(0);
+        if (mode.getValue().getName().equalsIgnoreCase("Single"))
+            target = targets.get(0);
+        else
+            if (this.switchChangeTicks.finished(RandomUtil.nextInt(switchTicks.getMin().intValue(), switchTicks.getMax().intValue())) && targets.size() > 1) {
+                Client.INSTANCE.getTargetManager().updateTargets();
+                if (targets.contains(target)) {
+                    targets.remove(target);
+                    Entity oldTarget = target;
+                    target = targets.get(0);
+                    targets.add(oldTarget);
+                } else {
+                    target = targets.get(0);
+                }
+                this.switchChangeTicks.reset();
+            }
 
 //        while (target == null || pastTargets.contains(target) || mc.thePlayer.getDistance(target.posX, target.posY, target.posZ) > range.getValue().doubleValue()) {
 //            target = targets.get(0);
@@ -509,18 +525,6 @@ public final class KillAura extends Module {
                         }
 
                         case "Switch": {
-                            if (this.switchChangeTicks.finished(RandomUtil.nextInt(switchTicks.getMin().intValue(), switchTicks.getMax().intValue())) && targets.size() > 1) {
-                                if (targets.contains(target)) {
-                                    targets.remove(target);
-                                    Entity oldTarget = target;
-                                    target = targets.get(0);
-                                    targets.add(oldTarget);
-                                } else {
-                                    target = targets.get(0);
-                                }
-                                this.switchChangeTicks.reset();
-                            }
-                            if (target == null) return;
                             if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) ||
                                     (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target)) {
                                 this.attack(target);
@@ -717,6 +721,7 @@ public final class KillAura extends Module {
                 break;
 
             case "Watchdog HvH":
+            case "GrimAC":
                 mc.gameSettings.keyBindUseItem.setPressed(true);
                 if ((this.hitTicks == 1 || !this.blocking) && !BadPacketsComponent.bad(false, true, true, true, false)) {
                     this.block(false, true);

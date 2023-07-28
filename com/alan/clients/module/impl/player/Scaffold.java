@@ -75,6 +75,7 @@ public class Scaffold extends Module {
             .add(new BypassSprint("Bypass", this))
             .add(new VulcanSprint("Vulcan", this))
             .add(new MatrixSprint("Matrix", this))
+            .add(new HuaYuTingSprint("HuaYuTing", this))
             .add(new WatchdogSprint("Watchdog", this))
             .setDefault("Normal");
 
@@ -282,6 +283,7 @@ public class Scaffold extends Module {
                 } else {
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
                     targetYaw = mc.thePlayer.rotationYaw - yawOffset;
+                    if (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && MoveUtil.isMoving()) targetPitch = 16f;
                 }
                 break;
         }

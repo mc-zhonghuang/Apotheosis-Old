@@ -23,6 +23,8 @@ public class NoSlow extends Module {
             .add(new CatACNoSlow("Cat Anti Cheat", this))
             .add(new IntaveNoSlow("Intave", this))
             .add(new OldIntaveNoSlow("Old Intave", this))
+            .add(new OldIntaveNoSlow("HuaYuTing", this))
+            .add(new GrimACNoSlow("GrimAC", this))
             .add(new VariableNoSlow("Variable", this))
             .add(new PredictionNoSlow("Prediction", this))
             .setDefault("Vanilla");
