@@ -50,7 +50,6 @@ public class Blink extends Module {
             PingSpoofComponent.dispatch();
 
             deSpawnEntity();
-            spawnEntity();
         }
     };
 
@@ -74,16 +73,16 @@ public class Blink extends Module {
 
     public void spawnEntity() {
         if (blinkEntity == null) {
-//            blinkEntity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
-//            blinkEntity.setPositionAndRotation(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch);
-//            blinkEntity.rotationYawHead = mc.thePlayer.rotationYawHead;
-//            blinkEntity.setSprinting(mc.thePlayer.isSprinting());
-//            blinkEntity.setInvisible(mc.thePlayer.isInvisible());
-//            blinkEntity.setSneaking(mc.thePlayer.isSneaking());
-//            blinkEntity.inventory = mc.thePlayer.inventory;
-//            Client.INSTANCE.getBotManager().add(blinkEntity);
-//
-//            mc.theWorld.addEntityToWorld(blinkEntity.getEntityId(), blinkEntity);
+            blinkEntity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+            blinkEntity.setPositionAndRotation(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch);
+            blinkEntity.rotationYawHead = mc.thePlayer.rotationYawHead;
+            blinkEntity.setSprinting(mc.thePlayer.isSprinting());
+            blinkEntity.setInvisible(mc.thePlayer.isInvisible());
+            blinkEntity.setSneaking(mc.thePlayer.isSneaking());
+            blinkEntity.inventory = mc.thePlayer.inventory;
+            Client.INSTANCE.getBotManager().add(blinkEntity);
+
+            mc.theWorld.addEntityToWorld(blinkEntity.getEntityId(), blinkEntity);
         }
     }
 }

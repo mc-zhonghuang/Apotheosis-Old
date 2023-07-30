@@ -252,6 +252,8 @@ public final class KillAura extends Module {
                     target = targets.get(0);
                 }
                 this.switchChangeTicks.reset();
+            } else if (targets.size() == 1) {
+                target = targets.get(0);
             }
 
 //        while (target == null || pastTargets.contains(target) || mc.thePlayer.getDistance(target.posX, target.posY, target.posZ) > range.getValue().doubleValue()) {

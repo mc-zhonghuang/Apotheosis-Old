@@ -39,9 +39,7 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Objects;
@@ -259,7 +257,6 @@ public class Scaffold extends Module {
                 break;
 
             case "UPDATED-NCP":
-
                 if (ticksOnAir > 0 && !RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
                 }
@@ -278,12 +275,16 @@ public class Scaffold extends Module {
             case "Telly":
                 if (mc.thePlayer.offGroundTicks >= 3) {
                     if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
-                        getRotations(yawOffset);
+                        final Vector2f rotations = RotationUtil.getRotations(blockFace, enumFacing.getEnumFacing());
+                        targetPitch = rotations.y;
+                        targetYaw = rotations.x;
+//                        targetPitch = mc.thePlayer.rotationPitch;
+//                        targetYaw = mc.thePlayer.rotationYaw;
                     }
                 } else {
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
                     targetYaw = mc.thePlayer.rotationYaw - yawOffset;
-                    if (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && MoveUtil.isMoving()) targetPitch = 16f;
+                    if (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && MoveUtil.isMoving()) targetPitch = (float) MathUtil.getRandom(90, 85);
                 }
                 break;
         }
@@ -327,7 +328,7 @@ public class Scaffold extends Module {
         switch (this.mode.getValue().getName()) {
             case "Telly": {
                 if (mc.thePlayer.onGround && MoveUtil.isMoving()) {
-                    mc.thePlayer.jump();
+//                    mc.thePlayer.jump();
                 }
             }
         }
@@ -381,6 +382,8 @@ public class Scaffold extends Module {
         if (this.sameY.getValue().getName().equals("Auto Jump")) {
             mc.gameSettings.keyBindJump.setPressed((mc.thePlayer.onGround && MoveUtil.isMoving()) || mc.gameSettings.keyBindJump.isPressed());
         }
+
+        if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks < 3) return;
 
         // Same Y
         final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !mc.gameSettings.keyBindJump.isKeyDown()) && MoveUtil.isMoving();
@@ -446,7 +449,15 @@ public class Scaffold extends Module {
             targetYaw = rotations.x;
             targetPitch = rotations.y;
         }
+
+        if (mode.getValue().getName().equalsIgnoreCase("Telly")) {
+            final Vector2f rotations = RotationUtil.getRotations(blockFace, enumFacing.getEnumFacing());
+
+            targetYaw = mc.thePlayer.rotationYaw - 180 - yawOffset;
+            targetPitch = rotations.y;
+        }
     }
+
 
 
     @EventLink()

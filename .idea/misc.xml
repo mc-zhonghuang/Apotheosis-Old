@@ -4,8 +4,11 @@
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="com.alan.clients.newevent.annotations.EventLink" />
     </list>
+    <writeAnnotations>
+      <writeAnnotation name="com.alan.clients.newevent.annotations.EventLink" />
+    </writeAnnotations>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="corretto-1.8 (2)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

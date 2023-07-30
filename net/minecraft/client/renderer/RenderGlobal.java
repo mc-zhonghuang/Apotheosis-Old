@@ -690,6 +690,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
 
                                 if (!flag || Reflector.callBoolean(entity2, Reflector.ForgeEntity_shouldRenderInPass, Integer.valueOf(i))) {
                                     try {
+                                        if (entity2 == null) continue;
                                         flag4 = this.renderManager.shouldRender(entity2, camera, d0, d1, d2) || entity2.riddenByEntity == this.mc.thePlayer;
 
                                         if (!flag4) {

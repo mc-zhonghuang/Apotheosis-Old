@@ -54,9 +54,9 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
     };
 
     private boolean checker(Entity entity) {
-        return (players && entity instanceof EntityPlayer && ((EntityPlayer) entity).getHealth() > 0) || (invisibles && entity.isInvisible()) || (animals && (entity instanceof EntityAnimal || entity instanceof EntitySquid || entity instanceof EntityGolem ||
-                entity instanceof EntityBat)) || (mobs && entity instanceof EntityMob || entity instanceof EntityVillager || entity instanceof EntitySlime ||
-                entity instanceof EntityGhast || entity instanceof EntityDragon) || (teams && entity instanceof EntityPlayer && !(((EntityPlayer) entity).isOnSameTeam(mc.thePlayer)));
+        return (players && entity instanceof EntityPlayer && ((EntityPlayer) entity).getHealth() > 0 && (!teams || !((EntityPlayer) entity).isOnSameTeam(mc.thePlayer))) || (invisibles && entity.isInvisible()) || (animals && (entity instanceof EntityAnimal || entity instanceof EntitySquid || entity instanceof EntityGolem ||
+                entity instanceof EntityBat)) || (mobs && (entity instanceof EntityMob || entity instanceof EntityVillager || entity instanceof EntitySlime ||
+                entity instanceof EntityGhast || entity instanceof EntityDragon));
     }
 
     public void updateTargets() {

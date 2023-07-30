@@ -8,10 +8,7 @@ import com.alan.clients.util.vector.Vector3d;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 
 /**
  * @author Patrick
@@ -68,6 +65,20 @@ public class RotationUtil implements InstanceAccess {
 
     public Vector2f calculate(final Vector3d to) {
         return calculate(mc.thePlayer.getCustomPositionVector().add(0, mc.thePlayer.getEyeHeight(), 0), to);
+    }
+
+    public Vector2f getRotations(BlockPos block, EnumFacing face) {
+        double x = block.getX() + 0.5 - mc.thePlayer.posX + (double) face.getFrontOffsetX() / 2;
+        double z = block.getZ() + 0.5 - mc.thePlayer.posZ + (double) face.getFrontOffsetZ() / 2;
+        double y = (block.getY() + 0.5);
+        double d1 = mc.thePlayer.posY + mc.thePlayer.getEyeHeight() - y;
+        double d3 = MathHelper.sqrt_double(x * x + z * z);
+        float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 82.0F;
+        float pitch = (float) (Math.atan2(d1, d3) * 180.0D / Math.PI);
+        if (yaw < 0.0F) {
+            yaw += 360f;
+        }
+        return new Vector2f(yaw, pitch);
     }
 
     public Vector2f calculate(final Vector3d position, final EnumFacing enumFacing) {
