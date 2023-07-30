@@ -7,6 +7,7 @@ import com.alan.clients.module.api.ModuleInfo;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.packet.PacketSendEvent;
+import com.alan.clients.util.packet.PacketUtil;
 import com.alan.clients.value.impl.ModeValue;
 import com.alan.clients.value.impl.SubMode;
 import io.netty.buffer.Unpooled;
@@ -24,6 +25,7 @@ public final class ClientSpoofer extends Module  {
             .add(new SubMode("PvP Lounge"))
             .add(new SubMode("CheatBreaker"))
             .add(new SubMode("Geyser"))
+            .add(new SubMode("Germ Mod"))
             .setDefault("Forge");
 
     @EventLink()
@@ -36,7 +38,7 @@ public final class ClientSpoofer extends Module  {
 
             switch (mode.getValue().getName()) {
                 case "Forge": {
-                    wrapper.setData(createPacketBuffer("FML", true));
+                    wrapper.setData(createPacketBuffer("fml,forge", true));
                     break;
                 }
 
@@ -65,6 +67,14 @@ public final class ClientSpoofer extends Module  {
                     // It's meant to be "eyser" don't change it
                     wrapper.setData(createPacketBuffer("eyser", false));
                     break;
+                }
+
+                case "Germ Mod": {
+//                    wrapper.setData(createPacketBuffer("fml,forge", true));
+//                    final C17PacketCustomPayload wrapperGermMod = new C17PacketCustomPayload();
+                    wrapper.setChannel("REGISTER");
+                    wrapper.setData(createPacketBuffer("FML|HS FML FML|MP FML FORGE germplugin-netease hyt0 armourers", false));
+//                    PacketUtil.send(wrapperGermMod);
                 }
             }
         }

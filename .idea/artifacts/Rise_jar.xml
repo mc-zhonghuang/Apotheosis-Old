@@ -58,6 +58,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/log4j-api-2.17.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/openauth-1.1.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/twitch-6.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/asm-all-5.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

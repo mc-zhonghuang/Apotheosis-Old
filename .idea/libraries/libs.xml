@@ -18,6 +18,7 @@
       <root url="jar://$PROJECT_DIR$/libs/janino-3.1.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/WMI4Java-1.6.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/json-20220924.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/asm-all-5.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

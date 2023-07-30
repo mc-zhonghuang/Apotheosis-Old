@@ -18,6 +18,7 @@ import com.alan.clients.newevent.impl.input.MoveInputEvent;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
 import com.alan.clients.newevent.impl.motion.StrafeEvent;
+import com.alan.clients.newevent.impl.other.TickEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
 import com.alan.clients.util.RayCastUtil;
 import com.alan.clients.util.math.MathUtil;
@@ -126,6 +127,7 @@ public class Scaffold extends Module {
     private EnumFacingOffset enumFacing;
     private BlockPos blockFace;
     private float targetYaw, targetPitch;
+    private float oldTargetYaw, oldTargetPitch;
     private int ticksOnAir, sneakingTicks;
     private double startY;
     private float forward, strafe;
@@ -136,6 +138,8 @@ public class Scaffold extends Module {
     protected void onEnable() {
         targetYaw = mc.thePlayer.rotationYaw - 180;
         targetPitch = 90;
+        oldTargetYaw = 0;
+        oldTargetPitch = 0;
 
         startY = Math.floor(mc.thePlayer.posY);
         targetBlock = null;
@@ -273,13 +277,18 @@ public class Scaffold extends Module {
                 break;
 
             case "Telly":
-                if (mc.thePlayer.offGroundTicks >= 3) {
+                if (mc.thePlayer.offGroundTicks >= 3 && mc.thePlayer.motionY <= 0) {
                     if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
                         final Vector2f rotations = RotationUtil.getRotations(blockFace, enumFacing.getEnumFacing());
                         targetPitch = rotations.y;
                         targetYaw = rotations.x;
+                        oldTargetYaw = targetYaw;
+                        oldTargetPitch = targetPitch;
 //                        targetPitch = mc.thePlayer.rotationPitch;
 //                        targetYaw = mc.thePlayer.rotationYaw;
+                    } else {
+                        targetPitch = oldTargetPitch;
+                        targetYaw = oldTargetYaw;
                     }
                 } else {
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
@@ -352,9 +361,9 @@ public class Scaffold extends Module {
         this.calculateSneaking();
 
         // Gets block to place
-        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0);
+        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, mode.getValue().getName().equalsIgnoreCase("Telly") ? 6 : 5);
 
-        if (targetBlock == null) {
+        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && targetBlock.yCoord > startY - 0.5 && MoveUtil.isMoving())) {
             return;
         }
 
@@ -383,7 +392,7 @@ public class Scaffold extends Module {
             mc.gameSettings.keyBindJump.setPressed((mc.thePlayer.onGround && MoveUtil.isMoving()) || mc.gameSettings.keyBindJump.isPressed());
         }
 
-        if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks < 3) return;
+        if (mode.getValue().getName().equalsIgnoreCase("Telly") && (mc.thePlayer.offGroundTicks < 3 || mc.thePlayer.motionY > 0)) return;
 
         // Same Y
         final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !mc.gameSettings.keyBindJump.isKeyDown()) && MoveUtil.isMoving();

@@ -296,9 +296,9 @@ public class PlayerUtil implements InstanceAccess {
     }
 
     // This methods purpose is to get block placement possibilities, blocks are 1 unit thick so please don't change it to 0.5 it causes bugs.
-    public Vec3 getPlacePossibility(double offsetX, double offsetY, double offsetZ) {
+    public Vec3 getPlacePossibility(double offsetX, double offsetY, double offsetZ, int blockRange) {
         final List<Vec3> possibilities = new ArrayList<>();
-        final int range = (int) (5 + (Math.abs(offsetX) + Math.abs(offsetZ)));
+        final int range = (int) (blockRange + (Math.abs(offsetX) + Math.abs(offsetZ)));
 
         for (int x = -range; x <= range; ++x) {
             for (int y = -range; y <= range; ++y) {
@@ -306,13 +306,13 @@ public class PlayerUtil implements InstanceAccess {
                     final Block block = PlayerUtil.blockRelativeToPlayer(x, y, z);
 
                     if (!(block instanceof BlockAir)) {
-                        for (int x2 = -1; x2 <= 1; x2 += 2)
+                        for (int x2 = -1; x2 <= 1; x2 += 1)
                             possibilities.add(new Vec3(mc.thePlayer.posX + x + x2, mc.thePlayer.posY + y, mc.thePlayer.posZ + z));
 
-                        for (int y2 = -1; y2 <= 1; y2 += 2)
+                        for (int y2 = -1; y2 <= 1; y2 += 1)
                             possibilities.add(new Vec3(mc.thePlayer.posX + x, mc.thePlayer.posY + y + y2, mc.thePlayer.posZ + z));
 
-                        for (int z2 = -1; z2 <= 1; z2 += 2)
+                        for (int z2 = -1; z2 <= 1; z2 += 1)
                             possibilities.add(new Vec3(mc.thePlayer.posX + x, mc.thePlayer.posY + y, mc.thePlayer.posZ + z + z2));
                     }
                 }
@@ -336,7 +336,7 @@ public class PlayerUtil implements InstanceAccess {
     }
 
     public Vec3 getPlacePossibility() {
-        return getPlacePossibility(0, 0, 0);
+        return getPlacePossibility(0, 0, 0, 5);
     }
 
 }

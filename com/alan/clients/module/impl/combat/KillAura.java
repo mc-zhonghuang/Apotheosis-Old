@@ -767,7 +767,9 @@ public final class KillAura extends Module {
                 break;
             case "Watchdog":
                 if (mc.thePlayer.isBlocking() || this.blocking) {
-                    PacketUtil.sendNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(-1, -1, -1), EnumFacing.DOWN));
+                    PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(-1, -1, -1), EnumFacing.DOWN));
+                    PacketUtil.send(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem % 8 + 1));
+                    PacketUtil.send(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem + 1));
                     this.blocking = false;
                 }
 

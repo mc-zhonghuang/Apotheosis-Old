@@ -23,13 +23,20 @@ public class WatchdogSprint extends Mode<Scaffold> {
 
     @Override
     public void onEnable() {
-        mc.gameSettings.keyBindSprint.setPressed(true);
-        mc.thePlayer.setSprinting(true);
+        mc.gameSettings.keyBindSprint.setPressed(false);
+        mc.thePlayer.setSprinting(false);
     }
 
     @EventLink
     public final Listener<PreMotionEvent> onPreMotion = event -> {
-        mc.thePlayer.motionX *= 1.01 - Math.random() / 50f;
-        mc.thePlayer.motionZ *= 1.01 - Math.random() / 50f;
+        mc.gameSettings.keyBindSprint.setPressed(false);
+        mc.thePlayer.setSprinting(false);
+        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            mc.thePlayer.motionX *= 0.95;
+            mc.thePlayer.motionZ *= 0.95;
+        } else {
+            mc.thePlayer.motionX *= 0.99;
+            mc.thePlayer.motionZ *= 0.99;
+        }
     };
 }
