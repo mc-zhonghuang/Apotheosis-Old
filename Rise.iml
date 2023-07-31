@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/assets/minecraft" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/run" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
-      <excludeFolder url="file://$MODULE_DIR$/libs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

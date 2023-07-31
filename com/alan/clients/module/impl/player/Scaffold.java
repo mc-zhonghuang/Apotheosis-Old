@@ -10,6 +10,7 @@ import com.alan.clients.module.Module;
 import com.alan.clients.module.api.Category;
 import com.alan.clients.module.api.ModuleInfo;
 import com.alan.clients.module.impl.movement.Speed;
+import com.alan.clients.module.impl.other.Debugger;
 import com.alan.clients.module.impl.player.scaffold.sprint.*;
 import com.alan.clients.module.impl.player.scaffold.tower.*;
 import com.alan.clients.newevent.Listener;
@@ -21,6 +22,7 @@ import com.alan.clients.newevent.impl.motion.StrafeEvent;
 import com.alan.clients.newevent.impl.other.TickEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
 import com.alan.clients.util.RayCastUtil;
+import com.alan.clients.util.chat.ChatUtil;
 import com.alan.clients.util.math.MathUtil;
 import com.alan.clients.util.packet.PacketUtil;
 import com.alan.clients.util.player.EnumFacingOffset;
@@ -291,6 +293,7 @@ public class Scaffold extends Module {
                         targetYaw = oldTargetYaw;
                     }
                 } else {
+                    if (this.getModule(Debugger.class).isEnabled()) ChatUtil.display("RESET");
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
                     targetYaw = mc.thePlayer.rotationYaw - yawOffset;
                     if (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && MoveUtil.isMoving()) targetPitch = (float) MathUtil.getRandom(90, 85);
@@ -364,6 +367,9 @@ public class Scaffold extends Module {
         targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, mode.getValue().getName().equalsIgnoreCase("Telly") ? 6 : 5);
 
         if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && targetBlock.yCoord > startY - 0.5 && MoveUtil.isMoving())) {
+            if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks >= 3 && mc.thePlayer.motionY <= 0) {
+                RotationComponent.setRotations(new Vector2f(oldTargetYaw, oldTargetPitch), 10, movementCorrection.getValue() ? MovementFix.NORMAL : MovementFix.OFF);
+            }
             return;
         }
 
