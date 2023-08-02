@@ -714,19 +714,16 @@ public final class KillAura extends Module {
                 }
                 break;
 
-            case "Watchdog":
-                if ((this.hitTicks == 1 || !this.blocking) && mc.thePlayer.hurtTime > 10 && ((mc.thePlayer.getDistanceToEntity(target) <= range.getValue().doubleValue() && !rayCast.getValue()) ||
-                        (rayCast.getValue() && mc.objectMouseOver != null && mc.objectMouseOver.entityHit == target) || (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY))) {
-                    this.block(true, false);
-                }
-
-                break;
-
             case "Watchdog HvH":
-            case "GrimAC":
                 mc.gameSettings.keyBindUseItem.setPressed(true);
                 if ((this.hitTicks == 1 || !this.blocking) && !BadPacketsComponent.bad(false, true, true, true, false)) {
                     this.block(false, true);
+                }
+                break;
+            case "GrimAC":
+                if (this.target == null) {
+                    mc.gameSettings.keyBindUseItem.setPressed(false);
+                    blocking = false;
                 }
                 break;
         }
@@ -766,12 +763,21 @@ public final class KillAura extends Module {
 
                 break;
             case "Watchdog":
-                if (mc.thePlayer.isBlocking() || this.blocking) {
-                    PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(-1, -1, -1), EnumFacing.DOWN));
-                    PacketUtil.send(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem % 8 + 1));
-                    PacketUtil.send(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem + 1));
-                    this.blocking = false;
-                }
+                if ((mc.thePlayer.getDistanceToEntity(target) <= range.getValue().doubleValue() && !rayCast.getValue()) ||
+                        (rayCast.getValue() && mc.objectMouseOver != null && mc.objectMouseOver.entityHit == target) || (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)) {
+                    if (mc.thePlayer.ticksExisted % 4 == 0) {
+                        PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
+                        PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
+                        PacketUtil.send(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
+                        blocking = true;
+                    }
+                } else
+                    this.unblock(false);
+
+                break;
+            case "GrimAC":
+                mc.gameSettings.keyBindUseItem.setPressed(true);
+                blocking = true;
 
                 break;
         }
