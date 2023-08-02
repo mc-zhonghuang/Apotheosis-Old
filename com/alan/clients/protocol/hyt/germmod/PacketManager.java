@@ -1,6 +1,5 @@
 package com.alan.clients.protocol.hyt.germmod;
 
-import com.alan.clients.protocol.hyt.germmod.gui.GuiGermMod;
 import com.alan.clients.protocol.hyt.germmod.packet.Packet;
 import com.alan.clients.protocol.hyt.germmod.packet.packets.PacketChannel;
 import com.alan.clients.protocol.hyt.germmod.packet.packets.PacketDigging;

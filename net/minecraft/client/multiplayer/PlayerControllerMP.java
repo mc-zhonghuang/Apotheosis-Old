@@ -22,6 +22,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.*;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.util.*;
+import net.minecraft.viamcp.ViaMCP;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 
@@ -469,6 +470,7 @@ public class PlayerControllerMP {
         final short short1 = playerIn.openContainer.getNextTransactionID(playerIn.inventory);
         final ItemStack itemstack = playerIn.openContainer.slotClick(slotId, mouseButtonClicked, mode, playerIn);
         this.netClientHandler.addToSendQueue(new C0EPacketClickWindow(windowId, slotId, mouseButtonClicked, mode, itemstack, short1));
+        if (ViaMCP.getInstance().getVersion() > ViaMCP.PROTOCOL_VERSION) this.netClientHandler.addToSendQueue(new C0FPacketConfirmTransaction(windowId, (short) 1, true));
         return itemstack;
     }
 

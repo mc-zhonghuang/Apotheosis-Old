@@ -21,6 +21,7 @@ public final class Velocity extends Module {
             .add(new IntaveVelocity("Intave", this))
             .add(new MatrixVelocity("Matrix", this))
             .add(new AACVelocity("AAC", this))
+            .add(new GrimVelocity("Grim", this))
             .add(new VulcanVelocity("Vulcan", this))
             .add(new RedeskyVelocity("Redesky", this))
             .add(new TickVelocity("Tick", this))

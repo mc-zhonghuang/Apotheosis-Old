@@ -7,6 +7,7 @@ import com.alan.clients.module.api.ModuleInfo;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
+import com.alan.clients.newevent.impl.other.TickEvent;
 import com.alan.clients.util.packet.PacketUtil;
 import com.alan.clients.value.impl.BooleanValue;
 import net.minecraft.item.ItemBlock;
@@ -20,7 +21,7 @@ public class AutoPlace extends Module {
     private final BooleanValue noSwing = new BooleanValue("No Swing", this, false);
 
     @EventLink
-    public final Listener<PreMotionEvent> onPreMotion = event -> {
+    public final Listener<TickEvent> onTick = event -> {
         if (mc.objectMouseOver != null) {
             if (mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && mc.objectMouseOver.sideHit != EnumFacing.DOWN && mc.objectMouseOver.sideHit != EnumFacing.UP && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemBlock) {
                 if (mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.getHeldItem(), mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit, mc.objectMouseOver.hitVec)) {

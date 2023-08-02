@@ -1,5 +1,6 @@
 package com.alan.clients.module.impl.player;
 
+import com.alan.clients.Client;
 import com.alan.clients.api.Rise;
 import com.alan.clients.component.impl.player.BadPacketsComponent;
 import com.alan.clients.component.impl.player.BlinkComponent;
@@ -21,6 +22,7 @@ import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
 import com.alan.clients.newevent.impl.motion.StrafeEvent;
 import com.alan.clients.newevent.impl.other.TickEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
+import com.alan.clients.util.RandomUtil;
 import com.alan.clients.util.RayCastUtil;
 import com.alan.clients.util.chat.ChatUtil;
 import com.alan.clients.util.math.MathUtil;
@@ -42,7 +44,9 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Objects;
@@ -101,6 +105,7 @@ public class Scaffold extends Module {
 
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation Speed", this, 5, 10, 0, 10, 1);
     private final BoundsNumberValue placeDelay = new BoundsNumberValue("Place Delay", this, 0, 0, 0, 5, 1);
+    private final BoundsNumberValue placeTime = new BoundsNumberValue("Place Time", this, 1, 2, 1, 10, 1);
     private final NumberValue timer = new NumberValue("Timer", this, 1, 0.1, 10, 0.1);
 
     public final BooleanValue movementCorrection = new BooleanValue("Movement Correction", this, false);
@@ -147,7 +152,6 @@ public class Scaffold extends Module {
         targetBlock = null;
 
         this.sneakingTicks = -1;
-
     }
 
     @Override
@@ -163,7 +167,6 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<PacketReceiveEvent> onPacketReceiveEvent = event -> {
-
         final Packet<?> packet = event.getPacket();
 
         if (packet instanceof S2FPacketSetSlot) {
@@ -279,11 +282,8 @@ public class Scaffold extends Module {
                 break;
 
             case "Telly":
-                if (mc.thePlayer.offGroundTicks >= 3 && mc.thePlayer.motionY <= 0) {
-                    if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
-                        final Vector2f rotations = RotationUtil.getRotations(blockFace, enumFacing.getEnumFacing());
-                        targetPitch = rotations.y;
-                        targetYaw = rotations.x;
+                if (mc.thePlayer.offGroundTicks >= 3) {
+                    if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {getRotations(yawOffset);
                         oldTargetYaw = targetYaw;
                         oldTargetPitch = targetPitch;
 //                        targetPitch = mc.thePlayer.rotationPitch;
@@ -293,9 +293,8 @@ public class Scaffold extends Module {
                         targetYaw = oldTargetYaw;
                     }
                 } else {
-                    if (this.getModule(Debugger.class).isEnabled()) ChatUtil.display("RESET");
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
-                    targetYaw = mc.thePlayer.rotationYaw - yawOffset;
+                    targetYaw = mc.thePlayer.rotationYaw - yawOffset - (mc.thePlayer.onGround ? 0 : 45);
                     if (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && MoveUtil.isMoving()) targetPitch = (float) MathUtil.getRandom(90, 85);
                 }
                 break;
@@ -323,19 +322,6 @@ public class Scaffold extends Module {
         }
     }
 
-    @EventLink()
-    public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-
-        if (targetBlock == null || enumFacing == null || blockFace == null) {
-            return;
-        }
-
-        mc.thePlayer.hideSneakHeight.reset();
-
-        // Timer
-        if (timer.getValue().floatValue() != 1) mc.timer.timerSpeed = timer.getValue().floatValue();
-    };
-
     public void runMode() {
         switch (this.mode.getValue().getName()) {
             case "Telly": {
@@ -348,8 +334,7 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
-
-        mc.thePlayer.safeWalk = this.safeWalk.getValue();
+        mc.thePlayer.safeWalk = this.safeWalk.getValue() && mc.thePlayer.onGround;
 
         // Getting ItemSlot
         SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue());
@@ -364,10 +349,10 @@ public class Scaffold extends Module {
         this.calculateSneaking();
 
         // Gets block to place
-        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, mode.getValue().getName().equalsIgnoreCase("Telly") ? 6 : 5);
+        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, 5);
 
-        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") && targetBlock.yCoord > startY - 0.5 && MoveUtil.isMoving())) {
-            if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks >= 3 && mc.thePlayer.motionY <= 0) {
+        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY)) {
+            if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks >= 3) {
                 RotationComponent.setRotations(new Vector2f(oldTargetYaw, oldTargetPitch), 10, movementCorrection.getValue() ? MovementFix.NORMAL : MovementFix.OFF);
             }
             return;
@@ -398,7 +383,7 @@ public class Scaffold extends Module {
             mc.gameSettings.keyBindJump.setPressed((mc.thePlayer.onGround && MoveUtil.isMoving()) || mc.gameSettings.keyBindJump.isPressed());
         }
 
-        if (mode.getValue().getName().equalsIgnoreCase("Telly") && (mc.thePlayer.offGroundTicks < 3 || mc.thePlayer.motionY > 0)) return;
+        if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? 5 : 4)) return;
 
         // Same Y
         final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !mc.gameSettings.keyBindJump.isKeyDown()) && MoveUtil.isMoving();
@@ -464,13 +449,6 @@ public class Scaffold extends Module {
             targetYaw = rotations.x;
             targetPitch = rotations.y;
         }
-
-        if (mode.getValue().getName().equalsIgnoreCase("Telly")) {
-            final Vector2f rotations = RotationUtil.getRotations(blockFace, enumFacing.getEnumFacing());
-
-            targetYaw = mc.thePlayer.rotationYaw - 180 - yawOffset;
-            targetPitch = rotations.y;
-        }
     }
 
 
@@ -492,7 +470,7 @@ public class Scaffold extends Module {
 
         switch (enumFacing.getEnumFacing()) {
             case DOWN:
-                hitVec.yCoord = blockFace.getY() + 0;
+                hitVec.yCoord = blockFace.getY();
                 break;
 
             case UP:
@@ -500,7 +478,7 @@ public class Scaffold extends Module {
                 break;
 
             case NORTH:
-                hitVec.zCoord = blockFace.getZ() + 0;
+                hitVec.zCoord = blockFace.getZ();
                 break;
 
             case EAST:
@@ -512,7 +490,7 @@ public class Scaffold extends Module {
                 break;
 
             case WEST:
-                hitVec.xCoord = blockFace.getX() + 0;
+                hitVec.xCoord = blockFace.getX();
                 break;
         }
 
