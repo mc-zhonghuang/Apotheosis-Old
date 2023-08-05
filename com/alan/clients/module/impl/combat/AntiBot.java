@@ -21,7 +21,7 @@ public final class AntiBot extends Module {
             new FuncraftAntiBot("", this));
 
     private final BooleanValue hytAntiBot = new BooleanValue("HuaYuTing", this, false,
-            new HuaYuTingAntiBot("HuaYuTing", this));
+            new HuaYuTingAntiBot("", this));
 
     private final BooleanValue ncps = new BooleanValue("NPC Detection Check", this, false,
             new NPCAntiBot("", this));

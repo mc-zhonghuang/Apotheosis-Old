@@ -84,6 +84,20 @@ public abstract class TileEntity {
         }
     }
 
+    public NBTTagCompound writeInternal(final NBTTagCompound compound) {
+        final String s = classToNameMap.get(this.getClass());
+
+        if (s == null) {
+            throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
+        } else {
+            compound.setString("id", s);
+            compound.setInteger("x", this.pos.getX());
+            compound.setInteger("y", this.pos.getY());
+            compound.setInteger("z", this.pos.getZ());
+            return compound;
+        }
+    }
+
     /**
      * Creates a new entity and loads its data from the specified NBT.
      */

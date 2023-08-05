@@ -176,6 +176,23 @@ public class ExtendedBlockStorage {
         this.data = dataArray;
     }
 
+    protected void set(int index, IBlockState state) {
+        this.data[index] = (char) Block.BLOCK_STATE_IDS.get(state);
+    }
+
+    public void setDataFromNBT(byte[] blockIds, NibbleArray data, NibbleArray blockIdExtension)
+    {
+        for (int i = 0; i < 4096; ++i)
+        {
+            int j = i & 15;
+            int k = i >> 8 & 15;
+            int l = i >> 4 & 15;
+            int i1 = blockIdExtension == null ? 0 : blockIdExtension.get(j, k, l);
+            int j1 = i1 << 12 | (blockIds[i] & 255) << 4 | data.get(j, k, l);
+            this.set(i, Block.BLOCK_STATE_IDS.getByValue(j1));
+        }
+    }
+
     /**
      * Returns the NibbleArray instance containing Block-light data.
      */

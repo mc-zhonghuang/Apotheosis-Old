@@ -150,6 +150,10 @@ public class ChunkProviderClient implements IChunkProvider {
     public void recreateStructures(final Chunk p_180514_1_, final int p_180514_2_, final int p_180514_3_) {
     }
 
+    public LongHashMap<Chunk> getChunkMapping() {
+        return chunkMapping;
+    }
+
     public Chunk provideChunk(final BlockPos blockPosIn) {
         return this.provideChunk(blockPosIn.getX() >> 4, blockPosIn.getZ() >> 4);
     }

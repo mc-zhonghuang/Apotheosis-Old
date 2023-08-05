@@ -104,4 +104,12 @@ public class C0EPacketClickWindow implements Packet<INetHandlerPlayServer> {
     public int getMode() {
         return this.mode;
     }
+
+    public void setUsedButton(int usedButton) {
+        this.usedButton = usedButton;
+    }
+
+    public void setActionNumber(short actionNumber) {
+        this.actionNumber = actionNumber;
+    }
 }

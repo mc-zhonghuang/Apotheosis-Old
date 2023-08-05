@@ -2,6 +2,7 @@ package com.alan.clients.module.impl.player;
 
 import com.alan.clients.Client;
 import com.alan.clients.api.Rise;
+import com.alan.clients.component.impl.player.BlinkComponent;
 import com.alan.clients.component.impl.player.PingSpoofComponent;
 import com.alan.clients.module.Module;
 import com.alan.clients.module.api.Category;
@@ -34,29 +35,17 @@ public class Blink extends Module {
     protected void onEnable() {
         getNext();
         spawnEntity();
+        BlinkComponent.blinking = true;
     }
 
     @Override
     protected void onDisable() {
         deSpawnEntity();
+        BlinkComponent.blinking = false;
     }
 
     @EventLink()
-    public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-        PingSpoofComponent.setSpoofing(999999999, incoming.getValue(), incoming.getValue(), incoming.getValue(), incoming.getValue(), incoming.getValue(), true);
-
-        if (mc.thePlayer.ticksExisted > next && pulse.getValue()) {
-            getNext();
-            PingSpoofComponent.dispatch();
-
-            deSpawnEntity();
-        }
-    };
-
-    @EventLink()
-    public final Listener<WorldChangeEvent> onWorldChange = event -> {
-        getNext();
-    };
+    public final Listener<WorldChangeEvent> onWorldChange = event -> getNext();
 
     public void getNext() {
         if (mc.thePlayer == null) return;

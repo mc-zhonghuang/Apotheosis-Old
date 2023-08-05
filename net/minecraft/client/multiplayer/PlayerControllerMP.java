@@ -469,8 +469,8 @@ public class PlayerControllerMP {
     public ItemStack windowClick(final int windowId, final int slotId, final int mouseButtonClicked, final int mode, final EntityPlayer playerIn) {
         final short short1 = playerIn.openContainer.getNextTransactionID(playerIn.inventory);
         final ItemStack itemstack = playerIn.openContainer.slotClick(slotId, mouseButtonClicked, mode, playerIn);
-        this.netClientHandler.addToSendQueue(new C0EPacketClickWindow(windowId, slotId, mouseButtonClicked, mode, itemstack, short1));
         if (ViaMCP.getInstance().getVersion() > ViaMCP.PROTOCOL_VERSION) this.netClientHandler.addToSendQueue(new C0FPacketConfirmTransaction(windowId, (short) 1, true));
+        this.netClientHandler.addToSendQueue(new C0EPacketClickWindow(windowId, slotId, mouseButtonClicked, mode, itemstack, short1));
         return itemstack;
     }
 

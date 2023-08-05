@@ -436,6 +436,10 @@ public class WorldClient extends World {
         }
     }
 
+    public void setClientChunkProvider(ChunkProviderClient clientChunkProvider) {
+        this.clientChunkProvider = clientChunkProvider;
+    }
+
     public boolean isPlayerUpdate() {
         return this.playerUpdate;
     }

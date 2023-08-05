@@ -283,7 +283,8 @@ public class Scaffold extends Module {
 
             case "Telly":
                 if (mc.thePlayer.offGroundTicks >= 3) {
-                    if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {getRotations(yawOffset);
+                    if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
+                        getRotations(yawOffset);
                         oldTargetYaw = targetYaw;
                         oldTargetPitch = targetPitch;
 //                        targetPitch = mc.thePlayer.rotationPitch;

@@ -131,7 +131,7 @@ public final class PingSpoofComponent extends Component {
 
         final Packet<?> packet = event.getPacket();
 
-        if (packet instanceof C03PacketPlayer || packet instanceof C16PacketClientStatus ||
+        if (packet instanceof C00PacketKeepAlive || packet instanceof C03PacketPlayer || packet instanceof C16PacketClientStatus ||
                 packet instanceof C0DPacketCloseWindow || packet instanceof C0EPacketClickWindow ||
                 packet instanceof C0BPacketEntityAction || packet instanceof C02PacketUseEntity ||
                 packet instanceof C0APacketAnimation || packet instanceof C09PacketHeldItemChange ||

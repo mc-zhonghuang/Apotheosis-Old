@@ -3226,6 +3226,9 @@ public abstract class World implements IBlockAccess, InstanceAccess, java.io.Ser
 //                throw new ReportedException(crashreport1);
             }
         }
+    }
 
+    public void setChunkProvider(IChunkProvider chunkProvider) {
+        this.chunkProvider = chunkProvider;
     }
 }

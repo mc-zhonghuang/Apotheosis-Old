@@ -69,7 +69,7 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
             teams = killAura.teams.getValue();
 
             this.clear();
-            mc.theWorld.loadedEntityList.stream().filter(entity -> entity != mc.thePlayer && checker(entity) && !(entity.isDead)).forEach(this::add);
+            mc.theWorld.loadedEntityList.stream().filter(entity -> entity != mc.thePlayer && checker(entity) && !entity.isDead && !Client.INSTANCE.getBotManager().contains(entity)).forEach(this::add);
         } catch (Exception ignored) {
             // Don't give crackers clues...
             if (Client.DEVELOPMENT_SWITCH) ignored.printStackTrace();

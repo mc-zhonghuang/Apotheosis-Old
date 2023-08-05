@@ -507,25 +507,7 @@ public final class KillAura extends Module {
                     final MovingObjectPosition movingObjectPosition = mc.objectMouseOver;
 
                     switch (this.mode.getValue().getName()) {
-                        case "Single": {
-                            if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) ||
-                                    (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target)) {
-                                this.attack(target);
-                            } else if (movingObjectPosition != null && movingObjectPosition.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
-                                this.attack(movingObjectPosition.entityHit);
-                            } else {
-                                switch (clickMode.getValue().getName()) {
-                                    case "Normal":
-                                    case "Hit Select":
-                                        PacketUtil.send(new C0APacketAnimation());
-                                        this.clickStopWatch.reset();
-                                        this.hitTicks = 0;
-                                        break;
-                                }
-                            }
-                            break;
-                        }
-
+                        case "Single":
                         case "Switch": {
                             if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) ||
                                     (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target)) {
@@ -721,8 +703,9 @@ public final class KillAura extends Module {
                 }
                 break;
             case "GrimAC":
-                if (this.target == null) {
+                if (this.target == null || mc.thePlayer.getHeldItem() == null || !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)) {
                     mc.gameSettings.keyBindUseItem.setPressed(false);
+                    mc.thePlayer.itemInUse = null;
                     blocking = false;
                 }
                 break;
@@ -776,8 +759,11 @@ public final class KillAura extends Module {
 
                 break;
             case "GrimAC":
-                mc.gameSettings.keyBindUseItem.setPressed(true);
-                blocking = true;
+                if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) {
+                    mc.gameSettings.keyBindUseItem.setPressed(true);
+                    mc.thePlayer.itemInUse = mc.thePlayer.getHeldItem();
+                    blocking = true;
+                }
 
                 break;
         }

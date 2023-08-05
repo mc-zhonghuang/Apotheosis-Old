@@ -5,10 +5,7 @@ import com.alan.clients.component.impl.player.SlotComponent;
 import com.alan.clients.module.impl.render.FreeLook;
 import com.alan.clients.newevent.impl.input.ClickEvent;
 import com.alan.clients.newevent.impl.input.KeyboardInputEvent;
-import com.alan.clients.newevent.impl.other.AttackEvent;
-import com.alan.clients.newevent.impl.other.GameEvent;
-import com.alan.clients.newevent.impl.other.PossibleClickEvent;
-import com.alan.clients.newevent.impl.other.TickEvent;
+import com.alan.clients.newevent.impl.other.*;
 import com.alan.clients.protection.launch.McqBFVeaHN;
 import com.alan.clients.ui.menu.impl.intro.IntroSequence;
 import com.alan.clients.ui.menu.impl.main.MainMenu;
@@ -131,7 +128,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 public class Minecraft implements IThreadListener, IPlayerUsage {
-    private static final Logger logger = LogManager.getLogger();
+    public static final Logger logger = LogManager.getLogger();
     private static final ResourceLocation locationMojangPng = new ResourceLocation("textures/gui/title/mojang.png");
     public static final boolean isRunningOnMac = Util.getOSType() == Util.EnumOS.OSX;
     Executor threadPool = Executors.newFixedThreadPool(1);
@@ -1453,6 +1450,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      * Runs the current tick.
      */
     public void runTick() throws IOException {
+        Client.INSTANCE.getEventBus().handle(new ClientTickEvent(ClientTickEvent.Type.PRE));
+
         scaledResolution = new ScaledResolution(this);
 
         if (thePlayer != null) {
@@ -1861,6 +1860,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             this.myNetworkManager.processReceivedPackets();
         }
 
+        Client.INSTANCE.getEventBus().handle(new ClientTickEvent(ClientTickEvent.Type.POST));
         this.mcProfiler.endSection();
         this.systemTime = getSystemTime();
     }
