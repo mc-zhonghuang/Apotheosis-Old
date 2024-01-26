@@ -38,7 +38,7 @@ public class WatchdogSprint extends Mode<Scaffold> {
         if (packet instanceof C03PacketPlayer) {
             final C03PacketPlayer wrapper = (C03PacketPlayer) packet;
 
-            if (mc.thePlayer.onGround && wrapper.moving) {
+            if (mc.thePlayer.onGround && wrapper.moving && !mc.isSingleplayer()) {
                 wrapper.y += 0.00625;
                 wrapper.onGround = false;
             }

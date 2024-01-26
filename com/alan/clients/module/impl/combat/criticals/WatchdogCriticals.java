@@ -27,7 +27,7 @@ public final class WatchdogCriticals extends Mode<Criticals> {
             if (attacking) {
                 final C03PacketPlayer wrapped = (C03PacketPlayer) packet;
 
-                if (wrapped.onGround && !(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer).down()).getBlock() instanceof BlockStairs || mc.theWorld.getBlockState(new BlockPos(mc.thePlayer)).getBlock() instanceof BlockStairs)) {
+                if (wrapped.onGround && !(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer).down()).getBlock() instanceof BlockStairs || mc.theWorld.getBlockState(new BlockPos(mc.thePlayer)).getBlock() instanceof BlockStairs) && !mc.isSingleplayer()) {
                     if (wrapped.moving) {
                         wrapped.y += 0.00625;
                         wrapped.setOnGround(false);
