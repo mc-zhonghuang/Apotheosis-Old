@@ -27,16 +27,18 @@ public final class WatchdogCriticals extends Mode<Criticals> {
             if (attacking) {
                 final C03PacketPlayer wrapped = (C03PacketPlayer) packet;
 
-                if (wrapped.moving) {
-                    wrapped.y += 0.00625;
-                    wrapped.setOnGround(false);
-                } else {
-                    event.setCancelled();
-
-                    if (wrapped.rotating) {
-                        mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY + 0.00625, mc.thePlayer.posZ, wrapped.yaw, wrapped.pitch, false));
+                if (wrapped.onGround) {
+                    if (wrapped.moving) {
+                        wrapped.y += 0.00625;
+                        wrapped.setOnGround(false);
                     } else {
-                        mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.00625, mc.thePlayer.posZ, false));
+                        event.setCancelled();
+
+                        if (wrapped.rotating) {
+                            mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY + 0.00625, mc.thePlayer.posZ, wrapped.yaw, wrapped.pitch, false));
+                        } else {
+                            mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.00625, mc.thePlayer.posZ, false));
+                        }
                     }
                 }
 
