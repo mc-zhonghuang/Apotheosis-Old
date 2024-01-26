@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer;
 
 import com.alan.clients.Client;
-import com.alan.clients.module.impl.other.SecurityFeatures;
+import com.alan.clients.module.impl.other.AntiExploit;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
@@ -97,7 +97,7 @@ public abstract class InventoryEffectRenderer extends GuiContainer {
                 } catch (final Exception exception) {
                     exception.printStackTrace();
 
-                    if (!Client.INSTANCE.getModuleManager().get(SecurityFeatures.class).isEnabled()) {
+                    if (!Client.INSTANCE.getModuleManager().get(AntiExploit.class).isEnabled()) {
                         System.out.println("Potion crasher detected, exiting to prevent detection.");
                         mc.shutdown();
                     }

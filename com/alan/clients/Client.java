@@ -18,7 +18,7 @@ import com.alan.clients.packetlog.api.manager.PacketLogManager;
 import com.alan.clients.protection.check.api.McqBFVbnWB;
 import com.alan.clients.protection.manager.TargetManager;
 import com.alan.clients.script.ScriptManager;
-import com.alan.clients.security.SecurityFeatureManager;
+import com.alan.clients.security.ExploitManager;
 import com.alan.clients.ui.click.clover.CloverClickGUI;
 import com.alan.clients.ui.click.dropdown.DropdownClickGUI;
 import com.alan.clients.ui.click.standard.RiseClickGUI;
@@ -39,10 +39,6 @@ import com.alan.clients.util.value.ConstantManager;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.multiplayer.GuiConnecting;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.viamcp.ViaMCP;
 import org.lwjgl.opengl.Display;
 
@@ -89,7 +85,7 @@ public enum Client {
     private ModuleManager moduleManager;
     private ComponentManager componentManager;
     private CommandManager commandManager;
-    private SecurityFeatureManager securityManager;
+    private ExploitManager securityManager;
     private BotManager botManager;
     private ThemeManager themeManager;
     @Setter
@@ -154,7 +150,7 @@ public enum Client {
         this.altManager = new AltManager();
         this.insultManager = new InsultManager();
         this.dataManager = new DataManager();
-        this.securityManager = new SecurityFeatureManager();
+        this.securityManager = new ExploitManager();
         this.botManager = new BotManager();
         this.themeManager = new ThemeManager();
 //        this.networkManager = new NetworkManager();
