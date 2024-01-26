@@ -7,6 +7,7 @@ import com.alan.clients.newevent.impl.input.ClickEvent;
 import com.alan.clients.newevent.impl.input.KeyboardInputEvent;
 import com.alan.clients.newevent.impl.other.*;
 import com.alan.clients.protection.launch.McqBFVeaHN;
+import com.alan.clients.ui.ingame.GuiIngameCache;
 import com.alan.clients.ui.menu.impl.intro.IntroSequence;
 import com.alan.clients.ui.menu.impl.main.MainMenu;
 import com.alan.clients.util.chat.ChatUtil;
@@ -1861,6 +1862,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
 
         Client.INSTANCE.getEventBus().handle(new ClientTickEvent(ClientTickEvent.Type.POST));
+        GuiIngameCache.dirty = true;
         this.mcProfiler.endSection();
         this.systemTime = getSystemTime();
     }

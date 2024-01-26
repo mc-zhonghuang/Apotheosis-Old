@@ -29,6 +29,7 @@ public class LongJump extends Module {
             .add(new ExtremeCraftLongJump("Extreme Craft", this))
             .add(new MatrixLongJump("Matrix", this))
             .add(new FireBallLongJump("Fire Ball", this))
+            .add(new HycraftLongJump("Hycraft", this))
             .setDefault("Vanilla");
 
     private final BooleanValue autoDisable = new BooleanValue("Auto Disable", this, true);

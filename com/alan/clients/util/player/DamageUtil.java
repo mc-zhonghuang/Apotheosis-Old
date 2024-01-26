@@ -45,14 +45,14 @@ public final class DamageUtil implements InstanceAccess {
             for (int i = 0; i < packetCount; i++) {
                 switch (type) {
                     case POSITION_ROTATION: {
-                        PacketUtil.send(new C03PacketPlayer.C06PacketPlayerPosLook(x, y + value, z, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-                        PacketUtil.send(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(x, y + value, z, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
                         break;
                     }
 
                     case POSITION: {
-                        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(x, y + value, z, false));
-                        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, false));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(x, y + value, z, false));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, false));
                         break;
                     }
                 }

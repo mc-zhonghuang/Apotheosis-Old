@@ -24,7 +24,7 @@ public final class HypixelAutoPlay extends Module {
         if (packet instanceof S02PacketChat) {
             S02PacketChat chat = ((S02PacketChat) packet);
 
-            if (chat.getChatComponent().getFormattedText().contains("play again?")) {
+            if (chat.getChatComponent().getFormattedText().contains("play again?") || chat.getChatComponent().getFormattedText().contains("再来一局")) {
                 for (IChatComponent iChatComponent : chat.getChatComponent().getSiblings()) {
                     for (String value : iChatComponent.toString().split("'")) {
                         if (value.startsWith("/play") && !value.contains(".")) {

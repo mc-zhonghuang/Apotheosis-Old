@@ -6,13 +6,19 @@ import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.other.TeleportEvent;
+import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
+import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.util.chat.ChatUtil;
 import com.alan.clients.util.packet.PacketUtil;
 import com.alan.clients.util.rotation.RotationUtil;
 import com.alan.clients.util.vector.Vector2f;
 import com.alan.clients.util.vector.Vector3d;
 import com.alan.clients.value.Mode;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 
@@ -37,27 +43,11 @@ public class GrimFlight extends Mode<Flight> {
     }
 
     @EventLink
-    private Listener<PreMotionEvent> preMotion = event -> {
-        if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
-            // Creating a variable that gets the block that the user is looking at and creating another variable with incremented Y position of the position so that the user teleports on top of the block.
-            MovingObjectPosition movingObjectPosition = mc.thePlayer.rayTrace(999, 1);
-            if (movingObjectPosition == null) return;
+    private Listener<PacketReceiveEvent> onPacketReceive = event -> {
+        final Packet<?> packet = event.getPacket();
 
-            final BlockPos pos = movingObjectPosition.getBlockPos();
-            final BlockPos tpPos = pos.offset(movingObjectPosition.sideHit, 4);
-
-            Vector2f rotations = RotationUtil.calculate(
-                    new Vector3d(tpPos.getX(), tpPos.getY(), tpPos.getZ()),
-                    new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
-            PacketUtil.send(new C03PacketPlayer.C06PacketPlayerPosLook(tpPos.getX(), tpPos.getY() - 1, tpPos.getZ(), rotations.x, rotations.y, false));
-
-            mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, SlotComponent.getItemStack(),
-                    movingObjectPosition.getBlockPos(), movingObjectPosition.sideHit, movingObjectPosition.hitVec);
+        if (packet instanceof S23PacketBlockChange) {
+            event.setCancelled();
         }
-    };
-
-    @EventLink
-    private Listener<TeleportEvent> teleport = event -> {
-        if (mc.gameSettings.keyBindUseItem.isKeyDown()) event.setCancelled(true);
     };
 }

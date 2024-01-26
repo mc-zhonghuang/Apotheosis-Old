@@ -1,16 +1,24 @@
 package com.alan.clients.module.impl.movement.longjump;
 
+import com.alan.clients.component.impl.player.BlinkComponent;
 import com.alan.clients.component.impl.player.ItemDamageComponent;
 import com.alan.clients.component.impl.player.PingSpoofComponent;
+import com.alan.clients.component.impl.render.NotificationComponent;
 import com.alan.clients.module.impl.movement.LongJump;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
+import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
 import com.alan.clients.newevent.impl.motion.StrafeEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
+import com.alan.clients.newevent.impl.packet.PacketSendEvent;
+import com.alan.clients.util.packet.PacketUtil;
+import com.alan.clients.util.player.DamageUtil;
 import com.alan.clients.util.player.MoveUtil;
+import com.alan.clients.util.player.PlayerUtil;
 import com.alan.clients.value.Mode;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
 
@@ -20,78 +28,49 @@ import net.minecraft.potion.Potion;
  */
 
 public class WatchdogLongJump extends Mode<LongJump> {
-    private boolean aBoolean;
-    private double aDouble;
+    private int ticks = 0;
 
     public WatchdogLongJump(String name, LongJump parent) {
         super(name, parent);
     }
 
+    @Override
+    public void onEnable() {
+        ticks = 0;
+    }
+
     @EventLink
-    public final Listener<PacketReceiveEvent> receive = event -> {
-        Packet<?> packet = event.getPacket();
+    public final Listener<PacketSendEvent> onPacketSend = event -> {
+        final Packet<?> packet = event.getPacket();
 
-        if (packet instanceof S12PacketEntityVelocity) {
-            final S12PacketEntityVelocity wrapper = (S12PacketEntityVelocity) packet;
-
-            if (wrapper.getEntityID() == mc.thePlayer.getEntityId()) {
-                aDouble = wrapper.motionY / 8000.0D;
-                if (aDouble > 0.1 - Math.random() / 10000f) {
-                    aBoolean = true;
-                    event.setCancelled(true);
-                }
-            }
+        if (packet instanceof C03PacketPlayer && ticks <= 25) {
+            event.setCancelled();
         }
+    };
+
+    @EventLink
+    public final Listener<StrafeEvent> onStrafe = event -> {
+        if (ticks <= 25)
+            event.setCancelled();
     };
 
     @EventLink
     public final Listener<PreUpdateEvent> preUpdate = event -> {
-        PingSpoofComponent.setSpoofing(2000, true, false, false, false, false);
-
-        if (!aBoolean) return;
-
-        if (mc.thePlayer.ticksSinceVelocity == 1) {
-            MoveUtil.strafe(MoveUtil.getAllowedHorizontalDistance() * (mc.thePlayer.isPotionActive(Potion.moveSpeed) ? 0.75 : 0.7) - Math.random() / 10000f);
+        ticks++;
+        if (ticks == 25) {
+            DamageUtil.damagePlayer(0.5);
+        } else if (ticks > 25 && ticks < 35 && mc.thePlayer.onGround) {
             mc.thePlayer.jump();
-        }
-
-        if (mc.thePlayer.ticksSinceVelocity == 9) {
-            MoveUtil.strafe((mc.thePlayer.isPotionActive(Potion.moveSpeed) ? 0.8 : 0.7) - Math.random() / 10000f);
-            mc.thePlayer.motionY = aDouble;
-        }
-
-        if (mc.thePlayer.ticksSinceVelocity <= 50 && mc.thePlayer.ticksSinceVelocity > 9) {
-            mc.thePlayer.motionY += 0.028;
-
-            if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-                mc.thePlayer.motionX *= 1.038;
-                mc.thePlayer.motionZ *= 1.038;
-            } else {
-                if (mc.thePlayer.ticksSinceVelocity == 12 || mc.thePlayer.ticksSinceVelocity == 13) {
-                    mc.thePlayer.motionX *= 1.1;
-                    mc.thePlayer.motionZ *= 1.1;
-                }
-
-                mc.thePlayer.motionX *= 1.019;
-                mc.thePlayer.motionZ *= 1.019;
-            }
-        }
-
-    };
-
-    @EventLink()
-    public final Listener<StrafeEvent> onStrafe = event -> {
-        if (!aBoolean) {
-            event.setCancelled(true);
-            MoveUtil.stop();
-        } else if (mc.thePlayer.ticksSinceVelocity <= 19) {
-            MoveUtil.strafe();
+        } else if (ticks == 35) {
+            BlinkComponent.blinking = true;
+            MoveUtil.strafe(1);
+            mc.thePlayer.jump();
+        } else if (ticks > 35 && mc.thePlayer.onGround) {
+            getParent().toggle();
+            BlinkComponent.dispatch();
+            BlinkComponent.blinking = false;
+            NotificationComponent.post("Watchdog long jump", "After the jump.");
+            this.ticks = 0;
         }
     };
-
-    @Override
-    public void onEnable() {
-        ItemDamageComponent.damage(false);
-        aBoolean = false;
-    }
 }

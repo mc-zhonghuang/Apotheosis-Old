@@ -2,7 +2,6 @@ package net.minecraft.client.network;
 
 import com.alan.clients.Client;
 import com.alan.clients.newevent.impl.other.TeleportEvent;
-import com.alan.clients.protocol.hyt.germmod.PacketManager;
 import com.alan.clients.ui.menu.impl.main.MainMenu;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
@@ -549,6 +548,8 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
      */
     public void handleChunkData(final S21PacketChunkData packetIn) {
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
+
+        if (packetIn == null) return;
 
         if (packetIn.func_149274_i()) {
             if (packetIn.getExtractedSize() == 0) {
@@ -1411,18 +1412,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
      */
     public void handleCustomPayload(final S3FPacketCustomPayload packetIn) {
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
-
-        if (packetIn.getChannelName().equalsIgnoreCase("REGISTER")) {
-            final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-            buffer.writeBytes("FML|HS FML FML|MP FML FORGE germplugin-netease hyt0 armourers".getBytes());
-            this.netManager.sendPacket(new C17PacketCustomPayload("REGISTER", buffer));
-            return;
-        }
-
-        if (packetIn.getChannelName().equals(PacketManager.serverChannelName)) {
-            PacketManager.processPacket(packetIn.getBufferData());
-            return;
-        }
 
         if ("MC|TrList".equals(packetIn.getChannelName())) {
             final PacketBuffer packetbuffer = packetIn.getBufferData();

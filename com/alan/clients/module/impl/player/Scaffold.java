@@ -36,6 +36,7 @@ import com.alan.clients.util.vector.Vector2f;
 import com.alan.clients.util.vector.Vector3d;
 import com.alan.clients.value.impl.*;
 import net.minecraft.block.BlockAir;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -79,6 +80,7 @@ public class Scaffold extends Module {
             .add(new LegitSprint("Legit", this))
             .add(new BypassSprint("Bypass", this))
             .add(new VulcanSprint("Vulcan", this))
+            .add(new NCPSprint("No Cheat Plus", this))
             .add(new MatrixSprint("Matrix", this))
             .add(new HuaYuTingSprint("HuaYuTing", this))
             .add(new WatchdogSprint("Watchdog", this))
@@ -105,9 +107,8 @@ public class Scaffold extends Module {
 
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation Speed", this, 5, 10, 0, 10, 1);
     private final BoundsNumberValue placeDelay = new BoundsNumberValue("Place Delay", this, 0, 0, 0, 5, 1);
-    private final BoundsNumberValue placeTime = new BoundsNumberValue("Place Time", this, 1, 2, 1, 10, 1);
     private final NumberValue timer = new NumberValue("Timer", this, 1, 0.1, 10, 0.1);
-
+    private final NumberValue tellyTick = new NumberValue("Telly Ticks", this, 3, 1, 6, 1, () -> !mode.getValue().getName().equalsIgnoreCase("Telly"));
     public final BooleanValue movementCorrection = new BooleanValue("Movement Correction", this, false);
     public final BooleanValue safeWalk = new BooleanValue("Safe Walk", this, true);
     private final BooleanValue sneak = new BooleanValue("Sneak", this, false);
@@ -118,6 +119,7 @@ public class Scaffold extends Module {
     public final NumberValue sneakingSpeed = new NumberValue("Sneaking Speed", this, 0.2, 0.2, 1, 0.05, () -> !sneak.getValue());
 
     private final BooleanValue render = new BooleanValue("Render", this, true);
+    private final BooleanValue noSwing = new BooleanValue("No Swing", this, true);
 
     private final BooleanValue advanced = new BooleanValue("Advanced", this, false);
 
@@ -276,13 +278,13 @@ public class Scaffold extends Module {
             case "Snap":
                 getRotations(yawOffset);
 
-                if (!(ticksOnAir > 0 && !RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict")))) {
+                if (!(ticksOnAir > 0 && !RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, true))) {
                     targetYaw = (float) (Math.toDegrees(MoveUtil.direction(mc.thePlayer.rotationYaw, forward, strafe))) + yawOffset;
                 }
                 break;
 
             case "Telly":
-                if (mc.thePlayer.offGroundTicks >= 3) {
+                if (mc.thePlayer.offGroundTicks >= tellyTick.getValue().intValue()) {
                     if (!RayCastUtil.overBlock(RotationComponent.rotations, enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict"))) {
                         getRotations(yawOffset);
                         oldTargetYaw = targetYaw;
@@ -352,8 +354,8 @@ public class Scaffold extends Module {
         // Gets block to place
         targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, 5);
 
-        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY)) {
-            if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks >= 3) {
+        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump))) {
+            if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks >= tellyTick.getValue().intValue()) {
                 RotationComponent.setRotations(new Vector2f(oldTargetYaw, oldTargetPitch), 10, movementCorrection.getValue() ? MovementFix.NORMAL : MovementFix.OFF);
             }
             return;
@@ -381,13 +383,13 @@ public class Scaffold extends Module {
         }
 
         if (this.sameY.getValue().getName().equals("Auto Jump")) {
-            mc.gameSettings.keyBindJump.setPressed((mc.thePlayer.onGround && MoveUtil.isMoving()) || mc.gameSettings.keyBindJump.isPressed());
+            mc.gameSettings.keyBindJump.setPressed((mc.thePlayer.onGround && MoveUtil.isMoving()) || GameSettings.isKeyDown(mc.gameSettings.keyBindJump));
         }
 
-        if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? 5 : 4)) return;
+        if (mode.getValue().getName().equalsIgnoreCase("Telly") && mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? tellyTick.getValue().intValue() + 1 : tellyTick.getValue().intValue())) return;
 
         // Same Y
-        final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !mc.gameSettings.keyBindJump.isKeyDown()) && MoveUtil.isMoving();
+        final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump)) && MoveUtil.isMoving();
 
         if (startY - 1 != Math.floor(targetBlock.yCoord) && sameY) {
             return;
@@ -401,7 +403,8 @@ public class Scaffold extends Module {
                 Vec3 hitVec = this.getHitVec();
 
                 if (mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, SlotComponent.getItemStack(), blockFace, enumFacing.getEnumFacing(), hitVec)) {
-                    PacketUtil.send(new C0APacketAnimation());
+                    if (noSwing.getValue()) PacketUtil.send(new C0APacketAnimation());
+                    else mc.thePlayer.swingItem();
                 }
 
                 mc.rightClickDelayTimer = 0;
@@ -419,7 +422,7 @@ public class Scaffold extends Module {
         }
 
         //For Same Y
-        if (mc.thePlayer.onGround || (mc.gameSettings.keyBindJump.isKeyDown() && !MoveUtil.isMoving())) {
+        if (mc.thePlayer.onGround || GameSettings.isKeyDown(mc.gameSettings.keyBindJump)) {
             startY = Math.floor(mc.thePlayer.posY);
         }
 
@@ -450,6 +453,8 @@ public class Scaffold extends Module {
             targetYaw = rotations.x;
             targetPitch = rotations.y;
         }
+
+        targetYaw += sprint.getValue().getName().equalsIgnoreCase("Watchdog") ? RandomUtil.nextInt(10, 20) : 0;
     }
 
 

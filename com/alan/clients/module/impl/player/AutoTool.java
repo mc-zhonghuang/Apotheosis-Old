@@ -60,7 +60,7 @@ public class AutoTool extends Module {
                 event.setCancelled();
         }
 
-        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && mc.gameSettings.keyBindAttack.isKeyDown()) {
+        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && mc.gameSettings.keyBindAttack.isPressed()) {
             blockBreak = 3;
             blockPos = mc.objectMouseOver.getBlockPos();
         }

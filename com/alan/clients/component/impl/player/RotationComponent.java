@@ -11,6 +11,7 @@ import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
 import com.alan.clients.newevent.impl.motion.StrafeEvent;
 import com.alan.clients.newevent.impl.render.LookEvent;
+import com.alan.clients.util.chat.ChatUtil;
 import com.alan.clients.util.player.MoveUtil;
 import com.alan.clients.util.rotation.RotationUtil;
 import com.alan.clients.util.vector.Vector2f;

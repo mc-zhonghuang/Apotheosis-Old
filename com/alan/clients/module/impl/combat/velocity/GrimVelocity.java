@@ -4,29 +4,17 @@ import com.alan.clients.module.impl.combat.Velocity;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
-import com.alan.clients.newevent.impl.other.TickEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
-import com.alan.clients.newevent.impl.packet.PacketSendEvent;
-import com.alan.clients.util.chat.ChatUtil;
-import com.alan.clients.util.packet.PacketUtil;
-import com.alan.clients.util.player.MoveUtil;
 import com.alan.clients.value.Mode;
-import com.alan.clients.value.impl.BooleanValue;
-import com.alan.clients.value.impl.NumberValue;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
-import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-import net.minecraft.network.play.server.S39PacketPlayerAbilities;
-
-import java.util.LinkedList;
-import java.util.concurrent.LinkedBlockingQueue;
+import net.minecraft.util.BlockPos;
 
 public class GrimVelocity extends Mode<Velocity> {
 
-    public int packets = 0;
+    public boolean send = false;
 
     public GrimVelocity(String name, Velocity parent) {
         super(name, parent);
@@ -41,16 +29,20 @@ public class GrimVelocity extends Mode<Velocity> {
             S12PacketEntityVelocity wrapper = (S12PacketEntityVelocity) packet;
             if (mc.theWorld.getEntityByID(wrapper.getEntityID()) == mc.thePlayer) {
                 event.setCancelled();
-                packets = 6;
+                send = true;
             }
         }
         if (packet instanceof S27PacketExplosion) {
             event.setCancelled();
-            packets = 6;
+            send = true;
         }
-        if (packet instanceof S32PacketConfirmTransaction && packets > 0) {
-            event.setCancelled();
-            packets--;
+    };
+
+    @EventLink
+    public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        if (send) {
+            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(mc.thePlayer).up(), 1, mc.thePlayer.getHeldItem(), 0, 0, 0));
+            send = false;
         }
     };
 }

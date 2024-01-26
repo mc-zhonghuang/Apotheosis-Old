@@ -13,6 +13,7 @@ import com.alan.clients.value.Mode;
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
@@ -22,16 +23,16 @@ import net.minecraft.util.MovementInput;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @author Alan
- * @since 16.05.2022
+ * @author LvZiQiao
+ * @since 25.1.2024
  */
 
 public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
-    private boolean inventoryOpen;
     private int chestCloseTicks;
     private int chestId;
-    private LinkedBlockingQueue<C03PacketPlayer> c03s = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<C03PacketPlayer> c03s = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<C0EPacketClickWindow> c0es = new LinkedBlockingQueue<>();
 
     public WatchdogInventoryMove(String name, InventoryMove parent) {
         super(name, parent);
@@ -42,46 +43,32 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
         final Packet<?> packet = event.getPacket();
 
-        if (packet instanceof C03PacketPlayer && inventoryOpen && !(mc.currentScreen instanceof GuiChest)) {
-            if (!BadPacketsComponent.bad(false, false, false, false, true))
-                PacketUtil.send(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-        } else if (packet instanceof C16PacketClientStatus) {
-            final C16PacketClientStatus wrapper = (C16PacketClientStatus) packet;
-
-            if (wrapper.getStatus() == C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT) {
-                inventoryOpen = true;
-                chestCloseTicks = -1;
-            }
-        } else if (packet instanceof C0BPacketEntityAction) {
-            final C0BPacketEntityAction wrapper = (C0BPacketEntityAction) packet;
-
-            if (wrapper.getAction() == C0BPacketEntityAction.Action.OPEN_INVENTORY) {
-                inventoryOpen = true;
-                chestCloseTicks = -1;
-            }
-        } else if (packet instanceof C08PacketPlayerBlockPlacement) {
+         if (packet instanceof C08PacketPlayerBlockPlacement) {
             C08PacketPlayerBlockPlacement c08PacketPlayerBlockPlacement = ((C08PacketPlayerBlockPlacement) packet);
 
             if (PlayerUtil.block(c08PacketPlayerBlockPlacement.getPosition()) instanceof BlockChest) {
-                inventoryOpen = true;
                 chestCloseTicks = -1;
             }
         } else if (packet instanceof C0DPacketCloseWindow) {
-            inventoryOpen = false;
-            if (((C0DPacketCloseWindow) packet).windowId != 0) {
+             if (((C0DPacketCloseWindow) packet).windowId != 0) {
                 chestCloseTicks = 0;
                 event.setCancelled();
                 chestId = ((C0DPacketCloseWindow) packet).windowId;
             }
         } else if (packet instanceof C0EPacketClickWindow) {
-            inventoryOpen = true;
-            chestCloseTicks = -1;
+             chestCloseTicks = -1;
+            if (mc.currentScreen instanceof GuiChest) {
+                event.setCancelled();
+                c0es.add((C0EPacketClickWindow) packet);
+            }
         } else if (packet instanceof C03PacketPlayer) {
             if (chestCloseTicks < 3 && chestCloseTicks != -1) {
                 event.setCancelled();
                 c03s.add((C03PacketPlayer) packet);
                 if (chestCloseTicks == 2) {
                     PacketUtil.sendNoEvent(new C0DPacketCloseWindow(chestId));
+                } else if (chestCloseTicks == 1 && !c0es.isEmpty()) {
+                    c0es.forEach(PacketUtil::sendNoEvent);
                 }
                 chestCloseTicks++;
             } else {
@@ -96,7 +83,6 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
     public final Listener<WorldChangeEvent> onWorld = event -> {
         c03s.clear();
         chestCloseTicks = -1;
-        inventoryOpen = false;
     };
 
     private final KeyBinding[] AFFECTED_BINDINGS = new KeyBinding[]{
@@ -110,7 +96,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
 
-        if (mc.currentScreen instanceof GuiChat || mc.currentScreen == this.getStandardClickGUI()) {
+        if (mc.currentScreen instanceof GuiChat || mc.currentScreen == this.getStandardClickGUI() || mc.currentScreen instanceof GuiInventory) {
             return;
         }
 

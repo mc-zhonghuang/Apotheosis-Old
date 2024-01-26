@@ -41,6 +41,8 @@ public class DamageFlight extends Mode<Flight> {
         InstanceAccess.mc.thePlayer.motionY = 0.0D
                 + (InstanceAccess.mc.gameSettings.keyBindJump.isKeyDown() ? speed : 0.0D)
                 - (InstanceAccess.mc.gameSettings.keyBindSneak.isKeyDown() ? speed : 0.0D);
+
+        System.out.println();
     };
 
     @EventLink()

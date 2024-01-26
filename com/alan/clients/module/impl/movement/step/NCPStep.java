@@ -59,7 +59,7 @@ public class NCPStep extends Mode<Step> {
             return;
         }
 
-        final double[] values;
+        double[] values;
 
         if (height > 2.019) {
             values = new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.919};
@@ -73,6 +73,9 @@ public class NCPStep extends Mode<Step> {
             values = new double[]{0.42, 0.7532};
         } else {
             values = new double[]{0.39, 0.6938};
+        }
+        if (height == 1) {
+            values = new double[]{0.41999998688698, 0.75};
         }
 
         mc.timer.timerSpeed = this.timer.getValue().floatValue();

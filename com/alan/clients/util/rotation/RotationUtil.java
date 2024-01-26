@@ -1,6 +1,7 @@
 package com.alan.clients.util.rotation;
 
 import com.alan.clients.util.RayCastUtil;
+import com.alan.clients.util.chat.ChatUtil;
 import com.alan.clients.util.interfaces.InstanceAccess;
 import com.alan.clients.util.math.MathConst;
 import com.alan.clients.util.vector.Vector2f;

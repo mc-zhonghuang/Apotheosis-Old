@@ -25,7 +25,7 @@ public class ChunkProviderClient implements IChunkProvider {
      */
     private final Chunk blankChunk;
     private final LongHashMap<Chunk> chunkMapping = new LongHashMap();
-    private final List<Chunk> chunkListing = Lists.newArrayList();
+    public final List<Chunk> chunkListing = Lists.newArrayList();
 
     /**
      * Reference to the World object.

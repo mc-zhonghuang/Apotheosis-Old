@@ -14,6 +14,7 @@ import com.alan.clients.value.impl.ModeValue;
 import com.alan.clients.value.impl.NumberValue;
 import com.alan.clients.value.impl.SubMode;
 import net.minecraft.block.BlockAir;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
@@ -30,6 +31,7 @@ public class WatchdogSpeed extends Mode<Speed> {
             .add(new SubMode("Full Strafe"))
             .add(new SubMode("Ground Strafe"))
             .add(new SubMode("Damage Strafe"))
+            .add(new SubMode("50% Strafe"))
             .setDefault("Full Strafe");
 
     private final BooleanValue damageBoost = new BooleanValue("Damage Boost", this, false);
@@ -41,7 +43,7 @@ public class WatchdogSpeed extends Mode<Speed> {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (mode.getValue().getName().equals("Ground Strafe") || mode.getValue().getName().equals("Damage Strafe"))
+        if (mode.getValue().getName().equals("Ground Strafe") || mode.getValue().getName().equals("Damage Strafe") || mode.getValue().getName().equals("50% Strafe"))
             return;
 
         if (!(PlayerUtil.blockRelativeToPlayer(0, -1, 0) instanceof BlockAir) && mc.thePlayer.ticksSinceVelocity > 20) {
@@ -57,29 +59,16 @@ public class WatchdogSpeed extends Mode<Speed> {
         switch (mode.getValue().getName()) {
 
             case "Ground Strafe":
-                if (mc.thePlayer.onGround && mc.thePlayer.ticksSinceJump > 5 && MoveUtil.isMoving()) {
-                    double lastAngle = Math.atan(mc.thePlayer.lastMotionX / mc.thePlayer.lastMotionZ) * (180 / Math.PI);
-
-                    MoveUtil.strafe(MoveUtil.getAllowedHorizontalDistance() - Math.random() / 100f);
-                    mc.thePlayer.jump();
-
-                    double angle = Math.atan(mc.thePlayer.motionX / mc.thePlayer.motionZ) * (180 / Math.PI);
-
-                    if (Math.abs(lastAngle - angle) > 20 && mc.thePlayer.ticksSinceVelocity > 20) {
-                        int speed = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).amplifier + 1 : 0;
-
-                        switch (speed) {
-                            case 0:
-                                MoveUtil.moveFlying(-0.005);
-                                break;
-
-                            case 1:
-                                MoveUtil.moveFlying(-0.035);
-                                break;
-
-                            default:
-                                MoveUtil.moveFlying(-0.04);
-                                break;
+                if (MoveUtil.isMoving()) {
+                    if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+                        if (mc.thePlayer.onGround) {
+                            mc.thePlayer.jump();
+                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.54));
+                        }
+                    } else {
+                        if (mc.thePlayer.onGround) {
+                            MoveUtil.strafe(Math.max(MoveUtil.speed(), MoveUtil.getAllowedHorizontalDistance()));
+                            mc.thePlayer.jump();
                         }
                     }
                 }
@@ -148,6 +137,22 @@ public class WatchdogSpeed extends Mode<Speed> {
                         }
                     }
                 }
+                break;
+            case "50% Strafe":
+                if (MoveUtil.isMoving()) {
+                    if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+                        if (mc.thePlayer.onGround) mc.thePlayer.jump();
+                        if (mc.thePlayer.onGround || MoveUtil.speed() < 0.275) {
+                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.54));
+                        }
+                    } else {
+                        if (mc.thePlayer.onGround || MoveUtil.speed() < 0.275) {
+                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.42));
+                        }
+                        if (mc.thePlayer.onGround) mc.thePlayer.jump();
+                    }
+                }
+
                 break;
         }
 

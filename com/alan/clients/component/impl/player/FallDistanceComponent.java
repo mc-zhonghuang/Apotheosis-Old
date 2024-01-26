@@ -3,6 +3,7 @@ package com.alan.clients.component.impl.player;
 import com.alan.clients.api.Rise;
 import com.alan.clients.component.Component;
 import com.alan.clients.newevent.Listener;
+import com.alan.clients.newevent.Priorities;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 
@@ -12,7 +13,7 @@ public final class FallDistanceComponent extends Component {
     public static float distance;
     private float lastDistance;
 
-    @EventLink()
+    @EventLink(value = Priorities.VERY_HIGH)
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
         final float fallDistance = mc.thePlayer.fallDistance;
 

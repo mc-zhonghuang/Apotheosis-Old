@@ -17,7 +17,6 @@ import com.alan.clients.packetlog.Check;
 import com.alan.clients.packetlog.api.manager.PacketLogManager;
 import com.alan.clients.protection.check.api.McqBFVbnWB;
 import com.alan.clients.protection.manager.TargetManager;
-import com.alan.clients.protocol.hyt.germmod.PacketManager;
 import com.alan.clients.script.ScriptManager;
 import com.alan.clients.security.SecurityFeatureManager;
 import com.alan.clients.ui.click.clover.CloverClickGUI;
@@ -202,7 +201,6 @@ public enum Client {
         }
 
         // Init Managers
-        PacketManager.init();
         this.targetManager.init();
         this.dataManager.init();
         //this.McqAFVeaWB.init();

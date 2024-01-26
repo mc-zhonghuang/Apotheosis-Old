@@ -5,6 +5,7 @@ import com.alan.clients.component.impl.player.rotationcomponent.MovementFix;
 import com.alan.clients.module.impl.movement.NoSlow;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
+import com.alan.clients.newevent.impl.motion.PostMotionEvent;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.motion.SlowDownEvent;
 import com.alan.clients.newevent.impl.packet.PacketSendEvent;
@@ -30,6 +31,13 @@ public class WatchdogNoSlow extends Mode<NoSlow> {
 //            PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
             PacketUtil.sendNoEvent(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem % 8 + 1));
             PacketUtil.sendNoEvent(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
+        }
+    };
+
+    @EventLink()
+    public final Listener<PostMotionEvent> onPostMotionEvent = event -> {
+        if (mc.thePlayer.isUsingItem() && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword && MoveUtil.isMoving()) {
+            PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
         }
     };
 
