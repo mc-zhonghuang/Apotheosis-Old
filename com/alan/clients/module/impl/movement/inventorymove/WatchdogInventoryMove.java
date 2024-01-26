@@ -31,6 +31,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
     private int chestCloseTicks;
     private int chestId;
+    private boolean canClose;
     private final LinkedBlockingQueue<C03PacketPlayer> c03s = new LinkedBlockingQueue<>();
     private final LinkedBlockingQueue<C0EPacketClickWindow> c0es = new LinkedBlockingQueue<>();
 
@@ -48,16 +49,18 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
             if (PlayerUtil.block(c08PacketPlayerBlockPlacement.getPosition()) instanceof BlockChest) {
                 chestCloseTicks = -1;
+                canClose = true;
             }
         } else if (packet instanceof C0DPacketCloseWindow) {
-             if (((C0DPacketCloseWindow) packet).windowId != 0) {
+             if (((C0DPacketCloseWindow) packet).windowId != 0 && canClose) {
                 chestCloseTicks = 0;
                 event.setCancelled();
                 chestId = ((C0DPacketCloseWindow) packet).windowId;
+                canClose = false;
             }
         } else if (packet instanceof C0EPacketClickWindow) {
              chestCloseTicks = -1;
-            if (mc.currentScreen instanceof GuiChest) {
+            if (mc.currentScreen instanceof GuiChest && canClose) {
                 event.setCancelled();
                 c0es.add((C0EPacketClickWindow) packet);
             }
@@ -96,7 +99,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
 
-        if (mc.currentScreen instanceof GuiChat || mc.currentScreen == this.getStandardClickGUI() || mc.currentScreen instanceof GuiInventory) {
+        if (mc.currentScreen instanceof GuiChat || mc.currentScreen == this.getStandardClickGUI()) {
             return;
         }
 
