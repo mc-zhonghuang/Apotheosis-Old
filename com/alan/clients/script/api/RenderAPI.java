@@ -83,21 +83,6 @@ public class RenderAPI extends API {
         return new ScriptMCFontRenderer(MC.fontRendererObj);
     }
 
-    public ScriptRiseFontRenderer getCustomFontRenderer(String name, int size, boolean antialiasing) {
-        return new ScriptRiseFontRenderer(new FontRenderer(new Font(name, 0, size), antialiasing));
-    }
-
-    public ScriptRiseFontRenderer getCustomFontRendererBold(String name, int size, boolean antialiasing) {
-        return new ScriptRiseFontRenderer(new FontRenderer(new Font(name, Font.BOLD, size), antialiasing));
-    }
-
-    public ScriptRiseFontRenderer getCustomFontRendererItalic(String name, int size, boolean antialiasing) {
-        return new ScriptRiseFontRenderer(new FontRenderer(new Font(name, Font.ITALIC, size), antialiasing));
-    }
-
-    public ScriptRiseFontRenderer getCustomFontRendererBoldItalic(String name, int size, boolean antialiasing) {
-        return new ScriptRiseFontRenderer(new FontRenderer(new Font(name, Font.BOLD | Font.ITALIC, size), antialiasing));
-    }
 
     public float getEyeHeight() {
         return MC.thePlayer.getEyeHeight();

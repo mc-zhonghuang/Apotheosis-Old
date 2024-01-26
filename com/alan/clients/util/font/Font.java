@@ -8,8 +8,9 @@ public abstract class Font {
     public abstract int drawStringWithShadow(final String text, final double x, final double y, final int color);
 
     public abstract int width(String text);
+    public abstract float drawCenteredString(final String text, final double x, final double y, final int color,boolean shadow);
 
-    public abstract int drawCenteredString(final String text, final double x, final double y, final int color);
+    public abstract float drawCenteredString(final String text, final double x, final double y, final int color);
 
     public abstract int drawRightString(final String text, final double x, final double y, final int color);
 
