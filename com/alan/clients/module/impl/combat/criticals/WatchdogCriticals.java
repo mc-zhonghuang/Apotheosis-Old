@@ -1,15 +1,15 @@
 package com.alan.clients.module.impl.combat.criticals;
 
-import com.alan.clients.component.impl.player.BadPacketsComponent;
 import com.alan.clients.module.impl.combat.Criticals;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
-import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.value.Mode;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.util.BlockPos;
 
 public final class WatchdogCriticals extends Mode<Criticals> {
 
@@ -27,7 +27,7 @@ public final class WatchdogCriticals extends Mode<Criticals> {
             if (attacking) {
                 final C03PacketPlayer wrapped = (C03PacketPlayer) packet;
 
-                if (wrapped.onGround) {
+                if (wrapped.onGround && !(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer).down()).getBlock() instanceof BlockStairs || mc.theWorld.getBlockState(new BlockPos(mc.thePlayer)).getBlock() instanceof BlockStairs)) {
                     if (wrapped.moving) {
                         wrapped.y += 0.00625;
                         wrapped.setOnGround(false);
