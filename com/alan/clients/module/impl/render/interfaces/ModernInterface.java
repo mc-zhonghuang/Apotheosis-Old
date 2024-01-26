@@ -27,7 +27,6 @@ import java.awt.*;
 
 public class ModernInterface extends Mode<Interface> {
 
-    private final Font productSansMedium36 = FontManager.getProductSansMedium(36);
     private final Font productSansRegular = FontManager.getProductSansRegular(18);
     private final Font minecraft = FontManager.getMinecraft();
 
@@ -180,7 +179,7 @@ public class ModernInterface extends Mode<Interface> {
                 // information of user in the bottom right corner of the screen
                 final float x = event.getScaledResolution().getScaledWidth();
                 final float y = event.getScaledResolution().getScaledHeight() - this.productSansRegular.height() - 1;
-                this.productSansRegular.drawStringWithShadow("java.lang.NullPointerException", x - userWidth - 5, y, 0xFFCCCCCC);
+                //    this.productSansRegular.drawStringWithShadow("java.lang.NullPointerException", x - userWidth - 5, y, 0xFFCCCCCC);
 //                this.productSansMedium18.drawStringWithShadow(username, x - nameWidth - 5, y, 0xFFCCCCCC);
 
                 // coordinates of user in the bottom left corner of the screen
@@ -197,7 +196,7 @@ public class ModernInterface extends Mode<Interface> {
         // information of user in the bottom right corner of the screen
         final float x = event.getScaledResolution().getScaledWidth();
         final float y = event.getScaledResolution().getScaledHeight() - this.productSansRegular.height() - 1;
-        this.productSansRegular.drawStringWithShadow("java.lang.NullPointerException", x - userWidth - 5, y, 0xFFCCCCCC);
+        //     this.productSansRegular.drawStringWithShadow("java.lang.NullPointerException", x - userWidth - 5, y, 0xFFCCCCCC);
 //        this.productSansMedium18.drawStringWithShadow(username, x - nameWidth - 5, y, 0xFFCCCCCC);
 
         // coordinates of user in the bottom left corner of the screen
@@ -205,12 +204,12 @@ public class ModernInterface extends Mode<Interface> {
         this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
         this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
 
-        // title in the top left corner of the screen
-        this.productSansMedium36.drawString(Client.NAME, 6, 6, logoColor.getRGB());
+        // title
+        //  this.productSansMedium36.drawString(Client.NAME, 6, 6, logoColor.getRGB());
 
         NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
-            // title in the top left corner of the screen
-            this.productSansMedium36.drawString(Client.NAME, 6, 6, this.getTheme().getFirstColor().getRGB());
+            //shadow
+            //   this.productSansMedium36.drawString(Client.NAME, 6, 6, this.getTheme().getFirstColor().getRGB());
         });
 
         if (mc.thePlayer.ticksExisted % 150 == 0) {

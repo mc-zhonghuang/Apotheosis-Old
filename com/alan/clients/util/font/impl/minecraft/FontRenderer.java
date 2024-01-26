@@ -22,9 +22,11 @@ import net.optifine.util.FontUtils;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.*;
 
 public class FontRenderer extends Font implements IResourceManagerReloadListener {
@@ -133,7 +135,53 @@ public class FontRenderer extends Font implements IResourceManagerReloadListener
     private final float[] charWidthFloat = new float[256];
     private boolean blend = false;
     private final GlBlendState oldBlendState = new GlBlendState();
+    public int getStringWidth(String text)
+    {
+        if (text == null)
+        {
+            return 0;
+        }
+        else
+        {
+            float f = 0.0F;
+            boolean flag = false;
 
+            for (int i = 0; i < text.length(); ++i)
+            {
+                char c0 = text.charAt(i);
+                float f1 = this.getCharWidthFloat(c0);
+
+                if (f1 < 0.0F && i < text.length() - 1)
+                {
+                    ++i;
+                    c0 = text.charAt(i);
+
+                    if (c0 != 108 && c0 != 76)
+                    {
+                        if (c0 == 114 || c0 == 82)
+                        {
+                            flag = false;
+                        }
+                    }
+                    else
+                    {
+                        flag = true;
+                    }
+
+                    f1 = 0.0F;
+                }
+
+                f += f1;
+
+                if (flag && f1 > 0.0F)
+                {
+                    f += this.unicodeFlag ? 1.0F : this.offsetBold;
+                }
+            }
+
+            return Math.round(f);
+        }
+    }
     public FontRenderer(final GameSettings gameSettingsIn, final ResourceLocation location, final TextureManager textureManagerIn, final boolean unicode) {
         this.gameSettings = gameSettingsIn;
         this.locationFontTextureBase = location;
@@ -381,7 +429,7 @@ public class FontRenderer extends Font implements IResourceManagerReloadListener
         int i;
 
         if (dropShadow) {
-            i = this.renderString(text, (float) x + 1.0F, (float) y + 1.0F, color, true);
+            i = this.renderString(text, (float) x + 1.0F, (float) y + 0.5F, color, true);
             i = Math.max(i, this.renderString(text, (float) x, (float) y, color, false));
         } else {
             i = this.renderString(text, (float) x, (float) y, color, false);
@@ -607,7 +655,13 @@ public class FontRenderer extends Font implements IResourceManagerReloadListener
     }
 
     @Override
-    public int drawCenteredString(String text, double x, double y, int color) {
+    public float drawCenteredString(String text, double x, double y, int color, boolean shadow) {
+        drawCenteredString(text, x + 0.5, y + 0.5, Color.BLACK.getRGB());
+        return drawCenteredString(text, x, y, color);
+    }
+
+    @Override
+    public float drawCenteredString(String text, double x, double y, int color) {
         return drawString(text, x - (width(text) >> 1), y, color, false); // whoever bitshifted this instead of diving by 2 is a fucking nerd and virgin
     }
 

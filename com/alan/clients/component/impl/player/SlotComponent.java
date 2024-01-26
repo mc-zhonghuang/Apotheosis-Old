@@ -59,7 +59,7 @@ public final class SlotComponent extends Component {
         }
 
         final ItemStack itemStack = getItemStack();
-
+/*
         if (itemStack != null) {
             final String stackSize = String.valueOf(itemStack.stackSize);
             final Item item = itemStack.getItem();
@@ -72,10 +72,9 @@ public final class SlotComponent extends Component {
             final float amountWidth = productSansLight.width("Amount:") + 2;
             final double width = 16 + edgeOffset * 2 + (item instanceof ItemBlock ? amountWidth + productSansMedium.width(stackSize) + 2 + edgeOffset : 0);
             final double height = 22;
-            final double x = halfWidth - width / 2.0F;
+          final double x = halfWidth - width / 2.0F;
             final double fontY = y + height / 2.0F - this.productSansLight.height() / 2.0F + 3;
             final int alpha = MathHelper.clamp_int((int) (255 * (float) (scaledResolution.getScaledHeight() - animation.getValue()) / 90.0F), 0, 255);
-
             if (alpha > 0) {
                 NORMAL_RENDER_RUNNABLES.add(() -> {
                     RenderUtil.roundedRectangle(x, y, width, height, getTheme().getRound(), getTheme().getBackgroundShade());
@@ -92,6 +91,8 @@ public final class SlotComponent extends Component {
                 NORMAL_POST_BLOOM_RUNNABLES.add(() -> RenderUtil.roundedRectangle(x, y, width, height, getTheme().getRound() + 0.5F, getTheme().getDropShadow()));
             }
         }
+
+ */
     };
 
     @EventLink(value = Priorities.VERY_HIGH)

@@ -170,7 +170,7 @@ public class FontManager {
     }
 
     public static Font getProductSansMedium(final int size) {
-        return get(PRODUCT_SANS_MEDIUM, size, "product_sans_medium", true, true);
+        return get(PRODUCT_SANS_MEDIUM, size, "productsans", true, true);
     }
 
     public static Font getProductSansLight(final int size) {
@@ -194,7 +194,7 @@ public class FontManager {
             final java.awt.Font font = FontUtil.getResource("alexander/font/" + name + (otf ? ".otf" : ".ttf"), size);
 
             if (font != null) {
-                map.put(size, new FontRenderer(font, fractionalMetrics, AA, international));
+                map.put(size, new FontRenderer(font));
             }
         }
 
