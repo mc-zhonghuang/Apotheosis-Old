@@ -263,8 +263,8 @@ public class Items {
             golden_leggings = (ItemArmor) getRegisteredItem("golden_leggings");
             golden_boots = (ItemArmor) getRegisteredItem("golden_boots");
             flint = getRegisteredItem("flint");
-            porkchop = getRegisteredItem("halal"); //Removed pork because haram
-            cooked_porkchop = getRegisteredItem("cooked_halal");
+            porkchop = getRegisteredItem("porkchop"); //Removed pork because haram
+            cooked_porkchop = getRegisteredItem("cooked_porkchop");
             painting = getRegisteredItem("painting");
             golden_apple = getRegisteredItem("golden_apple");
             sign = getRegisteredItem("sign");

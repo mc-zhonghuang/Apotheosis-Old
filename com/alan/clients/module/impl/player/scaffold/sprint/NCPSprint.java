@@ -17,7 +17,6 @@ public class NCPSprint extends Mode<Scaffold> {
     public final Listener<PreMotionEvent> onPreMotion = event -> {
         event.setOnGround(false);
         mc.gameSettings.keyBindSprint.setPressed(true);
-        mc.thePlayer.setSprinting(true);
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
             mc.thePlayer.motionX *= 0.95;
             mc.thePlayer.motionZ *= 0.95;

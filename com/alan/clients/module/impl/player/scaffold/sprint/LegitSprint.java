@@ -16,7 +16,6 @@ public class LegitSprint extends Mode<Scaffold> {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-
         if (Math.abs(MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw) - MathHelper.wrapAngleTo180_float(RotationComponent.rotations.x)) > 90) {
             mc.gameSettings.keyBindSprint.setPressed(false);
             mc.thePlayer.setSprinting(false);

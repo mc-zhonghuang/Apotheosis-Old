@@ -1,6 +1,7 @@
 package com.alan.clients.script.api;
 
 import com.alan.clients.Client;
+import com.alan.clients.api.Hidden;
 import com.alan.clients.command.Command;
 import com.alan.clients.component.impl.render.NotificationComponent;
 import com.alan.clients.module.Module;

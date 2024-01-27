@@ -32,6 +32,5 @@ public class HuaYuTingSprint extends Mode<Scaffold> {
     @Override
     public void onEnable() {
         mc.gameSettings.keyBindSprint.setPressed(true);
-        mc.thePlayer.setSprinting(true);
     }
 }

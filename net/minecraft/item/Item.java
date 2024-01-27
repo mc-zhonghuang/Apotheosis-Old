@@ -737,8 +737,8 @@ public class Item {
         registerItem(316, "golden_leggings", (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, 2)).setUnlocalizedName("leggingsGold"));
         registerItem(317, "golden_boots", (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, 3)).setUnlocalizedName("bootsGold"));
         registerItem(318, "flint", (new Item()).setUnlocalizedName("flint").setCreativeTab(CreativeTabs.tabMaterials));
-        registerItem(319, "halal", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("beefRaw"));
-        registerItem(320, "cooked_halal", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("beefCooked"));
+        registerItem(319, "porkchop", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("beefRaw"));
+        registerItem(320, "cooked_porkchop", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("beefCooked"));
         registerItem(321, "painting", (new ItemHangingEntity(EntityPainting.class)).setUnlocalizedName("painting"));
         registerItem(322, "golden_apple", (new ItemAppleGold(4, 1.2F, false)).setAlwaysEdible().setPotionEffect(Potion.regeneration.id, 5, 1, 1.0F).setUnlocalizedName("appleGold"));
         registerItem(323, "sign", (new ItemSign()).setUnlocalizedName("sign"));

@@ -11,4 +11,8 @@ import lombok.Setter;
 public final class MoveEvent extends CancellableEvent {
 
     private double posX, posY, posZ;
+
+    public void zeroXZ() {
+        this.posX = this.posZ = 0;
+    }
 }

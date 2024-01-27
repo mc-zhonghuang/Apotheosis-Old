@@ -10,6 +10,7 @@ import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
 import com.alan.clients.newevent.impl.motion.PreUpdateEvent;
 import com.alan.clients.newevent.impl.motion.StrafeEvent;
+import com.alan.clients.newevent.impl.other.MoveEvent;
 import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
 import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.util.packet.PacketUtil;
@@ -23,12 +24,13 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
 
 /**
- * @author Auth
- * @since 18/11/2021
+ * @author LvZiQiao
+ * @since 1/27/2024
  */
 
 public class WatchdogLongJump extends Mode<LongJump> {
     private int ticks = 0;
+    private int jumpTime = 0;
 
     public WatchdogLongJump(String name, LongJump parent) {
         super(name, parent);
@@ -37,40 +39,36 @@ public class WatchdogLongJump extends Mode<LongJump> {
     @Override
     public void onEnable() {
         ticks = 0;
+        jumpTime = 0;
     }
 
     @EventLink
-    public final Listener<PacketSendEvent> onPacketSend = event -> {
-        final Packet<?> packet = event.getPacket();
-
-        if (packet instanceof C03PacketPlayer && ticks <= 25) {
-            event.setCancelled();
-        }
+    public final Listener<MoveEvent> onMove = event -> {
+        if (jumpTime < 4)
+            event.zeroXZ();
     };
 
     @EventLink
-    public final Listener<StrafeEvent> onStrafe = event -> {
-        if (ticks <= 25)
-            event.setCancelled();
-    };
-
-    @EventLink
-    public final Listener<PreUpdateEvent> preUpdate = event -> {
-        ticks++;
-        if (ticks == 25) {
-            DamageUtil.damagePlayer(0.5);
-        } else if (ticks > 25 && ticks < 35 && mc.thePlayer.onGround) {
-            mc.thePlayer.jump();
-        } else if (ticks == 35) {
-            BlinkComponent.blinking = true;
-            MoveUtil.strafe(1);
-            mc.thePlayer.jump();
-        } else if (ticks > 35 && mc.thePlayer.onGround) {
-            getParent().toggle();
-            BlinkComponent.dispatch();
-            BlinkComponent.blinking = false;
-            NotificationComponent.post("Watchdog long jump", "After the jump.");
-            this.ticks = 0;
+    public final Listener<PreMotionEvent> onPreMotion = event -> {
+        if (jumpTime < 4) {
+            if (mc.thePlayer.onGround) {
+                jumpTime++;
+                mc.thePlayer.jump();
+            }
+            event.setOnGround(false);
+        } else {
+            ticks++;
+            if (ticks == 10) {
+                BlinkComponent.blinking = true;
+                MoveUtil.strafe(1);
+                mc.thePlayer.jump();
+            } else if (ticks > 10 && mc.thePlayer.onGround) {
+                getParent().toggle();
+                BlinkComponent.dispatch();
+                BlinkComponent.blinking = false;
+                NotificationComponent.post("Watchdog long jump", "After the jump.");
+                this.ticks = 0;
+            }
         }
     };
 }

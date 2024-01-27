@@ -6,7 +6,6 @@ import com.alan.clients.module.impl.render.FreeLook;
 import com.alan.clients.newevent.impl.input.ClickEvent;
 import com.alan.clients.newevent.impl.input.KeyboardInputEvent;
 import com.alan.clients.newevent.impl.other.*;
-import com.alan.clients.protection.launch.McqBFVeaHN;
 import com.alan.clients.ui.ingame.GuiIngameCache;
 import com.alan.clients.ui.menu.impl.intro.IntroSequence;
 import com.alan.clients.ui.menu.impl.main.MainMenu;
@@ -95,6 +94,7 @@ import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.optifine.Lagometer;
+import net.optifine.Lang;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -459,14 +459,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.mcSoundHandler = new SoundHandler(this.mcResourceManager, this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.mcSoundHandler);
         this.mcMusicTicker = new MusicTicker(this);
-        this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation(McqBFVeaHN.getVariable(new byte[]{102, 111, 110, 116, 49}) + ".png"), this.renderEngine, false); // "textures/font/ascii.png"
+        this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);
 
         if (this.gameSettings.language != null) {
             this.fontRendererObj.setUnicodeFlag(this.isUnicode());
             this.fontRendererObj.setBidiFlag(this.mcLanguageManager.isCurrentLanguageBidirectional());
         }
 
-        this.standardGalacticFontRenderer = new FontRenderer(this.gameSettings, new ResourceLocation(McqBFVeaHN.getVariable(new byte[]{102, 111, 110, 116, 50}) + ".png"), this.renderEngine, false); // textures/font/ascii_sga
+        this.standardGalacticFontRenderer = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii_sga.png"), this.renderEngine, false);
         this.mcResourceManager.registerReloadListener(this.fontRendererObj);
         this.mcResourceManager.registerReloadListener(this.standardGalacticFontRenderer);
         this.mcResourceManager.registerReloadListener(new GrassColorReloadListener());
@@ -493,10 +493,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.matrixMode(5888);
 
         this.checkGLError("Startup");
-
-        if (!Client.DEVELOPMENT_SWITCH && McqBFVeaHN.value != -2048) { // protection
-            GlStateManager.depthFunc((Integer) McqBFVeaHN.getVariable(new byte[]{100, 101, 112, 116, 104}));
-        }
 
         this.textureMapBlocks = new TextureMap("textures");
         this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
@@ -562,7 +558,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         Display.setTitle("Initializing " + Client.NAME + "...");
 
         try {
-            Display.create((new PixelFormat()).withDepthBits((Integer) McqBFVeaHN.getVariable(new byte[]{100, 101, 112, 116, 104, 66, 105, 116, 115}))); // 24
+            Display.create((new PixelFormat()).withDepthBits(24));
         } catch (final LWJGLException lwjglexception) {
             logger.error("Couldn't set pixel format", lwjglexception);
 
@@ -679,6 +675,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     public boolean isUnicode() {
         return this.mcLanguageManager != null && this.gameSettings != null && (this.mcLanguageManager.isCurrentLocaleUnicode() || this.gameSettings.forceUnicodeFont);
+    }
+
+    public void refreshLanguage() {
+        this.mcLanguageManager.onResourceManagerReload(this.getResourceManager());
+        this.mcLanguageManager.parseLanguageMetadata(this.defaultResourcePacks);
+        Lang.resourcesReloaded();
     }
 
     public void refreshResources() {

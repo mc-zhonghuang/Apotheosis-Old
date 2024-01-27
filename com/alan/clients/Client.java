@@ -15,8 +15,7 @@ import com.alan.clients.network.NetworkManager;
 import com.alan.clients.newevent.bus.impl.EventBus;
 import com.alan.clients.packetlog.Check;
 import com.alan.clients.packetlog.api.manager.PacketLogManager;
-import com.alan.clients.protection.check.api.McqBFVbnWB;
-import com.alan.clients.protection.manager.TargetManager;
+import com.alan.clients.manager.TargetManager;
 import com.alan.clients.script.ScriptManager;
 import com.alan.clients.security.ExploitManager;
 import com.alan.clients.ui.click.clover.CloverClickGUI;
@@ -81,7 +80,6 @@ public enum Client {
     private Locale locale = Locale.EN_US; // The language of the client
 
     private EventBus eventBus;
-    private McqBFVbnWB McqAFVeaWB;
     private ModuleManager moduleManager;
     private ComponentManager componentManager;
     private CommandManager commandManager;
@@ -113,9 +111,6 @@ public enum Client {
 
     private RiseTab creativeTab;
 
-    @Setter
-    private boolean validated;
-
     /**
      * The main method when the Minecraft#startGame method is about
      * finish executing our client gets called and that's where we
@@ -141,7 +136,6 @@ public enum Client {
         mc.gameSettings.ofSmoothFps = false;
         mc.gameSettings.ofFastMath = false;
 
-        this.McqAFVeaWB = new McqBFVbnWB();
         this.moduleManager = new ModuleManager();
         this.componentManager = new ComponentManager();
         this.commandManager = new CommandManager();
@@ -158,7 +152,7 @@ public enum Client {
         this.targetManager = new TargetManager();
         this.cheatDetector = new CheatDetector();
         this.constantManager = new ConstantManager();
-        this.eventBus = new EventBus();
+        this.eventBus = new EventBus<>();
         this.packetLogManager = new PacketLogManager();
 
         // Register
@@ -199,7 +193,6 @@ public enum Client {
         // Init Managers
         this.targetManager.init();
         this.dataManager.init();
-        //this.McqAFVeaWB.init();
         this.moduleManager.init();
         this.securityManager.init();
         this.botManager.init();

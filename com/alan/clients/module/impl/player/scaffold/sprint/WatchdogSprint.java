@@ -22,13 +22,11 @@ public class WatchdogSprint extends Mode<Scaffold> {
     @Override
     public void onEnable() {
         mc.gameSettings.keyBindSprint.setPressed(true);
-        mc.thePlayer.setSprinting(true);
     }
 
     @EventLink
     public final Listener<PreMotionEvent> onPreMotion = event -> {
         mc.gameSettings.keyBindSprint.setPressed(true);
-        mc.thePlayer.setSprinting(true);
     };
 
     @EventLink

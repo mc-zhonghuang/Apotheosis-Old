@@ -1,4 +1,4 @@
-package com.alan.clients.protection.manager;
+package com.alan.clients.manager;
 
 import com.alan.clients.Client;
 import com.alan.clients.module.impl.combat.KillAura;
@@ -54,7 +54,7 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
     };
 
     private boolean checker(Entity entity) {
-        return (players && entity instanceof EntityPlayer && ((EntityPlayer) entity).getHealth() > 0 && (!teams || !((EntityPlayer) entity).isOnSameTeam(mc.thePlayer))) || (invisibles && entity.isInvisible()) || (animals && (entity instanceof EntityAnimal || entity instanceof EntitySquid || entity instanceof EntityGolem ||
+        return (players && entity instanceof EntityPlayer) || (animals && (entity instanceof EntityAnimal || entity instanceof EntitySquid || entity instanceof EntityGolem ||
                 entity instanceof EntityBat)) || (mobs && (entity instanceof EntityMob || entity instanceof EntityVillager || entity instanceof EntitySlime ||
                 entity instanceof EntityGhast || entity instanceof EntityDragon));
     }
@@ -69,10 +69,10 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
             teams = killAura.teams.getValue();
 
             this.clear();
-            mc.theWorld.loadedEntityList.stream().filter(entity -> entity != mc.thePlayer && checker(entity) && !entity.isDead && !Client.INSTANCE.getBotManager().contains(entity)).forEach(this::add);
-        } catch (Exception ignored) {
+            mc.theWorld.loadedEntityList.stream().filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || !(entity instanceof EntityLivingBase) || mc.thePlayer.isOnSameTeam((EntityLivingBase) entity))).forEach(this::add);
+        } catch (Exception e) {
             // Don't give crackers clues...
-            if (Client.DEVELOPMENT_SWITCH) ignored.printStackTrace();
+            if (Client.DEVELOPMENT_SWITCH) e.printStackTrace();
         }
     }
 
@@ -81,9 +81,7 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
             return new ArrayList<>();
         }
         return this.stream()
-                .filter(entity -> mc.thePlayer.getDistanceToEntity(entity) < range)
-                .filter(entity -> mc.theWorld.loadedEntityList.contains(entity))
-                .filter(entity -> !Client.INSTANCE.getBotManager().contains(entity))
+                .filter(entity -> mc.thePlayer.getDistanceToEntity(entity) < range && mc.theWorld.loadedEntityList.contains(entity) && !Client.INSTANCE.getBotManager().contains(entity))
                 .sorted(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceSqToEntity(entity)))
                 .collect(Collectors.toList());
     }
