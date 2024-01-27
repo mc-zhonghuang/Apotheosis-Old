@@ -44,18 +44,18 @@ public class WatchdogLongJump extends Mode<LongJump> {
 
     @EventLink
     public final Listener<MoveEvent> onMove = event -> {
-        if (jumpTime < 5)
+        if (jumpTime < 4)
             event.zeroXZ();
     };
 
     @EventLink
     public final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (jumpTime < 5) {
+        if (jumpTime < 4) {
             if (mc.thePlayer.onGround) {
                 jumpTime++;
                 mc.thePlayer.jump();
             }
-            event.setOnGround(false);
+            if (jumpTime != 4) event.setOnGround(false);
         } else {
             ticks++;
             if (ticks == 10) {
