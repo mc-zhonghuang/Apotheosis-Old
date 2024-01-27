@@ -53,8 +53,6 @@ public final class WatchdogVelocity extends Mode<Velocity> {
                     else MoveUtil.strafe(Math.min(speedMaxValue.getValue().doubleValue(), MoveUtil.speed()));
                 }
             }
-        } else if (p instanceof S27PacketExplosion) {
-            event.setCancelled(true);
         }
     };
 }

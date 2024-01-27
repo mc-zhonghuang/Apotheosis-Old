@@ -72,6 +72,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
                     PacketUtil.sendNoEvent(new C0DPacketCloseWindow(chestId));
                 } else if (chestCloseTicks == 1 && !c0es.isEmpty()) {
                     c0es.forEach(PacketUtil::sendNoEvent);
+                    c0es.clear();
                 }
                 chestCloseTicks++;
             } else {
@@ -85,6 +86,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
     @EventLink
     public final Listener<WorldChangeEvent> onWorld = event -> {
         c03s.clear();
+        c0es.clear();
         chestCloseTicks = -1;
     };
 
