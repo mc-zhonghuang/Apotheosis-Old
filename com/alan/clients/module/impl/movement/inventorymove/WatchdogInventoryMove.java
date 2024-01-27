@@ -31,9 +31,7 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
     private int chestCloseTicks;
     private int chestId;
-    private boolean canClose;
     private final LinkedBlockingQueue<C03PacketPlayer> c03s = new LinkedBlockingQueue<>();
-    private final LinkedBlockingQueue<C0EPacketClickWindow> c0es = new LinkedBlockingQueue<>();
 
     public WatchdogInventoryMove(String name, InventoryMove parent) {
         super(name, parent);
@@ -49,30 +47,21 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
 
             if (PlayerUtil.block(c08PacketPlayerBlockPlacement.getPosition()) instanceof BlockChest) {
                 chestCloseTicks = -1;
-                canClose = true;
             }
         } else if (packet instanceof C0DPacketCloseWindow) {
-             if (((C0DPacketCloseWindow) packet).windowId != 0 && canClose) {
+             if (((C0DPacketCloseWindow) packet).windowId != 0) {
                 chestCloseTicks = 0;
                 event.setCancelled();
                 chestId = ((C0DPacketCloseWindow) packet).windowId;
-                canClose = false;
             }
         } else if (packet instanceof C0EPacketClickWindow) {
              chestCloseTicks = -1;
-            if (mc.currentScreen instanceof GuiChest && canClose) {
-                event.setCancelled();
-                c0es.add((C0EPacketClickWindow) packet);
-            }
         } else if (packet instanceof C03PacketPlayer) {
             if (chestCloseTicks < 3 && chestCloseTicks != -1) {
                 event.setCancelled();
                 c03s.add((C03PacketPlayer) packet);
                 if (chestCloseTicks == 2) {
                     PacketUtil.sendNoEvent(new C0DPacketCloseWindow(chestId));
-                } else if (chestCloseTicks == 1 && !c0es.isEmpty()) {
-                    c0es.forEach(PacketUtil::sendNoEvent);
-                    c0es.clear();
                 }
                 chestCloseTicks++;
             } else {
@@ -86,7 +75,6 @@ public class WatchdogInventoryMove extends Mode<InventoryMove> {
     @EventLink
     public final Listener<WorldChangeEvent> onWorld = event -> {
         c03s.clear();
-        c0es.clear();
         chestCloseTicks = -1;
     };
 

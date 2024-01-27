@@ -11,6 +11,7 @@ import com.alan.clients.newevent.impl.packet.PacketSendEvent;
 import com.alan.clients.value.Mode;
 import io.netty.buffer.Unpooled;
 import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
@@ -23,6 +24,8 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.status.client.C00PacketServerQuery;
 import net.minecraft.network.status.client.C01PacketPing;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -41,14 +44,6 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
                 mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem % 8 + 1));
                 mc.getNetHandler().addToSendQueue(new C17PacketCustomPayload("MadeByLvZiQiao", new PacketBuffer(Unpooled.buffer())));
                 mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
-            }
-
-            if (mc.thePlayer.getHeldItem().getItem() instanceof ItemFood && !mc.thePlayer.isUsingItem()) {
-                if (blinking) {
-                    blinking = false;
-                    packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
-                    packets.clear();
-                }
             }
         }
     };
@@ -75,29 +70,33 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
     private final Listener<PacketSendEvent> onPacketSend = event -> {
         final Packet<?> packet = event.getPacket();
 
-        if (packet instanceof C08PacketPlayerBlockPlacement && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemFood) {
-            final C08PacketPlayerBlockPlacement wrapped = (C08PacketPlayerBlockPlacement) packet;
-
-            if (wrapped.getPlacedBlockDirection() == 255)
+        if (mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemFood || (mc.thePlayer.getHeldItem().getItem() instanceof ItemPotion && !ItemPotion.isSplash(mc.thePlayer.getHeldItem().getMetadata())))) {
+            if (packet instanceof C08PacketPlayerBlockPlacement && ((C08PacketPlayerBlockPlacement) packet).getPosition().equals(new BlockPos(-1, -1, -1))) {
                 blinking = true;
-        } else if (!(packet instanceof C00Handshake || packet instanceof C00PacketLoginStart ||
-                packet instanceof C00PacketServerQuery || packet instanceof C01PacketPing ||
-                packet instanceof C01PacketEncryptionResponse) && blinking) {
-            event.setCancelled();
+            } else if (!(packet instanceof C00Handshake || packet instanceof C00PacketLoginStart ||
+                    packet instanceof C00PacketServerQuery || packet instanceof C01PacketPing ||
+                    packet instanceof C01PacketEncryptionResponse) && blinking) {
+                event.setCancelled();
 
-            if (packet instanceof C07PacketPlayerDigging) {
-                final C07PacketPlayerDigging wrapped = (C07PacketPlayerDigging) packet;
+                if (packet instanceof C07PacketPlayerDigging) {
+                    final C07PacketPlayerDigging wrapped = (C07PacketPlayerDigging) packet;
 
-                if (wrapped.getStatus() == C07PacketPlayerDigging.Action.RELEASE_USE_ITEM) {
-                    blinking = false;
-                    mc.getNetHandler().addToSendQueueUnregistered(wrapped);
-                    packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
-                    packets.clear();
-                    return;
+                    if (wrapped.getStatus() == C07PacketPlayerDigging.Action.RELEASE_USE_ITEM) {
+                        blinking = false;
+                        mc.getNetHandler().addToSendQueueUnregistered(wrapped);
+                        packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
+                        packets.clear();
+                        return;
+                    }
                 }
-            }
 
-            packets.add(packet);
+                packets.add(packet);
+            }
+        } else if (blinking) {
+            blinking = false;
+            mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
+            packets.clear();
         }
     };
 }
