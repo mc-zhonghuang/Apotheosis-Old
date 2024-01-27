@@ -30,8 +30,9 @@ public final class WatchdogVelocity extends Mode<Velocity> {
     @EventLink()
     public final Listener<PreMotionEvent> onMotion = event -> {
         if (mc.thePlayer.hurtTime == 9)
-            if (!MoveUtil.isMoving())
-                MoveUtil.strafe(0);
+            if (!MoveUtil.isMoving()) {
+                mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
+            }
     };
 
     @EventLink()
