@@ -15,6 +15,7 @@ public final class Criticals extends Module {
             .add(new PacketCriticals("Packet", this))
             .add(new EditCriticals("Edit", this))
             .add(new NoGroundCriticals("No Ground", this))
+            .add(new GrimACCriticals("GrimAC", this))
             .add(new NCPCriticals("NCP", this))
             .add(new WatchdogCriticals("Watchdog", this))
             .setDefault("Packet");

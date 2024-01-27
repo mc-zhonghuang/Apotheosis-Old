@@ -40,7 +40,7 @@ public class LongJump extends Module {
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
 
-        if (autoDisable.getValue() && inAir && mc.thePlayer.onGround) {
+        if (!mode.getValue().getName().equalsIgnoreCase("Watchdog") && autoDisable.getValue() && inAir && mc.thePlayer.onGround) {
             this.toggle();
         }
 

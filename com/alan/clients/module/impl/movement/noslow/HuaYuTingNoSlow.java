@@ -47,6 +47,7 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
                 if (blinking) {
                     blinking = false;
                     packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
+                    packets.clear();
                 }
             }
         }
@@ -91,6 +92,7 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
                     blinking = false;
                     mc.getNetHandler().addToSendQueueUnregistered(wrapped);
                     packets.forEach(p -> mc.getNetHandler().addToSendQueueUnregistered(p));
+                    packets.clear();
                     return;
                 }
             }
