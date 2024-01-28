@@ -1,6 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
-import com.alan.clients.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;

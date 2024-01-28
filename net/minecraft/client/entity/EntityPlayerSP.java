@@ -1,13 +1,12 @@
 package net.minecraft.client.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.network.NetworkManager;
-import com.alan.clients.newevent.impl.input.ChatInputEvent;
-import com.alan.clients.newevent.impl.motion.*;
-import com.alan.clients.newevent.impl.other.MoveEvent;
-import com.alan.clients.util.chat.ChatUtil;
-import com.alan.clients.util.interfaces.InstanceAccess;
-import com.alan.clients.util.vector.Vector2f;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.input.ChatInputEvent;
+import cn.hackedmc.alexander.newevent.impl.motion.*;
+import cn.hackedmc.alexander.newevent.impl.other.MoveEvent;
+import cn.hackedmc.alexander.util.chat.ChatUtil;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.util.vector.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -24,7 +23,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;

@@ -1,11 +1,11 @@
 package net.minecraft.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.motion.PostStrafeEvent;
-import com.alan.clients.newevent.impl.motion.StrafeEvent;
-import com.alan.clients.newevent.impl.motion.WaterEvent;
-import com.alan.clients.newevent.impl.other.StepEvent;
-import com.alan.clients.util.vector.Vector3d;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.motion.PostStrafeEvent;
+import cn.hackedmc.alexander.newevent.impl.motion.StrafeEvent;
+import cn.hackedmc.alexander.newevent.impl.motion.WaterEvent;
+import cn.hackedmc.alexander.newevent.impl.other.StepEvent;
+import cn.hackedmc.alexander.util.vector.Vector3d;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

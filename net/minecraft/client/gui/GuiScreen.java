@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.input.GuiClickEvent;
-import com.alan.clients.newevent.impl.input.GuiMouseReleaseEvent;
-import com.alan.clients.util.font.impl.minecraft.FontRenderer;
-import com.alan.clients.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.input.GuiClickEvent;
+import cn.hackedmc.alexander.newevent.impl.input.GuiMouseReleaseEvent;
+import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

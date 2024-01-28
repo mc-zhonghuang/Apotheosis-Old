@@ -1,7 +1,7 @@
 package net.minecraft.world;
 
-import com.alan.clients.util.RayCastUtil;
-import com.alan.clients.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.util.RayCastUtil;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

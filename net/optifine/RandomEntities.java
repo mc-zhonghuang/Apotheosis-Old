@@ -1,7 +1,7 @@
 package net.optifine;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.other.WorldChangeEvent;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.other.WorldChangeEvent;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.DataWatcher;

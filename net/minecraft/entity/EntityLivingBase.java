@@ -1,10 +1,10 @@
 package net.minecraft.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.motion.JumpEvent;
-import com.alan.clients.newevent.impl.motion.MinimumMotionEvent;
-import com.alan.clients.newevent.impl.render.SwingAnimationEvent;
-import com.alan.clients.util.player.MoveUtil;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.motion.JumpEvent;
+import cn.hackedmc.alexander.newevent.impl.motion.MinimumMotionEvent;
+import cn.hackedmc.alexander.newevent.impl.render.SwingAnimationEvent;
+import cn.hackedmc.alexander.util.player.MoveUtil;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;

@@ -1,10 +1,10 @@
 package net.minecraft.client.multiplayer;
 
-import com.alan.clients.Client;
-import com.alan.clients.component.impl.player.SlotComponent;
-import com.alan.clients.newevent.impl.inventory.SyncCurrentItemEvent;
-import com.alan.clients.newevent.impl.other.BlockBreakEvent;
-import com.alan.clients.newevent.impl.other.BlockDamageEvent;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.component.impl.player.SlotComponent;
+import cn.hackedmc.alexander.newevent.impl.inventory.SyncCurrentItemEvent;
+import cn.hackedmc.alexander.newevent.impl.other.BlockBreakEvent;
+import cn.hackedmc.alexander.newevent.impl.other.BlockDamageEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +22,6 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.*;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.util.*;
-import net.minecraft.viamcp.ViaMCP;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 

@@ -1,9 +1,9 @@
 package net.minecraft.client.renderer;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.other.BlockDamageEvent;
-import com.alan.clients.util.chat.ChatUtil;
-import com.alan.clients.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.other.BlockDamageEvent;
+import cn.hackedmc.alexander.util.chat.ChatUtil;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

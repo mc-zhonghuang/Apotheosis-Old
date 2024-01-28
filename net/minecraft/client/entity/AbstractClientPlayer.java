@@ -1,8 +1,8 @@
 package net.minecraft.client.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.render.LookEvent;
-import com.alan.clients.util.vector.Vector2f;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.render.LookEvent;
+import cn.hackedmc.alexander.util.vector.Vector2f;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;

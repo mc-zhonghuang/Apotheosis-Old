@@ -1,7 +1,7 @@
 package net.minecraft.viamcp.utils;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.other.AttackEvent;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.other.AttackEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

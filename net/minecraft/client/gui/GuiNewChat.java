@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.Client;
-import com.alan.clients.module.Module;
-import com.alan.clients.module.impl.render.Interface;
-import com.alan.clients.module.impl.render.UnlimitedChat;
-import com.alan.clients.ui.ingame.GuiIngameCache;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.module.Module;
+import cn.hackedmc.alexander.module.impl.render.Interface;
+import cn.hackedmc.alexander.module.impl.render.UnlimitedChat;
+import cn.hackedmc.alexander.ui.ingame.GuiIngameCache;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

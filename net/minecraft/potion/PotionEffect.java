@@ -1,7 +1,7 @@
 package net.minecraft.potion;
 
-import com.alan.clients.module.impl.movement.PotionExtender;
-import com.alan.clients.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.module.impl.movement.PotionExtender;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;

@@ -1,9 +1,9 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.util.account.microsoft.MicrosoftLogin;
-import com.alan.clients.util.interfaces.InstanceAccess;
-import com.alan.clients.util.shader.RiseShaders;
-import com.alan.clients.util.shader.base.ShaderRenderType;
+import cn.hackedmc.alexander.util.account.microsoft.MicrosoftLogin;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.alexander.util.shader.RiseShaders;
+import cn.hackedmc.alexander.util.shader.base.ShaderRenderType;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;

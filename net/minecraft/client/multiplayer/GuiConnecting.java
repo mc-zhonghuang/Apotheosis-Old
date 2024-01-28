@@ -1,10 +1,10 @@
 package net.minecraft.client.multiplayer;
 
 import by.radioegor146.nativeobfuscator.Native;
-import com.alan.clients.Client;
-import com.alan.clients.component.impl.player.LastConnectionComponent;
-import com.alan.clients.newevent.impl.other.ServerJoinEvent;
-import com.alan.clients.util.player.ServerUtil;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.component.impl.player.LastConnectionComponent;
+import cn.hackedmc.alexander.newevent.impl.other.ServerJoinEvent;
+import cn.hackedmc.alexander.util.player.ServerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiDisconnected;

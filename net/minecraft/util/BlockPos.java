@@ -1,6 +1,6 @@
 package net.minecraft.util;
 
-import com.alan.clients.util.vector.Vector3d;
+import cn.hackedmc.alexander.util.vector.Vector3d;
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.entity.Entity;
 

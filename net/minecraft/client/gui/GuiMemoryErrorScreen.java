@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
 import net.minecraft.client.resources.I18n;
 
 import java.io.IOException;

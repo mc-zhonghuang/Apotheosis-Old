@@ -1,4 +1,4 @@
-import com.alan.clients.Client;
+import cn.hackedmc.alexander.Client;
 import net.minecraft.client.main.Main;
 
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package net.minecraft.client.network;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.other.TeleportEvent;
-import com.alan.clients.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.other.TeleportEvent;
+import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;

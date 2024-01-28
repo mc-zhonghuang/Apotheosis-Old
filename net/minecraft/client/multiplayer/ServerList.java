@@ -1,6 +1,6 @@
 package net.minecraft.client.multiplayer;
 
-import com.alan.clients.Client;
+import cn.hackedmc.alexander.Client;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMultiplayer;

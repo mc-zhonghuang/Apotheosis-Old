@@ -1,8 +1,8 @@
 package net.minecraft.network;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.packet.PacketReceiveEvent;
-import com.alan.clients.newevent.impl.packet.PacketSendEvent;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.packet.PacketReceiveEvent;
+import cn.hackedmc.alexander.newevent.impl.packet.PacketSendEvent;
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.viaversion.viaversion.api.connection.UserConnection;

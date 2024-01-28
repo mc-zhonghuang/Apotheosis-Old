@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.module.impl.render.ItemPhysics;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.module.impl.render.ItemPhysics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;

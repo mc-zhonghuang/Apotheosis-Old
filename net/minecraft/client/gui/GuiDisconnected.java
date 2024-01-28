@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.Client;
-import com.alan.clients.component.impl.player.LastConnectionComponent;
-import com.alan.clients.newevent.impl.other.ServerKickEvent;
-import com.alan.clients.ui.menu.impl.main.MainMenu;
-import com.alan.clients.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.component.impl.player.LastConnectionComponent;
+import cn.hackedmc.alexander.newevent.impl.other.ServerKickEvent;
+import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.resources.I18n;

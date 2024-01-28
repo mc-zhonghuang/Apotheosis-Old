@@ -1,7 +1,7 @@
 package net.minecraft.util;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.input.MoveInputEvent;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.input.MoveInputEvent;
 import net.minecraft.client.settings.GameSettings;
 
 public class MovementInputFromOptions extends MovementInput {

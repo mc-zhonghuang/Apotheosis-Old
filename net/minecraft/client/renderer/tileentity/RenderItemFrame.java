@@ -1,6 +1,6 @@
 package net.minecraft.client.renderer.tileentity;
 
-import com.alan.clients.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;

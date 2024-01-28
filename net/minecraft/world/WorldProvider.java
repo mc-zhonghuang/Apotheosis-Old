@@ -1,7 +1,7 @@
 package net.minecraft.world;
 
-import com.alan.clients.Client;
-import com.alan.clients.module.impl.render.Ambience;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.module.impl.render.Ambience;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;

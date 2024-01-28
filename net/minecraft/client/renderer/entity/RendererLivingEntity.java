@@ -1,8 +1,8 @@
 package net.minecraft.client.renderer.entity;
 
-import com.alan.clients.Client;
-import com.alan.clients.newevent.impl.render.HurtRenderEvent;
-import com.alan.clients.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.newevent.impl.render.HurtRenderEvent;
+import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

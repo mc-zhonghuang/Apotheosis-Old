@@ -1,7 +1,7 @@
 package net.minecraft.client.gui.inventory;
 
-import com.alan.clients.util.font.Font;
-import com.alan.clients.util.font.FontManager;
+import cn.hackedmc.alexander.util.font.Font;
+import cn.hackedmc.alexander.util.font.FontManager;
 import com.google.common.collect.Sets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

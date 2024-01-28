@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import com.alan.clients.ui.menu.impl.serverfinder.ServerFinder;
+import cn.hackedmc.alexander.ui.menu.impl.serverfinder.ServerFinder;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.minecraft.client.multiplayer.GuiConnecting;
