@@ -507,7 +507,7 @@ public final class KillAura extends Module {
                         case "Single":
                         case "Switch": {
                             if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) ||
-                                    (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target)) {
+                                    (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target) || RayCastUtil.rayCast(RotationComponent.rotations, range).typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                                 this.attack(target);
                             } else if (movingObjectPosition != null && movingObjectPosition.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                                 this.attack(movingObjectPosition.entityHit);
@@ -778,7 +778,7 @@ public final class KillAura extends Module {
     }
 
     private boolean canBlock() {
-        return SlotComponent.getItemStack() != null && SlotComponent.getItemStack().getItem() instanceof ItemSword;
+        return SlotComponent.getItemStack() != null && SlotComponent.getItemStack().getItem() instanceof ItemSword && mc.thePlayer.getDistanceToEntity(target) <= range.getValue().floatValue();
     }
 
     @EventLink()

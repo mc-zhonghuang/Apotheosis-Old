@@ -374,10 +374,6 @@ public class EntityItem extends Entity {
         final ItemStack itemstack = this.getDataWatcher().getWatchableObjectItemStack(10);
 
         if (itemstack == null) {
-            if (this.worldObj != null) {
-                logger.error("Item entity " + this.getEntityId() + " has no item?!");
-            }
-
             return new ItemStack(Blocks.stone);
         } else {
             return itemstack;

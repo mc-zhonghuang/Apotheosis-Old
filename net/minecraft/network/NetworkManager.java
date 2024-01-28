@@ -1,8 +1,11 @@
 package net.minecraft.network;
 
 import cn.hackedmc.alexander.Client;
+import cn.hackedmc.alexander.module.impl.exploit.Disabler;
+import cn.hackedmc.alexander.module.impl.exploit.disabler.GrimACDisabler;
 import cn.hackedmc.alexander.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.alexander.newevent.impl.packet.PacketSendEvent;
+import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.viaversion.viaversion.api.connection.UserConnection;
@@ -24,6 +27,8 @@ import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.minecraft.network.play.server.*;
+import net.minecraft.network.status.server.S01PacketPong;
 import net.minecraft.util.*;
 import net.minecraft.viamcp.ViaMCP;
 import net.minecraft.viamcp.handler.CommonTransformer;
@@ -130,17 +135,43 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         this.closeChannel(chatcomponenttranslation);
     }
 
-    protected void channelRead0(final ChannelHandlerContext p_channelRead0_1_, final Packet p_channelRead0_2_) throws Exception {
+    protected void channelRead0(final ChannelHandlerContext p_channelRead0_1_, final Packet packet) throws Exception {
         if (this.channel.isOpen()) {
             try {
-                final PacketReceiveEvent event = new PacketReceiveEvent(p_channelRead0_2_);
-                Client.INSTANCE.getEventBus().handle(event);
+                if (Disabler.INSTANCE != null && Disabler.mc.thePlayer != null && Disabler.mc.thePlayer.ticksExisted >= 10 && Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.grimAC.getValue() && Disabler.INSTANCE.grimACDisabler.post.getValue() && (
+                                (packet instanceof S12PacketEntityVelocity && ((S12PacketEntityVelocity) packet).getEntityID() == InstanceAccess.mc.thePlayer.getEntityId()) ||
+                                packet instanceof S32PacketConfirmTransaction ||
+                                packet instanceof S01PacketPong ||
+                                packet instanceof S12PacketEntityVelocity ||
+                                packet instanceof S27PacketExplosion ||
+                                packet instanceof S08PacketPlayerPosLook ||
+                                packet instanceof S23PacketBlockChange ||
+                                packet instanceof S22PacketMultiBlockChange ||
+                                packet instanceof S19PacketEntityStatus ||
+                                packet instanceof S06PacketUpdateHealth ||
+                                packet instanceof S14PacketEntity ||
+                                packet instanceof S0FPacketSpawnMob ||
+                                packet instanceof S0CPacketSpawnPlayer ||
+                                packet instanceof S0EPacketSpawnObject ||
+                                packet instanceof S2CPacketSpawnGlobalEntity ||
+                                packet instanceof S13PacketDestroyEntities ||
+                                packet instanceof S30PacketWindowItems ||
+                                packet instanceof S2DPacketOpenWindow ||
+                                packet instanceof S04PacketEntityEquipment ||
+                                packet instanceof S2EPacketCloseWindow ||
+                                packet instanceof S3FPacketCustomPayload
+                        )) {
+                    Disabler.INSTANCE.grimACDisabler.packets.add(packet);
+                } else {
+                    final PacketReceiveEvent event = new PacketReceiveEvent(packet);
+                    Client.INSTANCE.getEventBus().handle(event);
 
-                if (event.isCancelled()) {
-                    return;
+                    if (event.isCancelled()) {
+                        return;
+                    }
+
+                    packet.processPacket(this.packetListener);
                 }
-
-                p_channelRead0_2_.processPacket(this.packetListener);
             } catch (final ThreadQuickExitException var4) {
             }
         }

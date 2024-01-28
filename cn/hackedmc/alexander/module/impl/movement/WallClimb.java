@@ -19,6 +19,7 @@ public class WallClimb extends Module {
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new VulcanWallClimb("Vulcan", this))
             .add(new VerusWallClimb("Verus", this))
+            .add(new GrimACWallClimb("GrimAC", this))
             .add(new KauriWallClimb("Kauri", this))
             .add(new WatchdogWallClimb("Watchdog", this))
             .add(new MineMenClubWallClimb("MineMenClub", this))

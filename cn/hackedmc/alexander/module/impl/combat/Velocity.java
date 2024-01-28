@@ -5,7 +5,6 @@ import cn.hackedmc.alexander.module.impl.combat.velocity.*;
 import cn.hackedmc.alexander.module.Module;
 import cn.hackedmc.alexander.module.api.Category;
 import cn.hackedmc.alexander.module.api.ModuleInfo;
-import cn.hackedmc.alexander.module.impl.combat.velocity.*;
 import cn.hackedmc.alexander.value.impl.BooleanValue;
 import cn.hackedmc.alexander.value.impl.ModeValue;
 
@@ -22,7 +21,7 @@ public final class Velocity extends Module {
             .add(new IntaveVelocity("Intave", this))
             .add(new MatrixVelocity("Matrix", this))
             .add(new AACVelocity("AAC", this))
-            .add(new GrimVelocity("Grim", this))
+            .add(new GrimACVelocity("GrimAC", this))
             .add(new VulcanVelocity("Vulcan", this))
             .add(new RedeskyVelocity("Redesky", this))
             .add(new TickVelocity("Tick", this))

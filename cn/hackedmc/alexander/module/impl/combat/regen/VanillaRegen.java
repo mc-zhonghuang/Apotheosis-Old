@@ -20,7 +20,6 @@ public final class VanillaRegen extends Mode<Regen> {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-
         if (mc.thePlayer.getHealth() < this.health.getValue().floatValue()) {
             for (int i = 0; i < this.packets.getValue().intValue(); i++) {
                 PacketUtil.send(new C03PacketPlayer(event.isOnGround()));

@@ -38,7 +38,7 @@ public class Timer {
     /**
      * The time reported by the system clock at the last sync, in milliseconds
      */
-    private long lastSyncSysClock;
+    public long lastSyncSysClock;
 
     /**
      * The time reported by the high-resolution clock at the last sync, in milliseconds

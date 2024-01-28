@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum MovementFix {
     OFF("Off"),
-    NORMAL("Rise"),
-    TRADITIONAL("Traditional"),
-    BACKWARDS_SPRINT("Backwards Sprint");
+    NORMAL("Normal"),
+    TRADITIONAL("Only Forward"),
+    BACKWARDS_SPRINT("Runnable");
 
     String name;
 

@@ -464,12 +464,12 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
                     this.motionZ = f;
                 }
 
-                if (Math.abs(this.motionX) == 0.1F || Math.abs(this.motionZ) == 0.1F) {
-                    ChatUtil.display("");
-                    ChatUtil.display(Math.hypot(this.motionX, this.motionZ));
-                    ChatUtil.display(this.motionX);
-                    ChatUtil.display(this.motionZ);
-                }
+//                if (Math.abs(this.motionX) == 0.1F || Math.abs(this.motionZ) == 0.1F) {
+//                    ChatUtil.display("");
+//                    ChatUtil.display(Math.hypot(this.motionX, this.motionZ));
+//                    ChatUtil.display(this.motionX);
+//                    ChatUtil.display(this.motionZ);
+//                }
 
             }
 

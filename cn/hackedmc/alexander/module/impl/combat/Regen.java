@@ -1,6 +1,7 @@
 package cn.hackedmc.alexander.module.impl.combat;
 
 import cn.hackedmc.alexander.api.Rise;
+import cn.hackedmc.alexander.module.impl.combat.regen.HigherVersionRegen;
 import cn.hackedmc.alexander.module.impl.combat.regen.VanillaRegen;
 import cn.hackedmc.alexander.module.impl.combat.regen.WorldGuardRegen;
 import cn.hackedmc.alexander.module.Module;
@@ -15,5 +16,6 @@ public final class Regen extends Module {
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new VanillaRegen("Vanilla", this))
             .add(new WorldGuardRegen("World Guard", this))
+            .add(new HigherVersionRegen("1.17+", this))
             .setDefault("Vanilla");
 }

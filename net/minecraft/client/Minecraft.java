@@ -23,6 +23,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -85,6 +86,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Timer;
 import net.minecraft.util.Util;
 import net.minecraft.util.*;
+import net.minecraft.viamcp.ViaMCP;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
@@ -1290,7 +1292,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (event.isCancelled()) return;
             }
 
-            this.thePlayer.swingItem();
+            if (ViaMCP.getInstance().getVersion() <= ProtocolVersion.v1_8.getVersion()) this.thePlayer.swingItem();
 
             if (this.objectMouseOver == null) {
                 logger.error("Null returned as 'hitResult', this shouldn't happen!");
@@ -1319,6 +1321,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 //                        }
                 }
             }
+
+            if (ViaMCP.getInstance().getVersion() > ProtocolVersion.v1_8.getVersion()) this.thePlayer.swingItem();
         }
     }
 
