@@ -2,7 +2,21 @@ package net.minecraft.viamcp.protocols;
 
 public class ProtocolInfoCollection {
     private static final String NO_DESC = "No Description Available";
-
+    public static ProtocolInfo R1_20_3 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "October 1, 2023"
+    );
+    public static ProtocolInfo R1_20_2 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "September 21, 2023"
+    );
+    public static ProtocolInfo R1_20 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "June 12, 2023"
+    );
+    public static ProtocolInfo R1_19_4 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "March 14, 2023"
+    );
+    public static ProtocolInfo R1_19_3 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "December 7, 2022"
+    );
     public static ProtocolInfo R1_19_1 = new ProtocolInfo(
             "The Wild Update", NO_DESC, "July 27, 2022"
     );
@@ -141,5 +155,26 @@ public class ProtocolInfoCollection {
 
     public static ProtocolInfo R1_7 = new ProtocolInfo(
             "The Update that Changed the World", NO_DESC, "October 22, 2013 - February 26, 2014"
+    );
+    public static ProtocolInfo R1_6_4 = new ProtocolInfo(
+            "World Structure Update", NO_DESC, "September 19, 2013"
+    );
+    public static ProtocolInfo R1_6_3 = new ProtocolInfo(
+            "The only pre released version", NO_DESC, "September 13, 2013"
+    );
+    public static ProtocolInfo R1_6_2 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "July 8, 2013"
+    );
+    public static ProtocolInfo R1_6_1 = new ProtocolInfo(
+            "Horse Updates", NO_DESC, "July 1, 2013"
+    );
+    public static ProtocolInfo R1_5_2 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "April 25, 2013"
+    );
+    public static ProtocolInfo R1_5_1 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "March, 21, 2013"
+    );
+    public static ProtocolInfo R1_4_6 = new ProtocolInfo(
+            "The Wild Update", NO_DESC, "December 20, 2012"
     );
 }

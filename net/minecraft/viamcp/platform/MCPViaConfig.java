@@ -9,11 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public class MCPViaConfig extends AbstractViaConfig {
-    private static final List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "velocity-ping-interval", "velocity-ping-save", "velocity-servers", "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
+    private static final List<String> UNSUPPORTED = Arrays.asList("checkforupdates", "bungee-ping-interval", "bungee-ping-save", "bungee-servers",
+            "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
+            "block-protocols", "block-disconnect-msg", "reload-disconnect-msg", "max-pps",
+            "max-pps-kick-msg", "tracking-period", "tracking-warning-pps", "tracking-max-warnings", "tracking-max-kick-msg",
+            "blockconnection-method", "quick-move-action-fix", "item-cache", "change-1_9-hitbox", "change-1_14-hitbox",
+            "use-new-deathmessages", "nms-player-ticking");
 
     public MCPViaConfig(final File configFile) {
         super(configFile);
-        reloadConfig();
+        this.reload();
     }
 
     @Override
@@ -29,11 +34,6 @@ public class MCPViaConfig extends AbstractViaConfig {
     @Override
     public List<String> getUnsupportedOptions() {
         return UNSUPPORTED;
-    }
-
-    @Override
-    public boolean isAntiXRay() {
-        return false;
     }
 
     @Override

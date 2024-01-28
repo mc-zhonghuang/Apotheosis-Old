@@ -4,9 +4,15 @@ package net.minecraft.viamcp.protocols;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 public enum ProtocolCollection {
+    /* 1.20.x */
+    R1_20_3(ProtocolVersion.v1_20_3, ProtocolInfoCollection.R1_20_3),
+    R1_20_2(ProtocolVersion.v1_20_2, ProtocolInfoCollection.R1_20_2),
+    R1_20(ProtocolVersion.v1_20, ProtocolInfoCollection.R1_20),
     /* 1.19.x */
-    R_1_19_1(ProtocolVersion.v1_19_1, ProtocolInfoCollection.R1_19_1),
-    R_1_19(ProtocolVersion.v1_19, ProtocolInfoCollection.R1_19),
+    R1_19_4(ProtocolVersion.v1_19_4, ProtocolInfoCollection.R1_19_4),
+    R1_19_3(ProtocolVersion.v1_19_3, ProtocolInfoCollection.R1_19_3),
+    R1_19_1(ProtocolVersion.v1_19_1, ProtocolInfoCollection.R1_19_1),
+    R1_19(ProtocolVersion.v1_19, ProtocolInfoCollection.R1_19),
 
     /* 1.18.x */
     R1_18_2(ProtocolVersion.v1_18_2, ProtocolInfoCollection.R1_18_2),
@@ -63,7 +69,14 @@ public enum ProtocolCollection {
 
     /* 1.7.x */
     R1_7_6(ProtocolVersion.v1_7_6, ProtocolInfoCollection.R1_7_6),
-    R1_7(ProtocolVersion.v1_7_1, ProtocolInfoCollection.R1_7);
+    R1_7(ProtocolVersion.v1_7_1, ProtocolInfoCollection.R1_7),
+    R1_6_4(ProtocolVersion.v_1_6_4, ProtocolInfoCollection.R1_6_4),
+    R1_6_3(ProtocolVersion.v_1_6_3, ProtocolInfoCollection.R1_6_3),
+    R1_6_2(ProtocolVersion.v_1_6_2, ProtocolInfoCollection.R1_6_2),
+    R1_6_1(ProtocolVersion.v_1_6_1, ProtocolInfoCollection.R1_6_1),
+    R1_5_2(ProtocolVersion.v1_5_2, ProtocolInfoCollection.R1_5_2),
+    R1_5_1(ProtocolVersion.v1_5_1, ProtocolInfoCollection.R1_5_1),
+    R1_4_6(ProtocolVersion.v1_4_6, ProtocolInfoCollection.R1_4_6);
 
     private final ProtocolVersion version;
     private final ProtocolInfo info;

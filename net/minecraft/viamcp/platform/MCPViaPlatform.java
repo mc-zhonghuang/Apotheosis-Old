@@ -1,26 +1,25 @@
 package net.minecraft.viamcp.platform;
 
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
-import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
-import com.viaversion.viaversion.api.platform.PlatformTask;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonObject;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import com.viaversion.viaversion.util.VersionInfo;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.viamcp.ViaMCP;
-import net.minecraft.viamcp.utils.FutureTaskId;
 import net.minecraft.viamcp.utils.JLoggerToLog4j;
+import net.minecraft.viamcp.utils.TaskUtil;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -34,12 +33,9 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     public MCPViaPlatform(final File dataFolder) {
         final Path configDir = dataFolder.toPath().resolve("ViaVersion");
         config = new MCPViaConfig(configDir.resolve("viaversion.yml").toFile());
+        config.reload();
         this.dataFolder = configDir.toFile();
         api = new MCPViaAPI();
-    }
-
-    public static String legacyToJson(final String legacy) {
-        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
     }
 
     @Override
@@ -58,37 +54,40 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
+    public boolean isProxy() {
+        return ViaPlatform.super.isProxy();
+    }
+
+    @Override
     public String getPluginVersion() {
-        return "4.1.1";
+        return VersionInfo.getVersion();
     }
 
     @Override
-    public FutureTaskId runAsync(final Runnable runnable) {
-        return new FutureTaskId(CompletableFuture.runAsync(runnable, ViaMCP.getInstance().getAsyncExecutor()).exceptionally(throwable ->
-        {
-            if (!(throwable instanceof CancellationException)) {
-                throwable.printStackTrace();
-            }
-
-            return null;
-        })
-        );
+    public TaskUtil runAsync(Runnable runnable) {
+        return new TaskUtil(Via.getManager().getScheduler().execute(runnable));
     }
 
     @Override
-    public FutureTaskId runSync(final Runnable runnable) {
-        return new FutureTaskId(ViaMCP.getInstance().getEventLoop().submit(runnable).addListener(errorLogger()));
+    public TaskUtil runRepeatingAsync(Runnable runnable, long period) {
+        return new TaskUtil(Via.getManager().getScheduler().scheduleRepeating(runnable, 0, period * 50, TimeUnit.MILLISECONDS));
     }
 
     @Override
-    public PlatformTask runSync(final Runnable runnable, final long ticks) {
-        return new FutureTaskId(ViaMCP.getInstance().getEventLoop().schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
+    public TaskUtil runSync(Runnable runnable) {
+        return this.runAsync(runnable);
     }
 
     @Override
-    public PlatformTask runRepeatingSync(final Runnable runnable, final long ticks) {
-        return new FutureTaskId(ViaMCP.getInstance().getEventLoop().scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS).addListener(errorLogger()));
+    public TaskUtil runSync(Runnable runnable, long delay) {
+        return new TaskUtil(Via.getManager().getScheduler().schedule(runnable, delay * 50, TimeUnit.MILLISECONDS));
     }
+
+    @Override
+    public TaskUtil runRepeatingSync(Runnable runnable, long period) {
+        return this.runRepeatingAsync(runnable, period);
+    }
+
 
     private <T extends Future<?>> GenericFutureListener<T> errorLogger() {
         return future ->
@@ -119,6 +118,11 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
+    public boolean disconnect(UserConnection connection, String message) {
+        return ViaPlatform.super.disconnect(connection, message);
+    }
+
+    @Override
     public boolean isPluginEnabled() {
         return true;
     }
@@ -134,11 +138,6 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public ConfigurationProvider getConfigurationProvider() {
-        return config;
-    }
-
-    @Override
     public File getDataFolder() {
         return dataFolder;
     }
@@ -146,6 +145,10 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     @Override
     public void onReload() {
         logger.info("ViaVersion was reloaded? (How did that happen)");
+    }
+
+    public MCPViaConfig getConfig() {
+        return config;
     }
 
     @Override
@@ -156,6 +159,11 @@ public class MCPViaPlatform implements ViaPlatform<UUID> {
     @Override
     public boolean isOldClientsAllowed() {
         return true;
+    }
+
+    @Override
+    public Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
+        return ViaPlatform.super.getUnsupportedSoftwareClasses();
     }
 
     @Override

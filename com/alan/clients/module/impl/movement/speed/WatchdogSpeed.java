@@ -60,16 +60,9 @@ public class WatchdogSpeed extends Mode<Speed> {
 
             case "Ground Strafe":
                 if (MoveUtil.isMoving()) {
-                    if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-                        if (mc.thePlayer.onGround) {
-                            mc.thePlayer.jump();
-                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.54));
-                        }
-                    } else {
-                        if (mc.thePlayer.onGround) {
-                            MoveUtil.strafe(Math.max(MoveUtil.speed(), MoveUtil.getAllowedHorizontalDistance()));
-                            mc.thePlayer.jump();
-                        }
+                    if (mc.thePlayer.onGround) {
+                        MoveUtil.strafe(Math.max(MoveUtil.speed(), MoveUtil.getAllowedHorizontalDistance()));
+                        mc.thePlayer.jump();
                     }
                 }
 
@@ -96,7 +89,7 @@ public class WatchdogSpeed extends Mode<Speed> {
                     angle = MoveUtil.simulationStrafeAngle(angle, 360);
                 }
 
-//                PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
 
                 if (mc.thePlayer.ticksSinceVelocity > 20) {
                     switch (mc.thePlayer.offGroundTicks) {
@@ -140,17 +133,10 @@ public class WatchdogSpeed extends Mode<Speed> {
                 break;
             case "50% Strafe":
                 if (MoveUtil.isMoving()) {
-                    if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-                        if (mc.thePlayer.onGround) mc.thePlayer.jump();
-                        if (mc.thePlayer.onGround || MoveUtil.speed() < 0.275) {
-                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.54));
-                        }
-                    } else {
-                        if (mc.thePlayer.onGround || MoveUtil.speed() < 0.275) {
-                            MoveUtil.strafe(Math.max(MoveUtil.speed(), 0.42));
-                        }
-                        if (mc.thePlayer.onGround) mc.thePlayer.jump();
+                    if (mc.thePlayer.onGround || MoveUtil.speed() < 0.275) {
+                        MoveUtil.strafe(Math.max(MoveUtil.speed(), MoveUtil.getAllowedHorizontalDistance()));
                     }
+                    if (mc.thePlayer.onGround) mc.thePlayer.jump();
                 }
 
                 break;
