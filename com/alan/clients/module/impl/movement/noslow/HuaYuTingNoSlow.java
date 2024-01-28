@@ -1,6 +1,8 @@
 package com.alan.clients.module.impl.movement.noslow;
 
+import com.alan.clients.component.impl.render.NotificationComponent;
 import com.alan.clients.module.impl.movement.NoSlow;
+import com.alan.clients.newevent.CancellableEvent;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PostMotionEvent;
@@ -32,6 +34,7 @@ import net.minecraft.network.status.client.C00PacketServerQuery;
 import net.minecraft.network.status.client.C01PacketPing;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.viamcp.ViaMCP;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -64,9 +67,7 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
     };
 
     @EventLink()
-    private final Listener<SlowDownEvent> onSlowDown = event -> {
-        if (mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemFood || mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)) event.setCancelled();
-    };
+    private final Listener<SlowDownEvent> onSlowDown = CancellableEvent::setCancelled;
 
     @EventLink()
     private final Listener<WorldChangeEvent> onWorld = event -> {
@@ -81,6 +82,9 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
         if (mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemFood || (mc.thePlayer.getHeldItem().getItem() instanceof ItemPotion && !ItemPotion.isSplash(mc.thePlayer.getHeldItem().getMetadata())))) {
             if (packet instanceof C08PacketPlayerBlockPlacement && ((C08PacketPlayerBlockPlacement) packet).getPosition().equals(new BlockPos(-1, -1, -1))) {
                 blinking = true;
+
+                if (ViaMCP.getInstance().getVersion() <= 47)
+                    NotificationComponent.post("No Slow", "This NoSlow only supports higher versions!", 10000);
             } else if (!(packet instanceof C00Handshake || packet instanceof C00PacketLoginStart ||
                     packet instanceof C00PacketServerQuery || packet instanceof C01PacketPing ||
                     packet instanceof C01PacketEncryptionResponse) && blinking) {

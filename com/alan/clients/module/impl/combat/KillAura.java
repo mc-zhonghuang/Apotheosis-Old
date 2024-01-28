@@ -46,6 +46,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.viamcp.ViaMCP;
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ScriptEvaluator;
 import util.time.StopWatch;
@@ -78,7 +79,7 @@ public final class KillAura extends Module {
             .add(new SubMode("Fake"))
             .add(new SubMode("Vanilla"))
             .add(new SubMode("NCP"))
-            .add(new SubMode("Watchdog"))
+            .add(new SubMode("Watchdog 1.9+"))
             .add(new SubMode("Watchdog HvH"))
             .add(new SubMode("GrimAC"))
             .add(new SubMode("Legit"))
@@ -548,8 +549,10 @@ public final class KillAura extends Module {
         Client.INSTANCE.getEventBus().handle(event);
 
         if (!event.isCancelled()) {
-            if (noSwing.getValue()) PacketUtil.sendNoEvent(new C0APacketAnimation());
-            else mc.thePlayer.swingItem();
+            if (ViaMCP.getInstance().getVersion() <= 47) {
+                if (noSwing.getValue()) PacketUtil.send(new C0APacketAnimation());
+                else mc.thePlayer.swingItem();
+            }
 
             if (this.keepSprint.getValue()) {
                 mc.playerController.syncCurrentPlayItem();
@@ -561,6 +564,11 @@ public final class KillAura extends Module {
                 }
             } else {
                 mc.playerController.attackEntity(mc.thePlayer, target);
+            }
+
+            if (ViaMCP.getInstance().getVersion() > 47) {
+                if (noSwing.getValue()) PacketUtil.send(new C0APacketAnimation());
+                else mc.thePlayer.swingItem();
             }
         }
 
@@ -740,19 +748,6 @@ public final class KillAura extends Module {
                 }
 
                 break;
-            case "Watchdog":
-                if ((mc.thePlayer.getDistanceToEntity(target) <= range.getValue().doubleValue() && !rayCast.getValue()) ||
-                        (rayCast.getValue() && mc.objectMouseOver != null && mc.objectMouseOver.entityHit == target) || (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)) {
-                    if (mc.thePlayer.ticksExisted % 4 == 0) {
-                        PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
-                        PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
-                        PacketUtil.send(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
-                        blocking = true;
-                    }
-                } else
-                    this.unblock(false);
-
-                break;
             case "GrimAC":
                 if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) {
                     mc.gameSettings.keyBindUseItem.setPressed(true);
@@ -768,6 +763,7 @@ public final class KillAura extends Module {
         switch (autoBlock.getValue().getName()) {
             case "NCP":
             case "New NCP":
+            case "watchdog 1.9+":
                 this.block(true, false);
                 break;
 
@@ -776,6 +772,7 @@ public final class KillAura extends Module {
                     PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
                 }
                 break;
+
         }
     }
 

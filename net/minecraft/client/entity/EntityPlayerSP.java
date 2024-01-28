@@ -31,6 +31,7 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
+import net.minecraft.viamcp.ViaMCP;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
@@ -72,7 +73,7 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
     /**
      * the last sneaking state sent to the server
      */
-    private boolean serverSneakState;
+    public static boolean serverSneakState;
 
     /**
      * the last sprinting state sent to the server
@@ -117,6 +118,7 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
     /**
      * The amount of time an entity has been in a Portal the previous tick
      */
+    private boolean prevOnGround;
     public float prevTimeInPortal;
 
     public boolean omniSprint;
@@ -196,14 +198,14 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
 
         final boolean flag = this.isSprinting();
 
-        if (flag != this.serverSprintState) {
+        if (flag != serverSprintState) {
             if (flag) {
                 this.sendQueue.addToSendQueue(new C0BPacketEntityAction(this, C0BPacketEntityAction.Action.START_SPRINTING));
             } else {
                 this.sendQueue.addToSendQueue(new C0BPacketEntityAction(this, C0BPacketEntityAction.Action.STOP_SPRINTING));
             }
 
-            this.serverSprintState = flag;
+            serverSprintState = flag;
         }
 
         final boolean flag1 = this.isSneaking();
@@ -241,9 +243,10 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
                     this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(event.getPosX(), event.getPosY(), event.getPosZ(), event.isOnGround()));
                 } else if (flag3) {
                     this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(event.getYaw(), event.getPitch(), event.isOnGround()));
-                } else {
+                } else if (prevOnGround != event.isOnGround() || ViaMCP.getInstance().getVersion() <= 47) {
                     this.sendQueue.addToSendQueue(new C03PacketPlayer(event.isOnGround()));
                 }
+                prevOnGround = event.isOnGround();
 
 
                 ++this.positionUpdateTicks;

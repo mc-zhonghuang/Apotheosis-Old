@@ -1,7 +1,9 @@
 package com.alan.clients.component.impl.hypixel;
 
+import com.alan.clients.Client;
 import com.alan.clients.api.Rise;
 import com.alan.clients.component.Component;
+import com.alan.clients.module.impl.render.SniperOverlay;
 import com.alan.clients.newevent.Listener;
 import com.alan.clients.newevent.annotations.EventLink;
 import com.alan.clients.newevent.impl.motion.PreMotionEvent;
@@ -25,7 +27,7 @@ public final class APIKeyComponent extends Component {
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
         if (!receivedKey && mc.thePlayer.ticksExisted == 2 && ServerUtil.isOnServer("hypixel")) {
-            mc.thePlayer.sendChatMessage("/api new");
+            if (Client.INSTANCE.getModuleManager().get(SniperOverlay.class).isEnabled()) mc.thePlayer.sendChatMessage("/api new");
         }
     };
 

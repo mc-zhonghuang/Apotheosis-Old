@@ -465,15 +465,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/ViaRewind-3.0.6-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/ViaVersion-4.10.0-24w04a-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -484,6 +475,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/ViaBackwards-4.10.0-24w04a-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/ViaRewind-Modified.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
