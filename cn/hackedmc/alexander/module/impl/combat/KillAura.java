@@ -593,7 +593,7 @@ public final class KillAura extends Module {
     private void unblock(final boolean swingCheck) {
         if (blocking && (!swingCheck || !swing)) {
             if (!mc.gameSettings.keyBindUseItem.isKeyDown()) {
-                PacketUtil.sendNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             } else {
                 mc.gameSettings.keyBindUseItem.setPressed(false);
             }
@@ -706,13 +706,6 @@ public final class KillAura extends Module {
                     this.block(false, true);
                 }
                 break;
-            case "GrimAC":
-                if (this.target == null || mc.thePlayer.getHeldItem() == null || !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)) {
-                    mc.gameSettings.keyBindUseItem.setPressed(false);
-                    mc.thePlayer.itemInUse = null;
-                    blocking = false;
-                }
-                break;
         }
     }
 
@@ -750,11 +743,7 @@ public final class KillAura extends Module {
 
                 break;
             case "GrimAC":
-                if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) {
-                    mc.gameSettings.keyBindUseItem.setPressed(true);
-                    mc.thePlayer.itemInUse = mc.thePlayer.getHeldItem();
-                    blocking = true;
-                }
+                this.unblock(true);
 
                 break;
         }
@@ -764,6 +753,7 @@ public final class KillAura extends Module {
         switch (autoBlock.getValue().getName()) {
             case "NCP":
             case "New NCP":
+            case "GrimAC":
             case "watchdog 1.9+":
                 this.block(true, false);
                 break;
@@ -773,7 +763,6 @@ public final class KillAura extends Module {
                     PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
                 }
                 break;
-
         }
     }
 

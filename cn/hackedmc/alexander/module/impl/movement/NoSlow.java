@@ -16,7 +16,7 @@ import cn.hackedmc.alexander.value.impl.ModeValue;
 @ModuleInfo(name = "module.movement.noslow.name", description = "module.movement.noslow.description", category = Category.MOVEMENT)
 public class NoSlow extends Module {
 
-    private final ModeValue mode = new ModeValue("Mode", this)
+    public final ModeValue mode = new ModeValue("Mode", this)
             .add(new VanillaNoSlow("Vanilla", this))
             .add(new NCPNoSlow("NCP", this))
             .add(new WatchdogNoSlow("Watchdog", this))

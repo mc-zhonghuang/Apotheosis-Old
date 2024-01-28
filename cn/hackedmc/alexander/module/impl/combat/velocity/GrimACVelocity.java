@@ -70,6 +70,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                     mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
                     mc.timer.lastSyncSysClock += 50;
+                    event.setCancelled();
 
                     break;
                 }
@@ -83,6 +84,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                             mc.thePlayer.onGround
                     ));
                     mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                    event.setCancelled();
 
                     break;
                 }
