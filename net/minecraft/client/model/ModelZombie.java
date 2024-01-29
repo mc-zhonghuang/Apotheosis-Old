@@ -8,11 +8,11 @@ public class ModelZombie extends ModelBiped {
         this(0.0F, false);
     }
 
-    protected ModelZombie(final float modelSize, final float p_i1167_2_, final int textureWidthIn, final int textureHeightIn) {
+    protected ModelZombie(float modelSize, float p_i1167_2_, int textureWidthIn, int textureHeightIn) {
         super(modelSize, p_i1167_2_, textureWidthIn, textureHeightIn);
     }
 
-    public ModelZombie(final float modelSize, final boolean p_i1168_2_) {
+    public ModelZombie(float modelSize, boolean p_i1168_2_) {
         super(modelSize, 0.0F, 64, p_i1168_2_ ? 32 : 64);
     }
 
@@ -21,10 +21,10 @@ public class ModelZombie extends ModelBiped {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, entityIn);
-        final float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
-        final float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
+        float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
+        float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
         this.bipedRightArm.rotateAngleZ = 0.0F;
         this.bipedLeftArm.rotateAngleZ = 0.0F;
         this.bipedRightArm.rotateAngleY = -(0.1F - f * 0.6F);

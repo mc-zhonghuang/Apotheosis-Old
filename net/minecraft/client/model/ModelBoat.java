@@ -11,10 +11,10 @@ public class ModelBoat extends ModelBase {
         this.boatSides[2] = new ModelRenderer(this, 0, 0);
         this.boatSides[3] = new ModelRenderer(this, 0, 0);
         this.boatSides[4] = new ModelRenderer(this, 0, 0);
-        final int i = 24;
-        final int j = 6;
-        final int k = 20;
-        final int l = 4;
+        int i = 24;
+        int j = 6;
+        int k = 20;
+        int l = 4;
         this.boatSides[0].addBox((float) (-i / 2), (float) (-k / 2 + 2), -3.0F, i, k - 4, 4, 0.0F);
         this.boatSides[0].setRotationPoint(0.0F, (float) l, 0.0F);
         this.boatSides[1].addBox((float) (-i / 2 + 2), (float) (-j - 1), -1.0F, i - 4, j, 2, 0.0F);
@@ -34,7 +34,7 @@ public class ModelBoat extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         for (int i = 0; i < 5; ++i) {
             this.boatSides[i].render(scale);
         }

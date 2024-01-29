@@ -6,10 +6,10 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.util.MathHelper;
 
 public class ModelWither extends ModelBase {
-    private final ModelRenderer[] field_82905_a;
-    private final ModelRenderer[] field_82904_b;
+    private ModelRenderer[] field_82905_a;
+    private ModelRenderer[] field_82904_b;
 
-    public ModelWither(final float p_i46302_1_) {
+    public ModelWither(float p_i46302_1_) {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.field_82905_a = new ModelRenderer[3];
@@ -39,14 +39,14 @@ public class ModelWither extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
 
-        for (final ModelRenderer modelrenderer : this.field_82904_b) {
+        for (ModelRenderer modelrenderer : this.field_82904_b) {
             modelrenderer.render(scale);
         }
 
-        for (final ModelRenderer modelrenderer1 : this.field_82905_a) {
+        for (ModelRenderer modelrenderer1 : this.field_82905_a) {
             modelrenderer1.render(scale);
         }
     }
@@ -56,8 +56,8 @@ public class ModelWither extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
-        final float f = MathHelper.cos(p_78087_3_ * 0.1F);
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
+        float f = MathHelper.cos(p_78087_3_ * 0.1F);
         this.field_82905_a[1].rotateAngleX = (0.065F + 0.05F * f) * (float) Math.PI;
         this.field_82905_a[2].setRotationPoint(-2.0F, 6.9F + MathHelper.cos(this.field_82905_a[1].rotateAngleX) * 10.0F, -0.5F + MathHelper.sin(this.field_82905_a[1].rotateAngleX) * 10.0F);
         this.field_82905_a[2].rotateAngleX = (0.265F + 0.1F * f) * (float) Math.PI;
@@ -69,8 +69,8 @@ public class ModelWither extends ModelBase {
      * Used for easily adding entity-dependent animations. The second and third float params here are the same second
      * and third as in the setRotationAngles method.
      */
-    public void setLivingAnimations(final EntityLivingBase entitylivingbaseIn, final float p_78086_2_, final float p_78086_3_, final float partialTickTime) {
-        final EntityWither entitywither = (EntityWither) entitylivingbaseIn;
+    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime) {
+        EntityWither entitywither = (EntityWither) entitylivingbaseIn;
 
         for (int i = 1; i < 3; ++i) {
             this.field_82904_b[i].rotateAngleY = (entitywither.func_82207_a(i - 1) - entitylivingbaseIn.renderYawOffset) / (180F / (float) Math.PI);

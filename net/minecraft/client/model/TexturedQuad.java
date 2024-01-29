@@ -12,15 +12,15 @@ public class TexturedQuad {
     public int nVertices;
     private boolean invertNormal;
 
-    public TexturedQuad(final PositionTextureVertex[] vertices) {
+    public TexturedQuad(PositionTextureVertex[] vertices) {
         this.vertexPositions = vertices;
         this.nVertices = vertices.length;
     }
 
-    public TexturedQuad(final PositionTextureVertex[] vertices, final int texcoordU1, final int texcoordV1, final int texcoordU2, final int texcoordV2, final float textureWidth, final float textureHeight) {
+    public TexturedQuad(PositionTextureVertex[] vertices, int texcoordU1, int texcoordV1, int texcoordU2, int texcoordV2, float textureWidth, float textureHeight) {
         this(vertices);
-        final float f = 0.0F / textureWidth;
-        final float f1 = 0.0F / textureHeight;
+        float f = 0.0F / textureWidth;
+        float f1 = 0.0F / textureHeight;
         vertices[0] = vertices[0].setTexturePosition((float) texcoordU2 / textureWidth - f, (float) texcoordV1 / textureHeight + f1);
         vertices[1] = vertices[1].setTexturePosition((float) texcoordU1 / textureWidth + f, (float) texcoordV1 / textureHeight + f1);
         vertices[2] = vertices[2].setTexturePosition((float) texcoordU1 / textureWidth + f, (float) texcoordV2 / textureHeight - f1);
@@ -28,7 +28,7 @@ public class TexturedQuad {
     }
 
     public void flipFace() {
-        final PositionTextureVertex[] apositiontexturevertex = new PositionTextureVertex[this.vertexPositions.length];
+        PositionTextureVertex[] apositiontexturevertex = new PositionTextureVertex[this.vertexPositions.length];
 
         for (int i = 0; i < this.vertexPositions.length; ++i) {
             apositiontexturevertex[i] = this.vertexPositions[this.vertexPositions.length - i - 1];
@@ -44,10 +44,10 @@ public class TexturedQuad {
      * @param renderer The renderer instance
      * @param scale    The amount of scale to apply to this object
      */
-    public void draw(final WorldRenderer renderer, final float scale) {
-        final Vec3 vec3 = this.vertexPositions[1].vector3D.subtractReverse(this.vertexPositions[0].vector3D);
-        final Vec3 vec31 = this.vertexPositions[1].vector3D.subtractReverse(this.vertexPositions[2].vector3D);
-        final Vec3 vec32 = vec31.crossProduct(vec3).normalize();
+    public void draw(WorldRenderer renderer, float scale) {
+        Vec3 vec3 = this.vertexPositions[1].vector3D.subtractReverse(this.vertexPositions[0].vector3D);
+        Vec3 vec31 = this.vertexPositions[1].vector3D.subtractReverse(this.vertexPositions[2].vector3D);
+        Vec3 vec32 = vec31.crossProduct(vec3).normalize();
         float f = (float) vec32.xCoord;
         float f1 = (float) vec32.yCoord;
         float f2 = (float) vec32.zCoord;

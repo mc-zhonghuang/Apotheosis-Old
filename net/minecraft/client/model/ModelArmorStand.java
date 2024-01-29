@@ -14,7 +14,7 @@ public class ModelArmorStand extends ModelArmorStandArmor {
         this(0.0F);
     }
 
-    public ModelArmorStand(final float p_i46306_1_) {
+    public ModelArmorStand(float p_i46306_1_) {
         super(p_i46306_1_, 64, 64);
         this.bipedHead = new ModelRenderer(this, 0, 0);
         this.bipedHead.addBox(-1.0F, -7.0F, -1.0F, 2, 7, 2, p_i46306_1_);
@@ -56,11 +56,11 @@ public class ModelArmorStand extends ModelArmorStandArmor {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, entityIn);
 
         if (entityIn instanceof EntityArmorStand) {
-            final EntityArmorStand entityarmorstand = (EntityArmorStand) entityIn;
+            EntityArmorStand entityarmorstand = (EntityArmorStand) entityIn;
             this.bipedLeftArm.showModel = entityarmorstand.getShowArms();
             this.bipedRightArm.showModel = entityarmorstand.getShowArms();
             this.standBase.showModel = !entityarmorstand.hasNoBasePlate();
@@ -75,9 +75,9 @@ public class ModelArmorStand extends ModelArmorStandArmor {
             this.standWaist.rotateAngleX = 0.017453292F * entityarmorstand.getBodyRotation().getX();
             this.standWaist.rotateAngleY = 0.017453292F * entityarmorstand.getBodyRotation().getY();
             this.standWaist.rotateAngleZ = 0.017453292F * entityarmorstand.getBodyRotation().getZ();
-            final float f = (entityarmorstand.getLeftLegRotation().getX() + entityarmorstand.getRightLegRotation().getX()) / 2.0F;
-            final float f1 = (entityarmorstand.getLeftLegRotation().getY() + entityarmorstand.getRightLegRotation().getY()) / 2.0F;
-            final float f2 = (entityarmorstand.getLeftLegRotation().getZ() + entityarmorstand.getRightLegRotation().getZ()) / 2.0F;
+            float f = (entityarmorstand.getLeftLegRotation().getX() + entityarmorstand.getRightLegRotation().getX()) / 2.0F;
+            float f1 = (entityarmorstand.getLeftLegRotation().getY() + entityarmorstand.getRightLegRotation().getY()) / 2.0F;
+            float f2 = (entityarmorstand.getLeftLegRotation().getZ() + entityarmorstand.getRightLegRotation().getZ()) / 2.0F;
             this.standBase.rotateAngleX = 0.0F;
             this.standBase.rotateAngleY = 0.017453292F * -entityIn.rotationYaw;
             this.standBase.rotateAngleZ = 0.0F;
@@ -87,12 +87,12 @@ public class ModelArmorStand extends ModelArmorStandArmor {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         super.render(entityIn, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale);
         GlStateManager.pushMatrix();
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.scale(1.0F / f, 1.0F / f, 1.0F / f);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
             this.standRightSide.render(scale);
@@ -113,8 +113,8 @@ public class ModelArmorStand extends ModelArmorStandArmor {
         GlStateManager.popMatrix();
     }
 
-    public void postRenderArm(final float scale) {
-        final boolean flag = this.bipedRightArm.showModel;
+    public void postRenderArm(float scale) {
+        boolean flag = this.bipedRightArm.showModel;
         this.bipedRightArm.showModel = true;
         super.postRenderArm(scale);
         this.bipedRightArm.showModel = flag;

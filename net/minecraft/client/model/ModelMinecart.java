@@ -12,10 +12,10 @@ public class ModelMinecart extends ModelBase {
         this.sideModels[3] = new ModelRenderer(this, 0, 0);
         this.sideModels[4] = new ModelRenderer(this, 0, 0);
         this.sideModels[5] = new ModelRenderer(this, 44, 10);
-        final int i = 20;
-        final int j = 8;
-        final int k = 16;
-        final int l = 4;
+        int i = 20;
+        int j = 8;
+        int k = 16;
+        int l = 4;
         this.sideModels[0].addBox((float) (-i / 2), (float) (-k / 2), -1.0F, i, k, 2, 0.0F);
         this.sideModels[0].setRotationPoint(0.0F, (float) l, 0.0F);
         this.sideModels[5].addBox((float) (-i / 2 + 1), (float) (-k / 2 + 1), -1.0F, i - 2, k - 2, 1, 0.0F);
@@ -38,7 +38,7 @@ public class ModelMinecart extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.sideModels[5].rotationPointY = 4.0F - p_78088_4_;
 
         for (int i = 0; i < 6; ++i) {

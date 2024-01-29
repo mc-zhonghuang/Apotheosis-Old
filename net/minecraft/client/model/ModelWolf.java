@@ -48,8 +48,8 @@ public class ModelWolf extends ModelBase {
     ModelRenderer wolfMane;
 
     public ModelWolf() {
-        final float f = 0.0F;
-        final float f1 = 13.5F;
+        float f = 0.0F;
+        float f1 = 13.5F;
         this.wolfHeadMain = new ModelRenderer(this, 0, 0);
         this.wolfHeadMain.addBox(-3.0F, -3.0F, -2.0F, 6, 6, 4, f);
         this.wolfHeadMain.setRotationPoint(-1.0F, f1, -7.0F);
@@ -82,12 +82,12 @@ public class ModelWolf extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         super.render(entityIn, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale);
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 5.0F * scale, 2.0F * scale);
             this.wolfHeadMain.renderWithRotation(scale);
@@ -119,8 +119,8 @@ public class ModelWolf extends ModelBase {
      * Used for easily adding entity-dependent animations. The second and third float params here are the same second
      * and third as in the setRotationAngles method.
      */
-    public void setLivingAnimations(final EntityLivingBase entitylivingbaseIn, final float p_78086_2_, final float p_78086_3_, final float partialTickTime) {
-        final EntityWolf entitywolf = (EntityWolf) entitylivingbaseIn;
+    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime) {
+        EntityWolf entitywolf = (EntityWolf) entitylivingbaseIn;
 
         if (entitywolf.isAngry()) {
             this.wolfTail.rotateAngleY = 0.0F;
@@ -170,7 +170,7 @@ public class ModelWolf extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, entityIn);
         this.wolfHeadMain.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
         this.wolfHeadMain.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);

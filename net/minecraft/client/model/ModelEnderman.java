@@ -13,9 +13,9 @@ public class ModelEnderman extends ModelBiped {
      */
     public boolean isAttacking;
 
-    public ModelEnderman(final float p_i46305_1_) {
+    public ModelEnderman(float p_i46305_1_) {
         super(0.0F, -14.0F, 64, 32);
-        final float f = -14.0F;
+        float f = -14.0F;
         this.bipedHeadwear = new ModelRenderer(this, 0, 16);
         this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, p_i46305_1_ - 0.5F);
         this.bipedHeadwear.setRotationPoint(0.0F, 0.0F + f, 0.0F);
@@ -43,10 +43,10 @@ public class ModelEnderman extends ModelBiped {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, entityIn);
         this.bipedHead.showModel = true;
-        final float f = -14.0F;
+        float f = -14.0F;
         this.bipedBody.rotateAngleX = 0.0F;
         this.bipedBody.rotationPointY = f;
         this.bipedBody.rotationPointZ = -0.0F;
@@ -56,7 +56,7 @@ public class ModelEnderman extends ModelBiped {
         this.bipedLeftArm.rotateAngleX = (float) ((double) this.bipedLeftArm.rotateAngleX * 0.5D);
         this.bipedRightLeg.rotateAngleX = (float) ((double) this.bipedRightLeg.rotateAngleX * 0.5D);
         this.bipedLeftLeg.rotateAngleX = (float) ((double) this.bipedLeftLeg.rotateAngleX * 0.5D);
-        final float f1 = 0.4F;
+        float f1 = 0.4F;
 
         if (this.bipedRightArm.rotateAngleX > f1) {
             this.bipedRightArm.rotateAngleX = f1;
@@ -113,7 +113,7 @@ public class ModelEnderman extends ModelBiped {
         this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ;
 
         if (this.isAttacking) {
-            final float f2 = 1.0F;
+            float f2 = 1.0F;
             this.bipedHead.rotationPointY -= f2 * 5.0F;
         }
     }

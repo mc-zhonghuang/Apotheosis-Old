@@ -30,11 +30,11 @@ public class ModelVillager extends ModelBase {
     public ModelRenderer leftVillagerLeg;
     public ModelRenderer villagerNose;
 
-    public ModelVillager(final float p_i1163_1_) {
+    public ModelVillager(float p_i1163_1_) {
         this(p_i1163_1_, 0.0F, 64, 64);
     }
 
-    public ModelVillager(final float p_i1164_1_, final float p_i1164_2_, final int p_i1164_3_, final int p_i1164_4_) {
+    public ModelVillager(float p_i1164_1_, float p_i1164_2_, int p_i1164_3_, int p_i1164_4_) {
         this.villagerHead = (new ModelRenderer(this)).setTextureSize(p_i1164_3_, p_i1164_4_);
         this.villagerHead.setRotationPoint(0.0F, 0.0F + p_i1164_2_, 0.0F);
         this.villagerHead.setTextureOffset(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8, 10, 8, p_i1164_1_);
@@ -63,7 +63,7 @@ public class ModelVillager extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
         this.villagerHead.render(scale);
         this.villagerBody.render(scale);
@@ -77,7 +77,7 @@ public class ModelVillager extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         this.villagerHead.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
         this.villagerHead.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
         this.villagerArms.rotationPointY = 3.0F;

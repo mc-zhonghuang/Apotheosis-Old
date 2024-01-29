@@ -14,7 +14,7 @@ public class ModelQuadruped extends ModelBase {
     protected float childYOffset = 8.0F;
     protected float childZOffset = 4.0F;
 
-    public ModelQuadruped(final int p_i1154_1_, final float p_i1154_2_) {
+    public ModelQuadruped(int p_i1154_1_, float p_i1154_2_) {
         this.head.addBox(-4.0F, -4.0F, -8.0F, 8, 8, 8, p_i1154_2_);
         this.head.setRotationPoint(0.0F, (float) (18 - p_i1154_1_), -6.0F);
         this.body = new ModelRenderer(this, 28, 8);
@@ -37,11 +37,11 @@ public class ModelQuadruped extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, this.childYOffset * scale, this.childZOffset * scale);
             this.head.render(scale);
@@ -70,8 +70,8 @@ public class ModelQuadruped extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
-        final float f = (180F / (float) Math.PI);
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
+        float f = (180F / (float) Math.PI);
         this.head.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
         this.head.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
         this.body.rotateAngleX = ((float) Math.PI / 2F);

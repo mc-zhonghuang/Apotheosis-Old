@@ -15,7 +15,7 @@ public class ModelChicken extends ModelBase {
     public ModelRenderer chin;
 
     public ModelChicken() {
-        final int i = 16;
+        int i = 16;
         this.head = new ModelRenderer(this, 0, 0);
         this.head.addBox(-2.0F, -6.0F, -2.0F, 4, 6, 3, 0.0F);
         this.head.setRotationPoint(0.0F, (float) (-1 + i), -4.0F);
@@ -45,11 +45,11 @@ public class ModelChicken extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 5.0F * scale, 2.0F * scale);
             this.head.render(scale);
@@ -82,7 +82,7 @@ public class ModelChicken extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         this.head.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
         this.head.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
         this.bill.rotateAngleX = this.head.rotateAngleX;

@@ -67,7 +67,7 @@ public class ModelRabbit extends ModelBase {
      */
     ModelRenderer rabbitNose;
     private float field_178701_m = 0.0F;
-    private final float field_178699_n = 0.0F;
+    private float field_178699_n = 0.0F;
 
     public ModelRabbit() {
         this.setTextureOffset("head.main", 0, 0);
@@ -136,7 +136,7 @@ public class ModelRabbit extends ModelBase {
         this.setRotationOffset(this.rabbitNose, 0.0F, 0.0F, 0.0F);
     }
 
-    private void setRotationOffset(final ModelRenderer p_178691_1_, final float p_178691_2_, final float p_178691_3_, final float p_178691_4_) {
+    private void setRotationOffset(ModelRenderer p_178691_1_, float p_178691_2_, float p_178691_3_, float p_178691_4_) {
         p_178691_1_.rotateAngleX = p_178691_2_;
         p_178691_1_.rotateAngleY = p_178691_3_;
         p_178691_1_.rotateAngleZ = p_178691_4_;
@@ -145,11 +145,11 @@ public class ModelRabbit extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 5.0F * scale, 2.0F * scale);
             this.rabbitHead.render(scale);
@@ -190,9 +190,9 @@ public class ModelRabbit extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
-        final float f = p_78087_3_ - (float) entityIn.ticksExisted;
-        final EntityRabbit entityrabbit = (EntityRabbit) entityIn;
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
+        float f = p_78087_3_ - (float) entityIn.ticksExisted;
+        EntityRabbit entityrabbit = (EntityRabbit) entityIn;
         this.rabbitNose.rotateAngleX = this.rabbitHead.rotateAngleX = this.rabbitRightEar.rotateAngleX = this.rabbitLeftEar.rotateAngleX = p_78087_5_ * 0.017453292F;
         this.rabbitNose.rotateAngleY = this.rabbitHead.rotateAngleY = p_78087_4_ * 0.017453292F;
         this.rabbitRightEar.rotateAngleY = this.rabbitNose.rotateAngleY - 0.2617994F;
@@ -207,6 +207,6 @@ public class ModelRabbit extends ModelBase {
      * Used for easily adding entity-dependent animations. The second and third float params here are the same second
      * and third as in the setRotationAngles method.
      */
-    public void setLivingAnimations(final EntityLivingBase entitylivingbaseIn, final float p_78086_2_, final float p_78086_3_, final float partialTickTime) {
+    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime) {
     }
 }

@@ -25,14 +25,23 @@ import java.util.BitSet;
 import java.util.List;
 
 public class BlockModelRenderer {
+    private static final EnumWorldBlockLayer[] OVERLAY_LAYERS = new EnumWorldBlockLayer[]{EnumWorldBlockLayer.CUTOUT, EnumWorldBlockLayer.CUTOUT_MIPPED, EnumWorldBlockLayer.TRANSLUCENT};
     private static float aoLightValueOpaque = 0.2F;
     private static boolean separateAoLightValue = false;
-    private static final EnumWorldBlockLayer[] OVERLAY_LAYERS = new EnumWorldBlockLayer[]{EnumWorldBlockLayer.CUTOUT, EnumWorldBlockLayer.CUTOUT_MIPPED, EnumWorldBlockLayer.TRANSLUCENT};
 
     public BlockModelRenderer() {
         if (Reflector.ForgeModContainer_forgeLightPipelineEnabled.exists()) {
-            Reflector.setFieldValue(Reflector.ForgeModContainer_forgeLightPipelineEnabled, false);
+            Reflector.setFieldValue(Reflector.ForgeModContainer_forgeLightPipelineEnabled, Boolean.valueOf(false));
         }
+    }
+
+    public static float fixAoLightValue(final float p_fixAoLightValue_0_) {
+        return p_fixAoLightValue_0_ == 0.2F ? aoLightValueOpaque : p_fixAoLightValue_0_;
+    }
+
+    public static void updateAoLightValue() {
+        aoLightValueOpaque = 1.0F - Config.getAmbientOcclusionLevel() * 0.8F;
+        separateAoLightValue = Config.isShaders() && Shaders.isSeparateAo();
     }
 
     public boolean renderModel(final IBlockAccess blockAccessIn, final IBakedModel modelIn, final IBlockState blockStateIn, final BlockPos blockPosIn, final WorldRenderer worldRendererIn) {
@@ -71,10 +80,6 @@ public class BlockModelRenderer {
         }
     }
 
-    public boolean renderModelAmbientOcclusion(final IBlockAccess blockAccessIn, final IBakedModel modelIn, final Block blockIn, final BlockPos blockPosIn, final WorldRenderer worldRendererIn, final boolean checkSides) {
-        final IBlockState iblockstate = blockAccessIn.getBlockState(blockPosIn);
-        return this.renderModelSmooth(blockAccessIn, modelIn, iblockstate, blockPosIn, worldRendererIn, checkSides);
-    }
 
     private boolean renderModelSmooth(final IBlockAccess p_renderModelSmooth_1_, final IBakedModel p_renderModelSmooth_2_, final IBlockState p_renderModelSmooth_3_, final BlockPos p_renderModelSmooth_4_, final WorldRenderer p_renderModelSmooth_5_, final boolean p_renderModelSmooth_6_) {
         boolean flag = false;
@@ -107,10 +112,6 @@ public class BlockModelRenderer {
         return flag;
     }
 
-    public boolean renderModelStandard(final IBlockAccess blockAccessIn, final IBakedModel modelIn, final Block blockIn, final BlockPos blockPosIn, final WorldRenderer worldRendererIn, final boolean checkSides) {
-        final IBlockState iblockstate = blockAccessIn.getBlockState(blockPosIn);
-        return this.renderModelFlat(blockAccessIn, modelIn, iblockstate, blockPosIn, worldRendererIn, checkSides);
-    }
 
     public boolean renderModelFlat(final IBlockAccess p_renderModelFlat_1_, final IBakedModel p_renderModelFlat_2_, final IBlockState p_renderModelFlat_3_, final BlockPos p_renderModelFlat_4_, final WorldRenderer p_renderModelFlat_5_, final boolean p_renderModelFlat_6_) {
         boolean flag = false;
@@ -308,7 +309,7 @@ public class BlockModelRenderer {
         if (block$enumoffsettype != Block.EnumOffsetType.NONE) {
             final int i = p_renderQuadsFlat_3_.getX();
             final int j = p_renderQuadsFlat_3_.getZ();
-            long k = (i * 3129871L) ^ (long) j * 116129781L;
+            long k = (long) (i * 3129871) ^ (long) j * 116129781L;
             k = k * k * 42317861L + k * 11L;
             d0 += ((double) ((float) (k >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
             d2 += ((double) ((float) (k >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
@@ -414,15 +415,6 @@ public class BlockModelRenderer {
         }
     }
 
-    public static float fixAoLightValue(final float p_fixAoLightValue_0_) {
-        return p_fixAoLightValue_0_ == 0.2F ? aoLightValueOpaque : p_fixAoLightValue_0_;
-    }
-
-    public static void updateAoLightValue() {
-        aoLightValueOpaque = 1.0F - Config.getAmbientOcclusionLevel() * 0.8F;
-        separateAoLightValue = Config.isShaders() && Shaders.isSeparateAo();
-    }
-
     private void renderOverlayModels(final IBlockAccess p_renderOverlayModels_1_, final IBakedModel p_renderOverlayModels_2_, final IBlockState p_renderOverlayModels_3_, final BlockPos p_renderOverlayModels_4_, final WorldRenderer p_renderOverlayModels_5_, final boolean p_renderOverlayModels_6_, final long p_renderOverlayModels_7_, final RenderEnv p_renderOverlayModels_9_, final boolean p_renderOverlayModels_10_) {
         if (p_renderOverlayModels_9_.isOverlaysRendered()) {
             for (final EnumWorldBlockLayer enumworldblocklayer : OVERLAY_LAYERS) {
@@ -468,6 +460,105 @@ public class BlockModelRenderer {
             final IBakedModel ibakedmodel = BetterSnow.getModelSnowLayer();
             final IBlockState iblockstate1 = BetterSnow.getStateSnowLayer();
             this.renderModel(p_renderOverlayModels_1_, ibakedmodel, iblockstate1, p_renderOverlayModels_4_, p_renderOverlayModels_5_, p_renderOverlayModels_6_);
+        }
+    }
+
+    public enum EnumNeighborInfo {
+        DOWN(new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.5F, false, new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0]),
+        UP(new EnumFacing[]{EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH}, 1.0F, false, new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0]),
+        NORTH(new EnumFacing[]{EnumFacing.UP, EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST}, 0.8F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_WEST}),
+        SOUTH(new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.DOWN, EnumFacing.UP}, 0.8F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.EAST}),
+        WEST(new EnumFacing[]{EnumFacing.UP, EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.6F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.SOUTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.SOUTH}),
+        EAST(new EnumFacing[]{EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.6F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.SOUTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.SOUTH});
+
+        private static final BlockModelRenderer.EnumNeighborInfo[] field_178282_n = new BlockModelRenderer.EnumNeighborInfo[6];
+
+        static {
+            field_178282_n[EnumFacing.DOWN.getIndex()] = DOWN;
+            field_178282_n[EnumFacing.UP.getIndex()] = UP;
+            field_178282_n[EnumFacing.NORTH.getIndex()] = NORTH;
+            field_178282_n[EnumFacing.SOUTH.getIndex()] = SOUTH;
+            field_178282_n[EnumFacing.WEST.getIndex()] = WEST;
+            field_178282_n[EnumFacing.EAST.getIndex()] = EAST;
+        }
+
+        protected final EnumFacing[] field_178276_g;
+        protected final float field_178288_h;
+        protected final boolean field_178289_i;
+        protected final BlockModelRenderer.Orientation[] field_178286_j;
+        protected final BlockModelRenderer.Orientation[] field_178287_k;
+        protected final BlockModelRenderer.Orientation[] field_178284_l;
+        protected final BlockModelRenderer.Orientation[] field_178285_m;
+
+        EnumNeighborInfo(final EnumFacing[] p_i46236_3_, final float p_i46236_4_, final boolean p_i46236_5_, final BlockModelRenderer.Orientation[] p_i46236_6_, final BlockModelRenderer.Orientation[] p_i46236_7_, final BlockModelRenderer.Orientation[] p_i46236_8_, final BlockModelRenderer.Orientation[] p_i46236_9_) {
+            this.field_178276_g = p_i46236_3_;
+            this.field_178288_h = p_i46236_4_;
+            this.field_178289_i = p_i46236_5_;
+            this.field_178286_j = p_i46236_6_;
+            this.field_178287_k = p_i46236_7_;
+            this.field_178284_l = p_i46236_8_;
+            this.field_178285_m = p_i46236_9_;
+        }
+
+        public static BlockModelRenderer.EnumNeighborInfo getNeighbourInfo(final EnumFacing p_178273_0_) {
+            return field_178282_n[p_178273_0_.getIndex()];
+        }
+    }
+
+    public enum Orientation {
+        DOWN(EnumFacing.DOWN, false),
+        UP(EnumFacing.UP, false),
+        NORTH(EnumFacing.NORTH, false),
+        SOUTH(EnumFacing.SOUTH, false),
+        WEST(EnumFacing.WEST, false),
+        EAST(EnumFacing.EAST, false),
+        FLIP_DOWN(EnumFacing.DOWN, true),
+        FLIP_UP(EnumFacing.UP, true),
+        FLIP_NORTH(EnumFacing.NORTH, true),
+        FLIP_SOUTH(EnumFacing.SOUTH, true),
+        FLIP_WEST(EnumFacing.WEST, true),
+        FLIP_EAST(EnumFacing.EAST, true);
+
+        protected final int field_178229_m;
+
+        Orientation(final EnumFacing p_i46233_3_, final boolean p_i46233_4_) {
+            this.field_178229_m = p_i46233_3_.getIndex() + (p_i46233_4_ ? EnumFacing.values().length : 0);
+        }
+    }
+
+    enum VertexTranslations {
+        DOWN(0, 1, 2, 3),
+        UP(2, 3, 0, 1),
+        NORTH(3, 0, 1, 2),
+        SOUTH(0, 1, 2, 3),
+        WEST(3, 0, 1, 2),
+        EAST(1, 2, 3, 0);
+
+        private static final BlockModelRenderer.VertexTranslations[] field_178199_k = new BlockModelRenderer.VertexTranslations[6];
+
+        static {
+            field_178199_k[EnumFacing.DOWN.getIndex()] = DOWN;
+            field_178199_k[EnumFacing.UP.getIndex()] = UP;
+            field_178199_k[EnumFacing.NORTH.getIndex()] = NORTH;
+            field_178199_k[EnumFacing.SOUTH.getIndex()] = SOUTH;
+            field_178199_k[EnumFacing.WEST.getIndex()] = WEST;
+            field_178199_k[EnumFacing.EAST.getIndex()] = EAST;
+        }
+
+        private final int field_178191_g;
+        private final int field_178200_h;
+        private final int field_178201_i;
+        private final int field_178198_j;
+
+        VertexTranslations(final int p_i46234_3_, final int p_i46234_4_, final int p_i46234_5_, final int p_i46234_6_) {
+            this.field_178191_g = p_i46234_3_;
+            this.field_178200_h = p_i46234_4_;
+            this.field_178201_i = p_i46234_5_;
+            this.field_178198_j = p_i46234_6_;
+        }
+
+        public static BlockModelRenderer.VertexTranslations getVertexTranslations(final EnumFacing p_178184_0_) {
+            return field_178199_k[p_178184_0_.getIndex()];
         }
     }
 
@@ -642,103 +733,6 @@ public class BlockModelRenderer {
             final int i = (int) ((float) (p_178203_1_ >> 16 & 255) * p_178203_5_ + (float) (p_178203_2_ >> 16 & 255) * p_178203_6_ + (float) (p_178203_3_ >> 16 & 255) * p_178203_7_ + (float) (p_178203_4_ >> 16 & 255) * p_178203_8_) & 255;
             final int j = (int) ((float) (p_178203_1_ & 255) * p_178203_5_ + (float) (p_178203_2_ & 255) * p_178203_6_ + (float) (p_178203_3_ & 255) * p_178203_7_ + (float) (p_178203_4_ & 255) * p_178203_8_) & 255;
             return i << 16 | j;
-        }
-    }
-
-    public enum EnumNeighborInfo {
-        DOWN(new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.5F, false, new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0]),
-        UP(new EnumFacing[]{EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH}, 1.0F, false, new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0], new BlockModelRenderer.Orientation[0]),
-        NORTH(new EnumFacing[]{EnumFacing.UP, EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST}, 0.8F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_WEST}),
-        SOUTH(new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.DOWN, EnumFacing.UP}, 0.8F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_WEST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.WEST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.WEST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.EAST}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_EAST, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.EAST, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.EAST}),
-        WEST(new EnumFacing[]{EnumFacing.UP, EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.6F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.SOUTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.SOUTH}),
-        EAST(new EnumFacing[]{EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.6F, true, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.SOUTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.FLIP_DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.DOWN, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.NORTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_NORTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.NORTH}, new BlockModelRenderer.Orientation[]{BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.SOUTH, BlockModelRenderer.Orientation.FLIP_UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.FLIP_SOUTH, BlockModelRenderer.Orientation.UP, BlockModelRenderer.Orientation.SOUTH});
-
-        private final EnumFacing[] field_178276_g;
-        private final float field_178288_h;
-        private final boolean field_178289_i;
-        private final BlockModelRenderer.Orientation[] field_178286_j;
-        private final BlockModelRenderer.Orientation[] field_178287_k;
-        private final BlockModelRenderer.Orientation[] field_178284_l;
-        private final BlockModelRenderer.Orientation[] field_178285_m;
-        private static final BlockModelRenderer.EnumNeighborInfo[] field_178282_n = new BlockModelRenderer.EnumNeighborInfo[6];
-
-        EnumNeighborInfo(final EnumFacing[] p_i46236_3_, final float p_i46236_4_, final boolean p_i46236_5_, final BlockModelRenderer.Orientation[] p_i46236_6_, final BlockModelRenderer.Orientation[] p_i46236_7_, final BlockModelRenderer.Orientation[] p_i46236_8_, final BlockModelRenderer.Orientation[] p_i46236_9_) {
-            this.field_178276_g = p_i46236_3_;
-            this.field_178288_h = p_i46236_4_;
-            this.field_178289_i = p_i46236_5_;
-            this.field_178286_j = p_i46236_6_;
-            this.field_178287_k = p_i46236_7_;
-            this.field_178284_l = p_i46236_8_;
-            this.field_178285_m = p_i46236_9_;
-        }
-
-        public static BlockModelRenderer.EnumNeighborInfo getNeighbourInfo(final EnumFacing p_178273_0_) {
-            return field_178282_n[p_178273_0_.getIndex()];
-        }
-
-        static {
-            field_178282_n[EnumFacing.DOWN.getIndex()] = DOWN;
-            field_178282_n[EnumFacing.UP.getIndex()] = UP;
-            field_178282_n[EnumFacing.NORTH.getIndex()] = NORTH;
-            field_178282_n[EnumFacing.SOUTH.getIndex()] = SOUTH;
-            field_178282_n[EnumFacing.WEST.getIndex()] = WEST;
-            field_178282_n[EnumFacing.EAST.getIndex()] = EAST;
-        }
-    }
-
-    public enum Orientation {
-        DOWN(EnumFacing.DOWN, false),
-        UP(EnumFacing.UP, false),
-        NORTH(EnumFacing.NORTH, false),
-        SOUTH(EnumFacing.SOUTH, false),
-        WEST(EnumFacing.WEST, false),
-        EAST(EnumFacing.EAST, false),
-        FLIP_DOWN(EnumFacing.DOWN, true),
-        FLIP_UP(EnumFacing.UP, true),
-        FLIP_NORTH(EnumFacing.NORTH, true),
-        FLIP_SOUTH(EnumFacing.SOUTH, true),
-        FLIP_WEST(EnumFacing.WEST, true),
-        FLIP_EAST(EnumFacing.EAST, true);
-
-        private final int field_178229_m;
-
-        Orientation(final EnumFacing p_i46233_3_, final boolean p_i46233_4_) {
-            this.field_178229_m = p_i46233_3_.getIndex() + (p_i46233_4_ ? EnumFacing.values().length : 0);
-        }
-    }
-
-    enum VertexTranslations {
-        DOWN(0, 1, 2, 3),
-        UP(2, 3, 0, 1),
-        NORTH(3, 0, 1, 2),
-        SOUTH(0, 1, 2, 3),
-        WEST(3, 0, 1, 2),
-        EAST(1, 2, 3, 0);
-
-        private final int field_178191_g;
-        private final int field_178200_h;
-        private final int field_178201_i;
-        private final int field_178198_j;
-        private static final BlockModelRenderer.VertexTranslations[] field_178199_k = new BlockModelRenderer.VertexTranslations[6];
-
-        VertexTranslations(final int p_i46234_3_, final int p_i46234_4_, final int p_i46234_5_, final int p_i46234_6_) {
-            this.field_178191_g = p_i46234_3_;
-            this.field_178200_h = p_i46234_4_;
-            this.field_178201_i = p_i46234_5_;
-            this.field_178198_j = p_i46234_6_;
-        }
-
-        public static BlockModelRenderer.VertexTranslations getVertexTranslations(final EnumFacing p_178184_0_) {
-            return field_178199_k[p_178184_0_.getIndex()];
-        }
-
-        static {
-            field_178199_k[EnumFacing.DOWN.getIndex()] = DOWN;
-            field_178199_k[EnumFacing.UP.getIndex()] = UP;
-            field_178199_k[EnumFacing.NORTH.getIndex()] = NORTH;
-            field_178199_k[EnumFacing.SOUTH.getIndex()] = SOUTH;
-            field_178199_k[EnumFacing.WEST.getIndex()] = WEST;
-            field_178199_k[EnumFacing.EAST.getIndex()] = EAST;
         }
     }
 }

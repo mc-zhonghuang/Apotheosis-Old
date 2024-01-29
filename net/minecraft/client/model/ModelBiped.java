@@ -1,7 +1,6 @@
 package net.minecraft.client.model;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
@@ -51,15 +50,17 @@ public class ModelBiped extends ModelBase {
      */
     public boolean aimedBow;
 
+    float lastRenderedPitch;
+
     public ModelBiped() {
         this(0.0F);
     }
 
-    public ModelBiped(final float modelSize) {
+    public ModelBiped(float modelSize) {
         this(modelSize, 0.0F, 64, 32);
     }
 
-    public ModelBiped(final float modelSize, final float p_i1149_2_, final int textureWidthIn, final int textureHeightIn) {
+    public ModelBiped(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
         this.textureWidth = textureWidthIn;
         this.textureHeight = textureHeightIn;
         this.bipedHead = new ModelRenderer(this, 0, 0);
@@ -90,12 +91,16 @@ public class ModelBiped extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
+
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
         GlStateManager.pushMatrix();
 
+        final Minecraft mc = Minecraft.getMinecraft();
+        final float distanceToPlayer = entityIn.getDistanceToEntity(mc.thePlayer);
+
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.scale(1.5F / f, 1.5F / f, 1.5F / f);
             GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
             this.bipedHead.render(scale);
@@ -103,19 +108,28 @@ public class ModelBiped extends ModelBase {
             GlStateManager.pushMatrix();
             GlStateManager.scale(1.0F / f, 1.0F / f, 1.0F / f);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+            this.bipedBody.render(scale);
+            this.bipedRightArm.render(scale);
+            this.bipedLeftArm.render(scale);
+            this.bipedRightLeg.render(scale);
+            this.bipedLeftLeg.render(scale);
+            this.bipedHeadwear.render(scale);
+
         } else {
             if (entityIn.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
 
             this.bipedHead.render(scale);
+            this.bipedBody.render(scale);
+            this.bipedRightArm.render(scale);
+            this.bipedLeftArm.render(scale);
+            this.bipedRightLeg.render(scale);
+            this.bipedLeftLeg.render(scale);
+
+            if (distanceToPlayer < 15)
+                this.bipedHeadwear.render(scale);
         }
-        this.bipedBody.render(scale);
-        this.bipedRightArm.render(scale);
-        this.bipedLeftArm.render(scale);
-        this.bipedRightLeg.render(scale);
-        this.bipedLeftLeg.render(scale);
-        this.bipedHeadwear.render(scale);
 
         GlStateManager.popMatrix();
     }
@@ -125,13 +139,14 @@ public class ModelBiped extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         this.bipedHead.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
+
+        final Minecraft mc = Minecraft.getMinecraft();
+
+
         this.bipedHead.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
-        final EntityPlayerSP entityPlayer = Minecraft.getMinecraft().thePlayer;
-        if (entityIn == entityPlayer) {
-            this.bipedHead.rotateAngleX = (entityPlayer.prevRenderPitchHead + (entityPlayer.renderPitchHead - entityPlayer.prevRenderPitchHead) * Minecraft.getMinecraft().timer.renderPartialTicks) / (180.0F / (float) Math.PI);
-        }
+
         this.bipedRightArm.rotateAngleX = MathHelper.cos(p_78087_1_ * 0.6662F + (float) Math.PI) * 2.0F * p_78087_2_ * 0.5F;
         this.bipedLeftArm.rotateAngleX = MathHelper.cos(p_78087_1_ * 0.6662F) * 2.0F * p_78087_2_ * 0.5F;
         this.bipedLeftArm.rotateAngleZ = 0.0F;
@@ -187,8 +202,8 @@ public class ModelBiped extends ModelBase {
             f = f * f;
             f = f * f;
             f = 1.0F - f;
-            final float f1 = MathHelper.sin(f * (float) Math.PI);
-            final float f2 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
+            float f1 = MathHelper.sin(f * (float) Math.PI);
+            float f2 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
             this.bipedRightArm.rotateAngleX = (float) ((double) this.bipedRightArm.rotateAngleX - ((double) f1 * 1.2D + (double) f2));
             this.bipedRightArm.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
             this.bipedRightArm.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
@@ -218,8 +233,8 @@ public class ModelBiped extends ModelBase {
         this.bipedLeftArm.rotateAngleX -= MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
 
         if (this.aimedBow) {
-            final float f3 = 0.0F;
-            final float f4 = 0.0F;
+            float f3 = 0.0F;
+            float f4 = 0.0F;
             this.bipedRightArm.rotateAngleZ = 0.0F;
             this.bipedLeftArm.rotateAngleZ = 0.0F;
             this.bipedRightArm.rotateAngleY = -(0.1F - f3 * 0.6F) + this.bipedHead.rotateAngleY;
@@ -237,11 +252,11 @@ public class ModelBiped extends ModelBase {
         copyModelAngles(this.bipedHead, this.bipedHeadwear);
     }
 
-    public void setModelAttributes(final ModelBase model) {
+    public void setModelAttributes(ModelBase model) {
         super.setModelAttributes(model);
 
         if (model instanceof ModelBiped) {
-            final ModelBiped modelbiped = (ModelBiped) model;
+            ModelBiped modelbiped = (ModelBiped) model;
             this.heldItemLeft = modelbiped.heldItemLeft;
             this.heldItemRight = modelbiped.heldItemRight;
             this.isSneak = modelbiped.isSneak;
@@ -249,7 +264,7 @@ public class ModelBiped extends ModelBase {
         }
     }
 
-    public void setInvisible(final boolean invisible) {
+    public void setInvisible(boolean invisible) {
         this.bipedHead.showModel = invisible;
         this.bipedHeadwear.showModel = invisible;
         this.bipedBody.showModel = invisible;
@@ -259,7 +274,7 @@ public class ModelBiped extends ModelBase {
         this.bipedLeftLeg.showModel = invisible;
     }
 
-    public void postRenderArm(final float scale) {
+    public void postRenderArm(float scale) {
         this.bipedRightArm.postRender(scale);
     }
 }

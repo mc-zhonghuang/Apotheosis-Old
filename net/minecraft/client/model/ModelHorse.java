@@ -7,73 +7,73 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.util.MathHelper;
 
 public class ModelHorse extends ModelBase {
-    private final ModelRenderer head;
-    private final ModelRenderer field_178711_b;
-    private final ModelRenderer field_178712_c;
-    private final ModelRenderer horseLeftEar;
-    private final ModelRenderer horseRightEar;
+    private ModelRenderer head;
+    private ModelRenderer field_178711_b;
+    private ModelRenderer field_178712_c;
+    private ModelRenderer horseLeftEar;
+    private ModelRenderer horseRightEar;
 
     /**
      * The left ear box for the mule model.
      */
-    private final ModelRenderer muleLeftEar;
+    private ModelRenderer muleLeftEar;
 
     /**
      * The right ear box for the mule model.
      */
-    private final ModelRenderer muleRightEar;
-    private final ModelRenderer neck;
+    private ModelRenderer muleRightEar;
+    private ModelRenderer neck;
 
     /**
      * The box for the horse's ropes on its face.
      */
-    private final ModelRenderer horseFaceRopes;
-    private final ModelRenderer mane;
-    private final ModelRenderer body;
-    private final ModelRenderer tailBase;
-    private final ModelRenderer tailMiddle;
-    private final ModelRenderer tailTip;
-    private final ModelRenderer backLeftLeg;
-    private final ModelRenderer backLeftShin;
-    private final ModelRenderer backLeftHoof;
-    private final ModelRenderer backRightLeg;
-    private final ModelRenderer backRightShin;
-    private final ModelRenderer backRightHoof;
-    private final ModelRenderer frontLeftLeg;
-    private final ModelRenderer frontLeftShin;
-    private final ModelRenderer frontLeftHoof;
-    private final ModelRenderer frontRightLeg;
-    private final ModelRenderer frontRightShin;
-    private final ModelRenderer frontRightHoof;
+    private ModelRenderer horseFaceRopes;
+    private ModelRenderer mane;
+    private ModelRenderer body;
+    private ModelRenderer tailBase;
+    private ModelRenderer tailMiddle;
+    private ModelRenderer tailTip;
+    private ModelRenderer backLeftLeg;
+    private ModelRenderer backLeftShin;
+    private ModelRenderer backLeftHoof;
+    private ModelRenderer backRightLeg;
+    private ModelRenderer backRightShin;
+    private ModelRenderer backRightHoof;
+    private ModelRenderer frontLeftLeg;
+    private ModelRenderer frontLeftShin;
+    private ModelRenderer frontLeftHoof;
+    private ModelRenderer frontRightLeg;
+    private ModelRenderer frontRightShin;
+    private ModelRenderer frontRightHoof;
 
     /**
      * The left chest box on the mule model.
      */
-    private final ModelRenderer muleLeftChest;
+    private ModelRenderer muleLeftChest;
 
     /**
      * The right chest box on the mule model.
      */
-    private final ModelRenderer muleRightChest;
-    private final ModelRenderer horseSaddleBottom;
-    private final ModelRenderer horseSaddleFront;
-    private final ModelRenderer horseSaddleBack;
-    private final ModelRenderer horseLeftSaddleRope;
-    private final ModelRenderer horseLeftSaddleMetal;
-    private final ModelRenderer horseRightSaddleRope;
-    private final ModelRenderer horseRightSaddleMetal;
+    private ModelRenderer muleRightChest;
+    private ModelRenderer horseSaddleBottom;
+    private ModelRenderer horseSaddleFront;
+    private ModelRenderer horseSaddleBack;
+    private ModelRenderer horseLeftSaddleRope;
+    private ModelRenderer horseLeftSaddleMetal;
+    private ModelRenderer horseRightSaddleRope;
+    private ModelRenderer horseRightSaddleMetal;
 
     /**
      * The left metal connected to the horse's face ropes.
      */
-    private final ModelRenderer horseLeftFaceMetal;
+    private ModelRenderer horseLeftFaceMetal;
 
     /**
      * The right metal connected to the horse's face ropes.
      */
-    private final ModelRenderer horseRightFaceMetal;
-    private final ModelRenderer horseLeftRein;
-    private final ModelRenderer horseRightRein;
+    private ModelRenderer horseRightFaceMetal;
+    private ModelRenderer horseLeftRein;
+    private ModelRenderer horseRightRein;
 
     public ModelHorse() {
         this.textureWidth = 128;
@@ -219,16 +219,16 @@ public class ModelHorse extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
-        final EntityHorse entityhorse = (EntityHorse) entityIn;
-        final int i = entityhorse.getHorseType();
-        final float f = entityhorse.getGrassEatingAmount(0.0F);
-        final boolean flag = entityhorse.isAdultHorse();
-        final boolean flag1 = flag && entityhorse.isHorseSaddled();
-        final boolean flag2 = flag && entityhorse.isChested();
-        final boolean flag3 = i == 1 || i == 2;
-        final float f1 = entityhorse.getHorseSize();
-        final boolean flag4 = entityhorse.riddenByEntity != null;
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
+        EntityHorse entityhorse = (EntityHorse) entityIn;
+        int i = entityhorse.getHorseType();
+        float f = entityhorse.getGrassEatingAmount(0.0F);
+        boolean flag = entityhorse.isAdultHorse();
+        boolean flag1 = flag && entityhorse.isHorseSaddled();
+        boolean flag2 = flag && entityhorse.isChested();
+        boolean flag3 = i == 1 || i == 2;
+        float f1 = entityhorse.getHorseSize();
+        boolean flag4 = entityhorse.riddenByEntity != null;
 
         if (flag1) {
             this.horseFaceRopes.render(scale);
@@ -284,7 +284,7 @@ public class ModelHorse extends ModelBase {
         if (!flag) {
             GlStateManager.popMatrix();
             GlStateManager.pushMatrix();
-            final float f2 = 0.5F + f1 * f1 * 0.5F;
+            float f2 = 0.5F + f1 * f1 * 0.5F;
             GlStateManager.scale(f2, f2, f2);
 
             if (f <= 0.0F) {
@@ -317,7 +317,7 @@ public class ModelHorse extends ModelBase {
     /**
      * Sets the rotations for a ModelRenderer in the ModelHorse class.
      */
-    private void setBoxRotation(final ModelRenderer p_110682_1_, final float p_110682_2_, final float p_110682_3_, final float p_110682_4_) {
+    private void setBoxRotation(ModelRenderer p_110682_1_, float p_110682_2_, float p_110682_3_, float p_110682_4_) {
         p_110682_1_.rotateAngleX = p_110682_2_;
         p_110682_1_.rotateAngleY = p_110682_3_;
         p_110682_1_.rotateAngleZ = p_110682_4_;
@@ -326,10 +326,11 @@ public class ModelHorse extends ModelBase {
     /**
      * Fixes and offsets a rotation in the ModelHorse class.
      */
-    private float updateHorseRotation(final float p_110683_1_, final float p_110683_2_, final float p_110683_3_) {
+    private float updateHorseRotation(float p_110683_1_, float p_110683_2_, float p_110683_3_) {
         float f;
 
         for (f = p_110683_2_ - p_110683_1_; f < -180.0F; f += 360.0F) {
+            ;
         }
 
         while (f >= 180.0F) {
@@ -343,11 +344,11 @@ public class ModelHorse extends ModelBase {
      * Used for easily adding entity-dependent animations. The second and third float params here are the same second
      * and third as in the setRotationAngles method.
      */
-    public void setLivingAnimations(final EntityLivingBase entitylivingbaseIn, final float p_78086_2_, final float p_78086_3_, final float partialTickTime) {
+    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime) {
         super.setLivingAnimations(entitylivingbaseIn, p_78086_2_, p_78086_3_, partialTickTime);
-        final float f = this.updateHorseRotation(entitylivingbaseIn.prevRenderYawOffset, entitylivingbaseIn.renderYawOffset, partialTickTime);
-        final float f1 = this.updateHorseRotation(entitylivingbaseIn.prevRotationYawHead, entitylivingbaseIn.rotationYawHead, partialTickTime);
-        final float f2 = entitylivingbaseIn.prevRotationPitch + (entitylivingbaseIn.rotationPitch - entitylivingbaseIn.prevRotationPitch) * partialTickTime;
+        float f = this.updateHorseRotation(entitylivingbaseIn.prevRenderYawOffset, entitylivingbaseIn.renderYawOffset, partialTickTime);
+        float f1 = this.updateHorseRotation(entitylivingbaseIn.prevRotationYawHead, entitylivingbaseIn.rotationYawHead, partialTickTime);
+        float f2 = entitylivingbaseIn.prevRotationPitch + (entitylivingbaseIn.rotationPitch - entitylivingbaseIn.prevRotationPitch) * partialTickTime;
         float f3 = f1 - f;
         float f4 = f2 / (180F / (float) Math.PI);
 
@@ -363,17 +364,17 @@ public class ModelHorse extends ModelBase {
             f4 += MathHelper.cos(p_78086_2_ * 0.4F) * 0.15F * p_78086_3_;
         }
 
-        final EntityHorse entityhorse = (EntityHorse) entitylivingbaseIn;
-        final float f5 = entityhorse.getGrassEatingAmount(partialTickTime);
-        final float f6 = entityhorse.getRearingAmount(partialTickTime);
-        final float f7 = 1.0F - f6;
-        final float f8 = entityhorse.getMouthOpennessAngle(partialTickTime);
-        final boolean flag = entityhorse.field_110278_bp != 0;
-        final boolean flag1 = entityhorse.isHorseSaddled();
-        final boolean flag2 = entityhorse.riddenByEntity != null;
-        final float f9 = (float) entitylivingbaseIn.ticksExisted + partialTickTime;
-        final float f10 = MathHelper.cos(p_78086_2_ * 0.6662F + (float) Math.PI);
-        final float f11 = f10 * 0.8F * p_78086_3_;
+        EntityHorse entityhorse = (EntityHorse) entitylivingbaseIn;
+        float f5 = entityhorse.getGrassEatingAmount(partialTickTime);
+        float f6 = entityhorse.getRearingAmount(partialTickTime);
+        float f7 = 1.0F - f6;
+        float f8 = entityhorse.getMouthOpennessAngle(partialTickTime);
+        boolean flag = entityhorse.field_110278_bp != 0;
+        boolean flag1 = entityhorse.isHorseSaddled();
+        boolean flag2 = entityhorse.riddenByEntity != null;
+        float f9 = (float) entitylivingbaseIn.ticksExisted + partialTickTime;
+        float f10 = MathHelper.cos(p_78086_2_ * 0.6662F + (float) Math.PI);
+        float f11 = f10 * 0.8F * p_78086_3_;
         this.head.rotationPointY = 4.0F;
         this.head.rotationPointZ = -10.0F;
         this.tailBase.rotationPointY = 3.0F;
@@ -405,8 +406,8 @@ public class ModelHorse extends ModelBase {
         this.muleLeftEar.rotationPointZ = this.head.rotationPointZ;
         this.muleRightEar.rotationPointZ = this.head.rotationPointZ;
         this.neck.rotationPointZ = this.head.rotationPointZ;
-        this.field_178711_b.rotationPointZ = 0.02F - f8 * 1.0F;
-        this.field_178712_c.rotationPointZ = 0.0F + f8 * 1.0F;
+        this.field_178711_b.rotationPointZ = 0.02F - f8;
+        this.field_178712_c.rotationPointZ = 0.0F + f8;
         this.mane.rotationPointZ = this.head.rotationPointZ;
         this.horseLeftEar.rotateAngleX = this.head.rotateAngleX;
         this.horseRightEar.rotateAngleX = this.head.rotateAngleX;
@@ -427,10 +428,10 @@ public class ModelHorse extends ModelBase {
         this.muleLeftChest.rotateAngleX = f11 / 5.0F;
         this.muleRightChest.rotateAngleX = -f11 / 5.0F;
         float f12 = ((float) Math.PI / 2F);
-        final float f13 = ((float) Math.PI * 3F / 2F);
-        final float f14 = -1.0471976F;
-        final float f15 = 0.2617994F * f6;
-        final float f16 = MathHelper.cos(f9 * 0.6F + (float) Math.PI);
+        float f13 = ((float) Math.PI * 3F / 2F);
+        float f14 = -1.0471976F;
+        float f15 = 0.2617994F * f6;
+        float f16 = MathHelper.cos(f9 * 0.6F + (float) Math.PI);
         this.frontLeftLeg.rotationPointY = -2.0F * f6 + 9.0F * f7;
         this.frontLeftLeg.rotationPointZ = -2.0F * f6 + -8.0F * f7;
         this.frontRightLeg.rotationPointY = this.frontLeftLeg.rotationPointY;
@@ -439,8 +440,8 @@ public class ModelHorse extends ModelBase {
         this.backLeftShin.rotationPointZ = this.backLeftLeg.rotationPointZ + MathHelper.cos(((float) Math.PI * 3F / 2F) + f15 + f7 * -f10 * 0.5F * p_78086_3_) * 7.0F;
         this.backRightShin.rotationPointY = this.backRightLeg.rotationPointY + MathHelper.sin(((float) Math.PI / 2F) + f15 + f7 * f10 * 0.5F * p_78086_3_) * 7.0F;
         this.backRightShin.rotationPointZ = this.backRightLeg.rotationPointZ + MathHelper.cos(((float) Math.PI * 3F / 2F) + f15 + f7 * f10 * 0.5F * p_78086_3_) * 7.0F;
-        final float f17 = (-1.0471976F + f16) * f6 + f11 * f7;
-        final float f18 = (-1.0471976F + -f16) * f6 + -f11 * f7;
+        float f17 = (-1.0471976F + f16) * f6 + f11 * f7;
+        float f18 = (-1.0471976F + -f16) * f6 + -f11 * f7;
         this.frontLeftShin.rotationPointY = this.frontLeftLeg.rotationPointY + MathHelper.sin(((float) Math.PI / 2F) + f17) * 7.0F;
         this.frontLeftShin.rotationPointZ = this.frontLeftLeg.rotationPointZ + MathHelper.cos(((float) Math.PI * 3F / 2F) + f17) * 7.0F;
         this.frontRightShin.rotationPointY = this.frontRightLeg.rotationPointY + MathHelper.sin(((float) Math.PI / 2F) + f18) * 7.0F;

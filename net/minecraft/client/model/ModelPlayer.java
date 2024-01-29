@@ -9,11 +9,11 @@ public class ModelPlayer extends ModelBiped {
     public ModelRenderer bipedLeftLegwear;
     public ModelRenderer bipedRightLegwear;
     public ModelRenderer bipedBodyWear;
-    private final ModelRenderer bipedCape;
-    private final ModelRenderer bipedDeadmau5Head;
-    private final boolean smallArms;
+    private ModelRenderer bipedCape;
+    private ModelRenderer bipedDeadmau5Head;
+    private boolean smallArms;
 
-    public ModelPlayer(final float p_i46304_1_, final boolean p_i46304_2_) {
+    public ModelPlayer(float p_i46304_1_, boolean p_i46304_2_) {
         super(p_i46304_1_, 0.0F, 64, 64);
         this.smallArms = p_i46304_2_;
         this.bipedDeadmau5Head = new ModelRenderer(this, 24, 0);
@@ -35,7 +35,8 @@ public class ModelPlayer extends ModelBiped {
             this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
             this.bipedRightArmwear.addBox(-2.0F, -2.0F, -2.0F, 3, 12, 4, p_i46304_1_ + 0.25F);
             this.bipedRightArmwear.setRotationPoint(-5.0F, 2.5F, 10.0F);
-        } else {
+        }
+        else {
             this.bipedLeftArm = new ModelRenderer(this, 32, 48);
             this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, p_i46304_1_);
             this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
@@ -64,37 +65,43 @@ public class ModelPlayer extends ModelBiped {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         super.render(entityIn, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale);
         GlStateManager.pushMatrix();
 
         if (this.isChild) {
-            final float f = 2.0F;
+            float f = 2.0F;
             GlStateManager.scale(1.0F / f, 1.0F / f, 1.0F / f);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-        } else {
+            this.bipedLeftLegwear.render(scale);
+            this.bipedRightLegwear.render(scale);
+            this.bipedLeftArmwear.render(scale);
+            this.bipedRightArmwear.render(scale);
+            this.bipedBodyWear.render(scale);
+        }
+        else {
             if (entityIn.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
-        }
 
-//        this.bipedLeftLegwear.render(scale);
-//        this.bipedRightLegwear.render(scale);
-//        this.bipedLeftArmwear.render(scale);
-//        this.bipedRightArmwear.render(scale);
-//        this.bipedBodyWear.render(scale);
+            this.bipedLeftLegwear.render(scale);
+            this.bipedRightLegwear.render(scale);
+            this.bipedLeftArmwear.render(scale);
+            this.bipedRightArmwear.render(scale);
+            this.bipedBodyWear.render(scale);
+        }
 
         GlStateManager.popMatrix();
     }
 
-    public void renderDeadmau5Head(final float p_178727_1_) {
+    public void renderDeadmau5Head(float p_178727_1_) {
         copyModelAngles(this.bipedHead, this.bipedDeadmau5Head);
         this.bipedDeadmau5Head.rotationPointX = 0.0F;
         this.bipedDeadmau5Head.rotationPointY = 0.0F;
         this.bipedDeadmau5Head.render(p_178727_1_);
     }
 
-    public void renderCape(final float p_178728_1_) {
+    public void renderCape(float p_178728_1_) {
         this.bipedCape.render(p_178728_1_);
     }
 
@@ -103,8 +110,8 @@ public class ModelPlayer extends ModelBiped {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
-        super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, entityIn);
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
         copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
         copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
@@ -122,7 +129,7 @@ public class ModelPlayer extends ModelBiped {
         this.bipedLeftArmwear.render(0.0625F);
     }
 
-    public void setInvisible(final boolean invisible) {
+    public void setInvisible(boolean invisible) {
         super.setInvisible(invisible);
         this.bipedLeftArmwear.showModel = invisible;
         this.bipedRightArmwear.showModel = invisible;
@@ -133,12 +140,13 @@ public class ModelPlayer extends ModelBiped {
         this.bipedDeadmau5Head.showModel = invisible;
     }
 
-    public void postRenderArm(final float scale) {
+    public void postRenderArm(float scale) {
         if (this.smallArms) {
             ++this.bipedRightArm.rotationPointX;
             this.bipedRightArm.postRender(scale);
             --this.bipedRightArm.rotationPointX;
-        } else {
+        }
+        else {
             this.bipedRightArm.postRender(scale);
         }
     }

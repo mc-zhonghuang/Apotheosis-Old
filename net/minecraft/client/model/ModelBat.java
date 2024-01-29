@@ -5,42 +5,42 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.util.MathHelper;
 
 public class ModelBat extends ModelBase {
-    private final ModelRenderer batHead;
+    private ModelRenderer batHead;
 
     /**
      * The body box of the bat model.
      */
-    private final ModelRenderer batBody;
+    private ModelRenderer batBody;
 
     /**
      * The inner right wing box of the bat model.
      */
-    private final ModelRenderer batRightWing;
+    private ModelRenderer batRightWing;
 
     /**
      * The inner left wing box of the bat model.
      */
-    private final ModelRenderer batLeftWing;
+    private ModelRenderer batLeftWing;
 
     /**
      * The outer right wing box of the bat model.
      */
-    private final ModelRenderer batOuterRightWing;
+    private ModelRenderer batOuterRightWing;
 
     /**
      * The outer left wing box of the bat model.
      */
-    private final ModelRenderer batOuterLeftWing;
+    private ModelRenderer batOuterLeftWing;
 
     public ModelBat() {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.batHead = new ModelRenderer(this, 0, 0);
         this.batHead.addBox(-3.0F, -3.0F, -3.0F, 6, 6, 6);
-        final ModelRenderer modelrenderer = new ModelRenderer(this, 24, 0);
+        ModelRenderer modelrenderer = new ModelRenderer(this, 24, 0);
         modelrenderer.addBox(-4.0F, -6.0F, -2.0F, 3, 4, 1);
         this.batHead.addChild(modelrenderer);
-        final ModelRenderer modelrenderer1 = new ModelRenderer(this, 24, 0);
+        ModelRenderer modelrenderer1 = new ModelRenderer(this, 24, 0);
         modelrenderer1.mirror = true;
         modelrenderer1.addBox(1.0F, -6.0F, -2.0F, 3, 4, 1);
         this.batHead.addChild(modelrenderer1);
@@ -68,7 +68,7 @@ public class ModelBat extends ModelBase {
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(final Entity entityIn, final float p_78088_2_, final float p_78088_3_, final float p_78088_4_, final float p_78088_5_, final float p_78088_6_, final float scale) {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
         this.batHead.render(scale);
         this.batBody.render(scale);
@@ -79,9 +79,9 @@ public class ModelBat extends ModelBase {
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(final float p_78087_1_, final float p_78087_2_, final float p_78087_3_, final float p_78087_4_, final float p_78087_5_, final float p_78087_6_, final Entity entityIn) {
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         if (((EntityBat) entityIn).getIsBatHanging()) {
-            final float f = (180F / (float) Math.PI);
+            float f = (180F / (float) Math.PI);
             this.batHead.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
             this.batHead.rotateAngleY = (float) Math.PI - p_78087_4_ / (180F / (float) Math.PI);
             this.batHead.rotateAngleZ = (float) Math.PI;
@@ -96,7 +96,7 @@ public class ModelBat extends ModelBase {
             this.batLeftWing.rotateAngleY = -this.batRightWing.rotateAngleY;
             this.batOuterLeftWing.rotateAngleY = -this.batOuterRightWing.rotateAngleY;
         } else {
-            final float f1 = (180F / (float) Math.PI);
+            float f1 = (180F / (float) Math.PI);
             this.batHead.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
             this.batHead.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
             this.batHead.rotateAngleZ = 0.0F;
