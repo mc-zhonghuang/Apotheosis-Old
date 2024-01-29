@@ -1,7 +1,7 @@
 package net.minecraft.world;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.impl.render.Ambience;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.render.Ambience;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
@@ -52,7 +52,7 @@ public abstract class WorldProvider {
     protected int dimensionId;
 
     /**
-     * Array for sunalexander/sunset colors (RGBA)
+     * Array for sunapotheosis/sunset colors (RGBA)
      */
     private final float[] colorsSunriseSunset = new float[4];
 
@@ -141,7 +141,7 @@ public abstract class WorldProvider {
     }
 
     /**
-     * Returns array with sunalexander/sunset colors
+     * Returns array with sunapotheosis/sunset colors
      */
     public float[] calcSunriseSunsetColors(final float celestialAngle, final float partialTicks) {
         final float f = 0.4F;

@@ -1,10 +1,10 @@
 package net.minecraft.entity.player;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.component.impl.player.SlotComponent;
-import cn.hackedmc.alexander.component.impl.render.SmoothCameraComponent;
-import cn.hackedmc.alexander.module.impl.player.Scaffold;
-import cn.hackedmc.alexander.newevent.impl.motion.HitSlowDownEvent;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.component.impl.render.SmoothCameraComponent;
+import cn.hackedmc.apotheosis.module.impl.player.Scaffold;
+import cn.hackedmc.apotheosis.newevent.impl.motion.HitSlowDownEvent;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;

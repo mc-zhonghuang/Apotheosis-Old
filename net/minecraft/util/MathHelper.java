@@ -1,6 +1,6 @@
 package net.minecraft.util;
 
-import cn.hackedmc.alexander.Client;
+import cn.hackedmc.apotheosis.Client;
 import net.optifine.util.MathUtils;
 
 import java.util.Random;

@@ -1,4 +1,4 @@
-import cn.hackedmc.alexander.Client;
+import cn.hackedmc.apotheosis.Client;
 import net.minecraft.client.main.Main;
 
 import java.util.Arrays;

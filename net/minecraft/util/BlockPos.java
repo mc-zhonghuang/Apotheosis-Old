@@ -1,6 +1,6 @@
 package net.minecraft.util;
 
-import cn.hackedmc.alexander.util.vector.Vector3d;
+import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.entity.Entity;
 

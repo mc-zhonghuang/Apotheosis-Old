@@ -1,6 +1,6 @@
 package net.optifine;
 
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.src.Config;

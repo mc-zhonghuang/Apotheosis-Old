@@ -1,6 +1,6 @@
 package net.minecraft.client.renderer.texture;
 
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.GlStateManager;

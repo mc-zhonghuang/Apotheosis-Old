@@ -1,17 +1,17 @@
 package net.minecraft.client;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.component.impl.player.SlotComponent;
-import cn.hackedmc.alexander.module.impl.render.FreeLook;
-import cn.hackedmc.alexander.newevent.impl.input.ClickEvent;
-import cn.hackedmc.alexander.newevent.impl.input.KeyboardInputEvent;
-import cn.hackedmc.alexander.newevent.impl.other.*;
-import cn.hackedmc.alexander.ui.ingame.GuiIngameCache;
-import cn.hackedmc.alexander.ui.menu.impl.intro.IntroSequence;
-import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
-import cn.hackedmc.alexander.util.chat.ChatUtil;
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
-import cn.hackedmc.alexander.util.render.RenderUtil;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.module.impl.render.FreeLook;
+import cn.hackedmc.apotheosis.newevent.impl.input.ClickEvent;
+import cn.hackedmc.apotheosis.newevent.impl.input.KeyboardInputEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.*;
+import cn.hackedmc.apotheosis.ui.ingame.GuiIngameCache;
+import cn.hackedmc.apotheosis.ui.menu.impl.intro.IntroSequence;
+import cn.hackedmc.apotheosis.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.apotheosis.util.chat.ChatUtil;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.util.render.RenderUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
@@ -787,7 +787,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         RenderUtil.color(Color.WHITE);
         RenderUtil.rectangle(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), Color.BLACK);
-        RenderUtil.image(new ResourceLocation("alexander/images/splash.png"), 0, 0, sr.getScaledWidth(), sr.getScaledHeight());
+        RenderUtil.image(new ResourceLocation("apotheosis/images/splash.png"), 0, 0, sr.getScaledWidth(), sr.getScaledHeight());
 
         GlStateManager.disableLighting();
         GlStateManager.disableFog();

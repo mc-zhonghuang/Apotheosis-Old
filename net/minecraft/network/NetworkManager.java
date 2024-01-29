@@ -1,11 +1,10 @@
 package net.minecraft.network;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.impl.exploit.Disabler;
-import cn.hackedmc.alexander.module.impl.exploit.disabler.GrimACDisabler;
-import cn.hackedmc.alexander.newevent.impl.packet.PacketReceiveEvent;
-import cn.hackedmc.alexander.newevent.impl.packet.PacketSendEvent;
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.exploit.Disabler;
+import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
+import cn.hackedmc.apotheosis.newevent.impl.packet.PacketSendEvent;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.viaversion.viaversion.api.connection.UserConnection;

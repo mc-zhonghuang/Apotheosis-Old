@@ -1,6 +1,6 @@
 package net.minecraft.client.resources;
 
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

@@ -1,7 +1,7 @@
 package net.minecraft.block;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.other.BlockAABBEvent;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.other.BlockAABBEvent;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;

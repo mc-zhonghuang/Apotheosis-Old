@@ -1,6 +1,6 @@
 package net.minecraft.enchantment;
 
-import cn.hackedmc.alexander.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.Entity;

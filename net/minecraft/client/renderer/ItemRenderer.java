@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.render.RenderItemEvent;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.render.RenderItemEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;

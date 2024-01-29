@@ -1,6 +1,6 @@
 package net.optifine.gui;
 
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;

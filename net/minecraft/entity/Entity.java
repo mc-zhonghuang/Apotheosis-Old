@@ -1,11 +1,11 @@
 package net.minecraft.entity;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.motion.PostStrafeEvent;
-import cn.hackedmc.alexander.newevent.impl.motion.StrafeEvent;
-import cn.hackedmc.alexander.newevent.impl.motion.WaterEvent;
-import cn.hackedmc.alexander.newevent.impl.other.StepEvent;
-import cn.hackedmc.alexander.util.vector.Vector3d;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.motion.PostStrafeEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.StrafeEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.WaterEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.StepEvent;
+import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

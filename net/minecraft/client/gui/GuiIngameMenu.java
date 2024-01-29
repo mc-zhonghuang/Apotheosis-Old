@@ -1,7 +1,7 @@
 package net.minecraft.client.gui;
 
-import cn.hackedmc.alexander.component.impl.player.LastConnectionComponent;
-import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.apotheosis.component.impl.player.LastConnectionComponent;
+import cn.hackedmc.apotheosis.ui.menu.impl.main.MainMenu;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.GuiConnecting;

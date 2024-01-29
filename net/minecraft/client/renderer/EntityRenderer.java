@@ -1,16 +1,16 @@
 package net.minecraft.client.renderer;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.Module;
-import cn.hackedmc.alexander.module.impl.render.*;
-import cn.hackedmc.alexander.newevent.impl.render.MouseOverEvent;
-import cn.hackedmc.alexander.newevent.impl.render.Render2DEvent;
-import cn.hackedmc.alexander.newevent.impl.render.Render3DEvent;
-import cn.hackedmc.alexander.newevent.impl.render.ViewBobbingEvent;
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
-import cn.hackedmc.alexander.util.render.RenderUtil;
-import cn.hackedmc.alexander.util.render.StencilUtil;
-import cn.hackedmc.alexander.util.shader.ShaderUtil;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.Module;
+import cn.hackedmc.apotheosis.module.impl.render.*;
+import cn.hackedmc.apotheosis.newevent.impl.render.MouseOverEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.Render2DEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.Render3DEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.ViewBobbingEvent;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.render.RenderUtil;
+import cn.hackedmc.apotheosis.util.render.StencilUtil;
+import cn.hackedmc.apotheosis.util.shader.ShaderUtil;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.block.Block;

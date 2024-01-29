@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.input.GuiClickEvent;
-import cn.hackedmc.alexander.newevent.impl.input.GuiMouseReleaseEvent;
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.input.GuiClickEvent;
+import cn.hackedmc.apotheosis.newevent.impl.input.GuiMouseReleaseEvent;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

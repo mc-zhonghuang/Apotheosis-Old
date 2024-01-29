@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.component.impl.player.LastConnectionComponent;
-import cn.hackedmc.alexander.newevent.impl.other.ServerKickEvent;
-import cn.hackedmc.alexander.ui.menu.impl.main.MainMenu;
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.component.impl.player.LastConnectionComponent;
+import cn.hackedmc.apotheosis.newevent.impl.other.ServerKickEvent;
+import cn.hackedmc.apotheosis.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.resources.I18n;

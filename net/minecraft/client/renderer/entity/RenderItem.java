@@ -1,8 +1,8 @@
 package net.minecraft.client.renderer.entity;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.render.GlintEvent;
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.render.GlintEvent;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;

@@ -1,9 +1,9 @@
 package net.minecraft.client.gui;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.render.LimitedRender2DEvent;
-import cn.hackedmc.alexander.newevent.impl.render.RenderHungerEvent;
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.render.LimitedRender2DEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.RenderHungerEvent;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,8 +33,8 @@ import net.optifine.CustomColors;
 
 import java.util.Random;
 
-import static cn.hackedmc.alexander.util.interfaces.InstanceAccess.LIMITED_POST_RENDER_RUNNABLES;
-import static cn.hackedmc.alexander.util.interfaces.InstanceAccess.LIMITED_PRE_RENDER_RUNNABLES;
+import static cn.hackedmc.apotheosis.util.interfaces.InstanceAccess.LIMITED_POST_RENDER_RUNNABLES;
+import static cn.hackedmc.apotheosis.util.interfaces.InstanceAccess.LIMITED_PRE_RENDER_RUNNABLES;
 
 public class GuiIngame extends Gui {
     private static final ResourceLocation vignetteTexPath = new ResourceLocation("textures/misc/vignette.png");

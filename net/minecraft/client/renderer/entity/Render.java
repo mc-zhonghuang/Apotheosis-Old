@@ -1,6 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
-import cn.hackedmc.alexander.util.font.impl.minecraft.FontRenderer;
+import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;

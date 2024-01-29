@@ -1,8 +1,8 @@
 package net.minecraft.client.entity;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.render.LookEvent;
-import cn.hackedmc.alexander.util.vector.Vector2f;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.render.LookEvent;
+import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;

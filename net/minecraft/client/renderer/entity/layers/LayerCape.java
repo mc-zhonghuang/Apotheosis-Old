@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class LayerCape implements LayerRenderer<AbstractClientPlayer> {
     private final RenderPlayer playerRenderer;
-    private final ResourceLocation resourceLocation = new ResourceLocation("alexander/cape/Cape.png");
+    private final ResourceLocation resourceLocation = new ResourceLocation("apotheosis/cape/Cape.png");
 
     public LayerCape(final RenderPlayer playerRendererIn) {
         this.playerRenderer = playerRendererIn;

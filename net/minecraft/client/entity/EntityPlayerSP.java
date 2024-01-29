@@ -1,12 +1,11 @@
 package net.minecraft.client.entity;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.input.ChatInputEvent;
-import cn.hackedmc.alexander.newevent.impl.motion.*;
-import cn.hackedmc.alexander.newevent.impl.other.MoveEvent;
-import cn.hackedmc.alexander.util.chat.ChatUtil;
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
-import cn.hackedmc.alexander.util.vector.Vector2f;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.*;
+import cn.hackedmc.apotheosis.newevent.impl.other.MoveEvent;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;

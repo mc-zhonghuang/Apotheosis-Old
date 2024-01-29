@@ -2025,31 +2025,31 @@
   "rise.toggle.enable": {
     "category": "master",
     "sounds": [
-      "alexander/toggle/enable"
+      "apotheosis/toggle/enable"
     ]
   },
   "rise.toggle.disable": {
     "category": "master",
     "sounds": [
-      "alexander/toggle/disable"
+      "apotheosis/toggle/disable"
     ]
   },
   "rise.click.standard": {
     "category": "master",
     "sounds": [
-      "alexander/click/standard"
+      "apotheosis/click/standard"
     ]
   },
   "rise.click.double": {
     "category": "master",
     "sounds": [
-      "alexander/click/double"
+      "apotheosis/click/double"
     ]
   },
   "rise.click.alan": {
     "category": "master",
     "sounds": [
-      "alexander/click/alan"
+      "apotheosis/click/alan"
     ]
   }
 }

@@ -1,9 +1,9 @@
 package net.minecraft.client.renderer;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.newevent.impl.other.BlockDamageEvent;
-import cn.hackedmc.alexander.util.chat.ChatUtil;
-import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.other.BlockDamageEvent;
+import cn.hackedmc.apotheosis.util.chat.ChatUtil;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

@@ -1,10 +1,10 @@
 package net.minecraft.client.multiplayer;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.component.impl.player.SlotComponent;
-import cn.hackedmc.alexander.newevent.impl.inventory.SyncCurrentItemEvent;
-import cn.hackedmc.alexander.newevent.impl.other.BlockBreakEvent;
-import cn.hackedmc.alexander.newevent.impl.other.BlockDamageEvent;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.newevent.impl.inventory.SyncCurrentItemEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.BlockBreakEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.BlockDamageEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

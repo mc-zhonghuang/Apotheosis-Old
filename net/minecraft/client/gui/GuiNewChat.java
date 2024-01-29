@@ -1,10 +1,10 @@
 package net.minecraft.client.gui;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.Module;
-import cn.hackedmc.alexander.module.impl.render.Interface;
-import cn.hackedmc.alexander.module.impl.render.UnlimitedChat;
-import cn.hackedmc.alexander.ui.ingame.GuiIngameCache;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.Module;
+import cn.hackedmc.apotheosis.module.impl.render.Interface;
+import cn.hackedmc.apotheosis.module.impl.render.UnlimitedChat;
+import cn.hackedmc.apotheosis.ui.ingame.GuiIngameCache;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

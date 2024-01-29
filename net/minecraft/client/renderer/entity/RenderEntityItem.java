@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.impl.render.ItemPhysics;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.render.ItemPhysics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;

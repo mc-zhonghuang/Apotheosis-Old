@@ -33,7 +33,7 @@ public class WorldProviderEnd extends WorldProvider {
     }
 
     /**
-     * Returns array with sunalexander/sunset colors
+     * Returns array with sunApotheosis/sunset colors
      */
     public float[] calcSunriseSunsetColors(final float celestialAngle, final float partialTicks) {
         return null;

@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer;
 
-import cn.hackedmc.alexander.Client;
-import cn.hackedmc.alexander.module.impl.other.AntiExploit;
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.other.AntiExploit;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
