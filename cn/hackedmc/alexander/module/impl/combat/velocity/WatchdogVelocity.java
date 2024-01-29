@@ -41,7 +41,6 @@ public final class WatchdogVelocity extends Mode<Velocity> {
             if (wrapper.getEntityID() == mc.thePlayer.getEntityId()) {
                 if (MoveUtil.isMoving()) {
                     event.setCancelled();
-                    mc.thePlayer.addVelocity(wrapper.motionX / 8000.0, wrapper.motionY / 8000.0, wrapper.motionZ / 8000.0);
                     if (!speedLimit.getValue()) MoveUtil.strafe();
                     else MoveUtil.strafe(Math.min(speedMaxValue.getValue().doubleValue(), MoveUtil.speed()));
                 }

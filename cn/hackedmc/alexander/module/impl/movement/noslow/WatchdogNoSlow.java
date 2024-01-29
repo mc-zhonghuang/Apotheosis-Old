@@ -17,6 +17,7 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 public class WatchdogNoSlow extends Mode<NoSlow> {
     public WatchdogNoSlow(String name, NoSlow parent) {
@@ -34,45 +35,16 @@ public class WatchdogNoSlow extends Mode<NoSlow> {
 
     @EventLink()
     public final Listener<PostMotionEvent> onPostMotionEvent = event -> {
-        if (mc.thePlayer.isUsingItem() && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword && MoveUtil.isMoving()) {
-            PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
+        if (mc.thePlayer.isUsingItem() && mc.thePlayer.getHeldItem() != null && MoveUtil.isMoving()) {
+            if (mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)
+                PacketUtil.send(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
+            else if (mc.thePlayer.ticksExisted % 3 == 0)
+                PacketUtil.send(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), EnumFacing.DOWN.getIndex(), null, 0, 0, 0));
         }
     };
 
     @EventLink
     public final Listener<SlowDownEvent> onSlowDown = event -> {
         event.setCancelled(true);
-    };
-
-    @EventLink
-    public final Listener<PacketReceiveEvent> onPacketReceive = event -> {
-        final Packet<?> packet = event.getPacket();
-
-        if (packet instanceof S02PacketChat) {
-            final S02PacketChat wrapped = (S02PacketChat) packet;
-
-            if (wrapped.isChat()) {
-                final String text = wrapped.getChatComponent().getUnformattedText();
-
-                if (text.equalsIgnoreCase("建筑高度限制是 256 个方块") || text.equalsIgnoreCase("Height limit for building is 256 blocks"))
-                    event.setCancelled();
-            }
-        }
-    };
-
-    @EventLink
-    public final Listener<PacketSendEvent> onPacketSend = event -> {
-        final Packet<?> packet = event.getPacket();
-
-        if (mc.thePlayer == null) return;
-
-        if (packet instanceof C08PacketPlayerBlockPlacement && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemFood || mc.thePlayer.getHeldItem().getItem() instanceof ItemBow || (mc.thePlayer.getHeldItem().getItem() instanceof ItemPotion && !ItemPotion.isSplash(mc.thePlayer.getHeldItem().getMetadata())))) {
-            final C08PacketPlayerBlockPlacement wrapped = (C08PacketPlayerBlockPlacement) packet;
-
-            if (wrapped.getPlacedBlockDirection() == 255 && wrapped.getPosition().equals(new BlockPos(-1, -1, -1))) {
-                event.setCancelled();
-                mc.getNetHandler().addToSendQueueUnregistered(new C08PacketPlayerBlockPlacement(new BlockPos(mc.thePlayer.posX, 1000, mc.thePlayer.posZ), 0, mc.thePlayer.getHeldItem(), 0, 0, 0));
-            }
-        }
     };
 }

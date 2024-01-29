@@ -29,7 +29,7 @@ public final class WatchdogCriticals extends Mode<Criticals> {
 
                 if (wrapped.onGround && !(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer).down()).getBlock() instanceof BlockStairs || mc.theWorld.getBlockState(new BlockPos(mc.thePlayer)).getBlock() instanceof BlockStairs) && !mc.isSingleplayer()) {
                     if (wrapped.moving) {
-                        wrapped.y += 0.00625;
+                        wrapped.y += 0.000625;
                         wrapped.setOnGround(false);
                     } else {
                         event.setCancelled();
