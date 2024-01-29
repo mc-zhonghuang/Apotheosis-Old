@@ -63,68 +63,68 @@ public class GrimACVelocity extends Mode<Velocity> {
         if (packet instanceof S12PacketEntityVelocity) {
             final S12PacketEntityVelocity wrapped = (S12PacketEntityVelocity) packet;
 
-            if (wrapped.getEntityID() != mc.thePlayer.getEntityId()) return;
-
-            switch (mode.getValue().getName().toLowerCase()) {
-                case "block spoof": {
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
-                    mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
-                    mc.timer.lastSyncSysClock += 50;
-                    event.setCancelled();
-
-                    break;
-                }
-                case "1.17+": {
-                    mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C06PacketPlayerPosLook(
-                            mc.thePlayer.posX,
-                            mc.thePlayer.posY,
-                            mc.thePlayer.posZ,
-                            RotationComponent.rotations.x,
-                            RotationComponent.rotations.y,
-                            mc.thePlayer.onGround
-                    ));
-                    mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
-                    event.setCancelled();
-
-                    break;
-                }
-                case "attack reduce": {
-                    if (killAura == null) killAura = getModule(KillAura.class);
-                    if (killAura.target != null) {
+            if (wrapped.getEntityID() == mc.thePlayer.getEntityId()) {
+                switch (mode.getValue().getName().toLowerCase()) {
+                    case "block spoof": {
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
+                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        mc.timer.lastSyncSysClock += 1;
                         event.setCancelled();
 
-                        if (!EntityPlayerSP.serverSprintState) {
-                            if (legitSprint.getValue()) {
-                                if (lastSprint < 0) mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
-                                lastSprint = 2;
-                            } else {
-                                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
-                            }
-                        }
-
-                        for (int i = 0;i < 8;i++) {
-                            if (ViaMCP.getInstance().getVersion() <= 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-                            mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(killAura.target, C02PacketUseEntity.Action.ATTACK));
-                            if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-                        }
-
-                        double velocityX = wrapped.motionX / 8000.0;
-                        double velocityZ = wrapped.motionZ / 8000.0;
-
-                        if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
-                            mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
-                        } else {
-                            mc.thePlayer.motionX = velocityX * (velocityX / 15);
-                            mc.thePlayer.motionZ = velocityZ * (velocityZ / 15);
-                        }
-
-                        mc.thePlayer.motionY = wrapped.motionY / 8000.0;
-
-                        if (!EntityPlayerSP.serverSprintState && !legitSprint.getValue())
-                            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+                        break;
                     }
+                    case "1.17+": {
+                        mc.getNetHandler().addToSendQueueUnregistered(new C03PacketPlayer.C06PacketPlayerPosLook(
+                                mc.thePlayer.posX,
+                                mc.thePlayer.posY,
+                                mc.thePlayer.posZ,
+                                RotationComponent.rotations.x,
+                                RotationComponent.rotations.y,
+                                mc.thePlayer.onGround
+                        ));
+                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        event.setCancelled();
 
-                    break;
+                        break;
+                    }
+                    case "attack reduce": {
+                        if (killAura == null) killAura = getModule(KillAura.class);
+                        if (killAura.target != null) {
+                            event.setCancelled();
+
+                            if (!EntityPlayerSP.serverSprintState) {
+                                if (legitSprint.getValue()) {
+                                    if (lastSprint < 0) mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+                                    lastSprint = 2;
+                                } else {
+                                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
+                                }
+                            }
+
+                            for (int i = 0;i < 8;i++) {
+                                if (ViaMCP.getInstance().getVersion() <= 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(killAura.target, C02PacketUseEntity.Action.ATTACK));
+                                if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
+                            }
+
+                            double velocityX = wrapped.motionX / 8000.0;
+                            double velocityZ = wrapped.motionZ / 8000.0;
+
+                            if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
+                                mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
+                            } else {
+                                mc.thePlayer.motionX = velocityX * (velocityX / 15);
+                                mc.thePlayer.motionZ = velocityZ * (velocityZ / 15);
+                            }
+
+                            mc.thePlayer.motionY = wrapped.motionY / 8000.0;
+
+                            if (!EntityPlayerSP.serverSprintState && !legitSprint.getValue())
+                                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+                        }
+
+                        break;
+                    }
                 }
             }
         }

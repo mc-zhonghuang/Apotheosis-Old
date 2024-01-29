@@ -440,10 +440,15 @@ public class Block {
         final AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(worldIn, pos, state);
 
         if (collidingEntity == Minecraft.getMinecraft().thePlayer) {
-            final BlockAABBEvent event = new BlockAABBEvent(worldIn, this, pos, axisalignedbb, mask);
+            final BlockAABBEvent event = new BlockAABBEvent(worldIn, this, pos, axisalignedbb, mask, list);
             Client.INSTANCE.getEventBus().handle(event);
 
             if (event.isCancelled()) return;
+
+            if (list != event.getBoxList()) {
+                list.clear();
+                list.addAll(event.getBoxList());
+            }
 
             if (event.getBoundingBox() != null && event.getMaskBoundingBox().intersectsWith(event.getBoundingBox())) {
                 list.add(event.getBoundingBox());
