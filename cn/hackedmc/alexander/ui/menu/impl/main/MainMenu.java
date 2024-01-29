@@ -45,8 +45,8 @@ public final class MainMenu extends Menu {
         RiseShaders.MAIN_MENU_SHADER.run(ShaderRenderType.OVERLAY, partialTicks, null);
         ScaledResolution scaledResolution = new ScaledResolution(mc);
         // Run blur
-        RiseShaders.GAUSSIAN_BLUR_SHADER.update();
-        RiseShaders.GAUSSIAN_BLUR_SHADER.run(ShaderRenderType.OVERLAY, partialTicks, InstanceAccess.NORMAL_BLUR_RUNNABLES);
+//        RiseShaders.GAUSSIAN_BLUR_SHADER.update();
+//        RiseShaders.GAUSSIAN_BLUR_SHADER.run(ShaderRenderType.OVERLAY, partialTicks, InstanceAccess.NORMAL_BLUR_RUNNABLES);
         // Run bloom
         RiseShaders.POST_BLOOM_SHADER.update();
         RiseShaders.POST_BLOOM_SHADER.run(ShaderRenderType.OVERLAY, partialTicks, InstanceAccess.NORMAL_POST_BLOOM_RUNNABLES);

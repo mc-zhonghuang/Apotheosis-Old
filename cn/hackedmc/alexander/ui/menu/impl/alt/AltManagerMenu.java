@@ -87,8 +87,8 @@ public final class AltManagerMenu extends Menu {
         NORMAL_BLUR_RUNNABLES.add(() -> RenderUtil.rectangle(0, 0, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), Color.BLACK));
 
         // Run blur
-        RiseShaders.GAUSSIAN_BLUR_SHADER.update();
-        RiseShaders.GAUSSIAN_BLUR_SHADER.run(ShaderRenderType.OVERLAY, mc.timer.renderPartialTicks, InstanceAccess.NORMAL_BLUR_RUNNABLES);
+//        RiseShaders.GAUSSIAN_BLUR_SHADER.update();
+//        RiseShaders.GAUSSIAN_BLUR_SHADER.run(ShaderRenderType.OVERLAY, mc.timer.renderPartialTicks, InstanceAccess.NORMAL_BLUR_RUNNABLES);
 
         // Run bloom
         RiseShaders.POST_BLOOM_SHADER.update();
