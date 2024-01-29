@@ -180,15 +180,6 @@ public final class KillAura extends Module {
             this.unblock(false);
             target = null;
         }
-        switch (autoBlock.getValue().getName()) {
-            case "Watchdog":
-                    PacketUtil.sendNoEvent((Packet)new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
-                    PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
-                    useItem.write((Type) Type.VAR_INT, Integer.valueOf(1));
-                    PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class);
-                    this.blocking = true;
-                break;
-        }
     };
 
     @Override
