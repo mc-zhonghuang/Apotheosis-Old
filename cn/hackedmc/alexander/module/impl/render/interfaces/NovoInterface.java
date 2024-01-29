@@ -9,6 +9,7 @@ import cn.hackedmc.alexander.newevent.annotations.EventLink;
 import cn.hackedmc.alexander.newevent.impl.other.KillEvent;
 import cn.hackedmc.alexander.newevent.impl.other.TickEvent;
 import cn.hackedmc.alexander.newevent.impl.render.Render2DEvent;
+import cn.hackedmc.alexander.util.ServerUtils;
 import cn.hackedmc.alexander.util.font.Font;
 import cn.hackedmc.alexander.util.font.FontManager;
 import cn.hackedmc.alexander.util.render.ColorUtil;
@@ -18,14 +19,17 @@ import cn.hackedmc.alexander.util.vector.Vector2d;
 import cn.hackedmc.alexander.util.vector.Vector2f;
 import cn.hackedmc.alexander.value.Mode;
 import cn.hackedmc.alexander.value.impl.BooleanValue;
+import cn.hackedmc.alexander.value.impl.DragValue;
 import cn.hackedmc.alexander.value.impl.ModeValue;
 import cn.hackedmc.alexander.value.impl.SubMode;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.renderer.GlStateManager;
 import util.time.StopWatch;
 
 import java.awt.*;
 
-public class ModernInterface extends Mode<Interface> {
+public class NovoInterface extends Mode<Interface> {
 
     private final Font productSansRegular = FontManager.getProductSansRegular(18);
     private final Font minecraft = FontManager.getMinecraft();
@@ -63,18 +67,25 @@ public class ModernInterface extends Mode<Interface> {
         add(new SubMode("Blur"));
         setDefault("Normal");
     }};
+    private final DragValue position = new DragValue("", this.getParent(), new Vector2d(200, 200), true);
+
+
     private boolean glow, shadow;
     private boolean normalBackGround, blurBackGround;
     private String username, coordinates;
     private float nameWidth, userWidth, xyzWidth;
     private Color logoColor;
 
-    public ModernInterface(String name, Interface parent) {
+    public NovoInterface(String name, Interface parent) {
         super(name, parent);
     }
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
+        String text = " | " + Client.VERSION + " | " + mc.session.getPlayerID() + " | " + ServerUtils.getRemoteIp() + " | " + "Fps:"+ Minecraft.getDebugFPS();
+        int sb = 6 * 25 - 5;
+        int left = FontManager.getProductSansRegular(20).width(text);
+        position.scale = new Vector2d(200, 100);
 
         if (mc == null || mc.gameSettings.showDebugInfo || mc.theWorld == null || mc.thePlayer == null || Client.CLIENT_TYPE != Type.RISE) {
             return;
@@ -184,7 +195,7 @@ public class ModernInterface extends Mode<Interface> {
 
                 // coordinates of user in the bottom left corner of the screen
                 final float coordX = 5;
-                this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
+                this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
                 this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
             }
 
@@ -196,20 +207,32 @@ public class ModernInterface extends Mode<Interface> {
         // information of user in the bottom right corner of the screen
         final float x = event.getScaledResolution().getScaledWidth();
         final float y = event.getScaledResolution().getScaledHeight() - this.productSansRegular.height() - 1;
-        //     this.productSansRegular.drawStringWithShadow("java.lang.NullPointerException", x - userWidth - 5, y, 0xFFCCCCCC);
-//        this.productSansMedium18.drawStringWithShadow(username, x - nameWidth - 5, y, 0xFFCCCCCC);
-
-        // coordinates of user in the bottom left corner of the screen
         final float coordX = 5;
-        this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
+
+        // Don't draw if the F3 menu is open
+        if (mc.gameSettings.showDebugInfo) return;
+        Color color1 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y)));
+        Color color2 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y + position.scale.y * 8.75)));
+
+        //background
+        RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, left + position.scale.x - sb, position.scale.y - 80, 0, new Color(0,0,0,100));
+        //sb
+        FontManager.getProductSansRegular(20).drawStringWithShadow(Client.NAME, position.position.x + 13, position.position.y + 17, logoColor.getRGB());
+        //client name
+        FontManager.getProductSansRegular(20).drawStringWithShadow(text, position.position.x + 62, position.position.y + 17, -1);
+        //lift
+        RenderUtil.drawRoundedGradientRect(position.position.x + 10, position.position.y + 8, left + position.scale.x - sb, position.scale.y - 96, 0, color1,color2,true);
+        //lift
+        RenderUtil.drawRoundedGradientRect(position.position.x + 10, position.position.y + 8, left + position.scale.x - sb, position.scale.y - 96, 0, color2,color1,true);
+
+        this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
+
         this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
 
-        // title
-        //  this.productSansMedium36.drawString(Client.NAME, 6, 6, logoColor.getRGB());
 
         NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
             //shadow
-            //   this.productSansMedium36.drawString(Client.NAME, 6, 6, this.getTheme().getFirstColor().getRGB());
+            FontManager.getProductSansRegular(20).drawStringWithShadow(Client.NAME, position.position.x + 13 , position.position.y + 17, logoColor.getRGB());
         });
 
         if (mc.thePlayer.ticksExisted % 150 == 0) {

@@ -3,6 +3,7 @@ package cn.hackedmc.alexander.module.impl.render;
 import cn.hackedmc.alexander.Client;
 import cn.hackedmc.alexander.module.impl.render.interfaces.ModernInterface;
 import cn.hackedmc.alexander.module.impl.render.interfaces.ModuleComponent;
+import cn.hackedmc.alexander.module.impl.render.interfaces.NovoInterface;
 import cn.hackedmc.alexander.module.impl.render.interfaces.WurstInterface;
 import cn.hackedmc.alexander.newevent.annotations.EventLink;
 import cn.hackedmc.alexander.newevent.impl.render.Render2DEvent;
@@ -36,6 +37,7 @@ public final class Interface extends Module {
 
     private final ModeValue mode = new ModeValue("Mode", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
         add(new ModernInterface("Modern", (Interface) this.getParent()));
+        add(new NovoInterface("Novo", (Interface) this.getParent()));
         add(new WurstInterface("Wurst", (Interface) this.getParent()));
         setDefault("Modern");
     }};

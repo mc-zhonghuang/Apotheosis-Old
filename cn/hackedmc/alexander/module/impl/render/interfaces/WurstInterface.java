@@ -7,6 +7,7 @@ import cn.hackedmc.alexander.newevent.annotations.EventLink;
 import cn.hackedmc.alexander.newevent.impl.other.TickEvent;
 import cn.hackedmc.alexander.newevent.impl.render.Render2DEvent;
 import cn.hackedmc.alexander.util.font.Font;
+import cn.hackedmc.alexander.util.font.FontManager;
 import cn.hackedmc.alexander.util.render.ColorUtil;
 import cn.hackedmc.alexander.util.render.RenderUtil;
 import cn.hackedmc.alexander.value.Mode;
@@ -17,7 +18,7 @@ import java.awt.*;
 public class WurstInterface extends Mode<Interface> {
 
     private Font font;
-    private ResourceLocation resourceLocation = new ResourceLocation("alexander/logo/wurst.png");
+    //private ResourceLocation resourceLocation = new ResourceLocation("alexander/logo/wurst.png");
 
     public WurstInterface(String name, Interface parent) {
         super(name, parent);
@@ -48,10 +49,11 @@ public class WurstInterface extends Mode<Interface> {
             font.drawStringWithShadow(moduleComponent.getTranslatedName(), x, y, finalColor.getRGB());
         }
 
-        RenderUtil.rectangle(0, 10, 185, 12, ColorUtil.withAlpha(Color.WHITE, 100));
-        RenderUtil.image(resourceLocation, 2, 5.5, 758 / 8.5f, 192 / 8.5f);
+    //    RenderUtil.rectangle(0, 10, 185, 12, ColorUtil.withAlpha(Color.WHITE, 100));
+        //RenderUtil.image(resourceLocation, 2, 5.5, 758 / 8.5f, 192 / 8.5f);
 
-        font.drawString("v" + Client.VERSION + " MC 1.8.9", 95, 14, Color.BLACK.getRGB());
+        font.drawString(Client.NAME, 6, 6, Color.white.getRGB());
+        //font.drawString("v" + Client.VERSION + " MC 1.8.9", 95, 14, Color.BLACK.getRGB());
     };
 
 
