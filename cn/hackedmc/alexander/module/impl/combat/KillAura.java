@@ -39,6 +39,10 @@ import cn.hackedmc.alexander.util.rotation.RotationUtil;
 import cn.hackedmc.alexander.util.vector.Vector2f;
 import cn.hackedmc.alexander.value.impl.*;
 import cn.hackedmc.alexander.value.impl.*;
+import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Type;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.network.Packet;
@@ -80,6 +84,7 @@ public final class KillAura extends Module {
             .add(new SubMode("Fake"))
             .add(new SubMode("Vanilla"))
             .add(new SubMode("NCP"))
+            .add(new SubMode("Watchdog"))
             .add(new SubMode("Watchdog 1.9+"))
             .add(new SubMode("Watchdog HvH"))
             .add(new SubMode("GrimAC"))
@@ -174,6 +179,15 @@ public final class KillAura extends Module {
         if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
             this.unblock(false);
             target = null;
+        }
+        switch (autoBlock.getValue().getName()) {
+            case "Watchdog":
+                    PacketUtil.sendNoEvent((Packet)new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                    PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                    useItem.write((Type) Type.VAR_INT, Integer.valueOf(1));
+                    PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class);
+                    this.blocking = true;
+                break;
         }
     };
 
@@ -742,6 +756,7 @@ public final class KillAura extends Module {
                 }
 
                 break;
+
             case "GrimAC":
                 this.unblock(true);
 

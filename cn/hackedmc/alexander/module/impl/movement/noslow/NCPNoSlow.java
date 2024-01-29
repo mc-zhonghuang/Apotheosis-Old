@@ -21,7 +21,6 @@ import net.minecraft.util.EnumFacing;
  */
 
 public class NCPNoSlow extends Mode<NoSlow> {
-
     public NCPNoSlow(String name, NoSlow parent) {
         super(name, parent);
     }
@@ -29,14 +28,7 @@ public class NCPNoSlow extends Mode<NoSlow> {
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
         if (InstanceAccess.mc.thePlayer.isBlocking()) {
-            PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-        }
-    };
-
-    @EventLink
-    public final Listener<PostMotionEvent> onPostMotion = event -> {
-        if (InstanceAccess.mc.thePlayer.isBlocking()) {
-            PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+            PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), EnumFacing.UP.getIndex(), null, 0.0F, 0.0F, 0.0F));
         }
     };
 

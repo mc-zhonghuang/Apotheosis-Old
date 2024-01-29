@@ -1,6 +1,8 @@
 package cn.hackedmc.alexander.util.packet;
 
 import cn.hackedmc.alexander.util.interfaces.InstanceAccess;
+import com.viaversion.viaversion.api.protocol.Protocol;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.Packet;
 
@@ -22,7 +24,9 @@ public final class PacketUtil implements InstanceAccess {
             mc.getNetHandler().addToSendQueue(packet);
         }
     }
-
+    public static void sendToServer(PacketWrapper packet, Class<? extends Protocol> packetProtocol) {
+        sendToServer(packet, packetProtocol);
+    }
     public void queueNoEvent(final Packet<?> packet) {
         if (isServerPacket(packet)) {
             mc.getNetHandler().addToReceiveQueueUnregistered(packet);
