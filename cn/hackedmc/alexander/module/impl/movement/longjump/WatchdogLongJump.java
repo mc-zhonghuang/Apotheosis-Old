@@ -16,7 +16,6 @@ import cn.hackedmc.alexander.value.Mode;
  */
 
 public class WatchdogLongJump extends Mode<LongJump> {
-    private int ticks = 0;
     private int jumpTime = 0;
 
     public WatchdogLongJump(String name, LongJump parent) {
@@ -25,7 +24,6 @@ public class WatchdogLongJump extends Mode<LongJump> {
 
     @Override
     public void onEnable() {
-        ticks = 0;
         jumpTime = 0;
     }
 
@@ -40,21 +38,19 @@ public class WatchdogLongJump extends Mode<LongJump> {
         if (jumpTime < 4) {
             if (mc.thePlayer.onGround) {
                 jumpTime++;
-                mc.thePlayer.jump();
+                if (jumpTime == 4) {
+                    mc.thePlayer.motionY = 3.0;
+                    BlinkComponent.blinking = true;
+                } else {
+                    mc.thePlayer.jump();
+                }
             }
             if (jumpTime != 4) event.setOnGround(false);
         } else {
-            ticks++;
-            if (ticks == 10) {
-                BlinkComponent.blinking = true;
-                MoveUtil.strafe(1);
-                mc.thePlayer.jump();
-            } else if (ticks > 10 && mc.thePlayer.onGround) {
-                getParent().toggle();
+            if (mc.thePlayer.onGround) {
                 BlinkComponent.dispatch();
                 BlinkComponent.blinking = false;
-                NotificationComponent.post("Watchdog long jump", "After the jump.");
-                this.ticks = 0;
+                this.toggle();
             }
         }
     };
