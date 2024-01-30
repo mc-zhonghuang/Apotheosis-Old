@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="com.alan.clients.newevent.annotations.EventLink" />
-      <item index="1" class="java.lang.String" itemvalue="lombok.experimental.UtilityClass" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="cn.hackedmc.apotheosis.api.Rise" />
+      <item index="1" class="java.lang.String" itemvalue="com.alan.clients.newevent.annotations.EventLink" />
+      <item index="2" class="java.lang.String" itemvalue="lombok.experimental.UtilityClass" />
     </list>
     <writeAnnotations>
       <writeAnnotation name="com.alan.clients.newevent.annotations.EventLink" />
