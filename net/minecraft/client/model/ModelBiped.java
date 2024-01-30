@@ -1,5 +1,6 @@
 package net.minecraft.client.model;
 
+import cn.hackedmc.apotheosis.module.impl.render.Animations;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -94,7 +95,6 @@ public class ModelBiped extends ModelBase {
      * Sets the models various rotation angles then renders the model.
      */
     public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
-
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
         GlStateManager.pushMatrix();
 
@@ -186,7 +186,7 @@ public class ModelBiped extends ModelBase {
 
             case 3:
                 this.bipedRightArm.rotateAngleX = this.bipedRightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * (float) this.heldItemRight;
-                this.bipedRightArm.rotateAngleY = -0.5235988F;
+                this.bipedRightArm.rotateAngleY = (Animations.INSTANCE.isEnabled() ? 0 : -0.5235988F);
         }
 
         this.bipedLeftArm.rotateAngleY = 0.0F;

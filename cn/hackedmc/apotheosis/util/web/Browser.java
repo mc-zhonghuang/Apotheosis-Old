@@ -48,7 +48,6 @@ public class Browser {
 
             return response.toString();
         } catch (final Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

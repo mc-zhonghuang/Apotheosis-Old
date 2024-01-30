@@ -1,5 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
+import cn.hackedmc.apotheosis.module.impl.render.Animations;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelPlayer;
@@ -160,6 +162,10 @@ public class RenderPlayer extends RendererLivingEntity<AbstractClientPlayer> {
      * Sets a simple glTranslate on a LivingEntity.
      */
     protected void renderLivingAt(AbstractClientPlayer entityLivingBaseIn, double x, double y, double z) {
+        if (Animations.INSTANCE.isEnabled() && Animations.INSTANCE.playerSize.getValue().doubleValue() != 1.0 && entityLivingBaseIn == InstanceAccess.mc.thePlayer) {
+            GlStateManager.scale(Animations.INSTANCE.playerSize.getValue().doubleValue(), Animations.INSTANCE.playerSize.getValue().doubleValue(), Animations.INSTANCE.playerSize.getValue().doubleValue());
+        }
+
         if (entityLivingBaseIn.isEntityAlive() && entityLivingBaseIn.isPlayerSleeping()) {
             super.renderLivingAt(entityLivingBaseIn, x + (double)entityLivingBaseIn.renderOffsetX, y + (double)entityLivingBaseIn.renderOffsetY, z + (double)entityLivingBaseIn.renderOffsetZ);
         }

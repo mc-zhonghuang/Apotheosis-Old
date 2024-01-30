@@ -20,41 +20,12 @@ import java.util.ArrayList;
  */
 public class IntroSequence extends GuiScreen {
 
-    private final String username = ""; // ALAN TODO THIS WITH VANTAGE STUFF
-    private final String usernameMod = username == "" ? username : ", " + username + ",";
-
-    private final ArrayList<Line> lines = new ArrayList<Line>() {{
-        add(new Line("Around the release of apotheosis 5.3, the team behind apotheosis began to envision a new project", 10000));
-        add(new Line("This project came to be known as apotheosis 6.", 5000));
-        add(new Line("", 500));
-        add(new Line("Today", 2000));
-        add(new Line("Thousands of development hours from some of the most talented minds in the community", 7500));
-        add(new Line("Hundreds of hours of testing and feedback from dedicated beta testers", 6000));
-        add(new Line("", 500));
-        add(new Line("It's ready", 2000));
-        add(new Line("", 500));
-        add(new Line("With the highest quality features ever seen in a client", 5000));
-        add(new Line("The highest frame rates ever seen in a Minecraft client of any kind", 6000));
-        add(new Line("The smoothest and most meticulously polished user experience ever", 6000));
-        add(new Line("And so many more powerful and unique features in development for updates in the very near future", 9000));
-        add(new Line("We're so incredibly proud to show you the future of apotheosis.", 6000));
-        add(new Line("", 500));
-        add(new Line("Welcome" + usernameMod + " to the pioneer of the next generation of Minecraft clients.", 7000));
-    }};
+    // ALAN TODO THIS WITH VANTAGE STUFF
 
     private final StopWatch timeTracker = new StopWatch();
-    private int currentLine = 0;
     private boolean started = false;
 
     private final Animation logoAnimation = new Animation(Easing.EASE_IN_OUT_CUBIC, 3000);
-
-    @Override
-    public void initGui() {
-        // TODO FIRST LAUNCH DETECTION
-//        if (!Client.FIRST_LAUNCH) {
-//            mc.displayGuiScreen(Client.BETA_SWITCH ? new PrereleaseDisclaimer() : new LoginMenu());
-//        }
-    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -67,23 +38,6 @@ public class IntroSequence extends GuiScreen {
             this.logoAnimation.setValue(255);
             this.logoAnimation.reset();
         }
-
-//        if (currentLine >= lines.size()) {
-//            mc.displayGuiScreen(new MainMenu());
-//            return;
-//        }
-
-//        RenderUtil.rectangle(0, 0, mc.displayWidth, mc.displayHeight, Color.BLACK);
-//        FontRenderer fr = FontManager.getProductSansRegular(24);
-//        ScaledResolution sr = new ScaledResolution(mc);
-//        Line line = lines.get(currentLine);
-//
-//        fr.drawCenteredString(line.getText(), sr.getScaledWidth() / 2D, sr.getScaledHeight() / 2D, -1);
-//
-//        if (timeTracker.finished(line.getLength())) {
-//            timeTracker.reset();
-//            currentLine++;
-//        }
 
         this.logoAnimation.run(0);
 

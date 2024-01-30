@@ -152,18 +152,20 @@ public final class AltManagerMenu extends Menu {
                     Account account = altDisplay.getAccount();
                     String refreshToken = account.getRefreshToken();
                     if (refreshToken != null) {
-                        new Thread(() -> {
-                            if (account.getPassword().equalsIgnoreCase("Offline")) {
-                                mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), "mojang");
-                                return;
-                            }
-                            MicrosoftLogin.LoginData loginData = loginWithRefreshToken(refreshToken);
-                            account.setUsername(loginData.username);
-                            account.setRefreshToken(loginData.newRefreshToken);
-                            for (AltDisplay d : altDisplays) if (d.isSelected()) d.setSelected(false);
-                            altDisplay.setSelected(true);
-
-                        }).start();
+                        if (account.getPassword().equalsIgnoreCase("Offline")) {
+                            mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), "mojang");
+                            return;
+                        } else {
+                            new Thread(() -> {
+                                MicrosoftLogin.LoginData loginData = loginWithRefreshToken(refreshToken);
+                                if (loginData != null) {
+                                    account.setUsername(loginData.username);
+                                    account.setRefreshToken(loginData.newRefreshToken);
+                                    for (AltDisplay d : altDisplays) if (d.isSelected()) d.setSelected(false);
+                                    altDisplay.setSelected(true);
+                                }
+                            }).start();
+                        }
                     }
                     break;
                 }
@@ -179,7 +181,6 @@ public final class AltManagerMenu extends Menu {
     @Override
     public void initGui() {
         int centerX = this.width / 2;
-        int centerY = this.height / 2;
         int buttonX = centerX - BUTTON_WIDTH - 10;
         int buttonX2 = centerX + 10;
         int buttonY = this.height - BUTTON_HEIGHT - BUTTON_SPACING;
@@ -187,30 +188,30 @@ public final class AltManagerMenu extends Menu {
 
         // Re-creates the buttons for not having to care about the animation reset
         this.loginThroughBrowserButton = new MenuFeedBackTextButton(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, () -> {
-            final String clipboardContent = getClipboardString();
-            if (clipboardContent.length() <= 50) mc.session = new Session(clipboardContent, "", "", "mojang");
             MicrosoftLogin.getRefreshToken(refreshToken -> {
                 if (refreshToken != null) {
                     new Thread(() -> {
                         MicrosoftLogin.LoginData loginData = loginWithRefreshToken(refreshToken);
-                        Account account = new Account(loginData.username, "************");
-                        account.setUsername(loginData.username);
-                        account.setRefreshToken(loginData.newRefreshToken); // TODO: THIS IS IMPORTANT
-                        Client.INSTANCE.getAltManager().getAccounts().add(account);
+                        if (loginData != null) {
+                            Account account = new Account(loginData.username, "************");
+                            account.setUsername(loginData.username);
+                            account.setRefreshToken(loginData.newRefreshToken); // TODO: THIS IS IMPORTANT
+                            Client.INSTANCE.getAltManager().getAccounts().add(account);
 
-                        AltDisplay display;
-                        if (!altDisplays.isEmpty()) {
-                            AltDisplay prevDisplay = altDisplays.get(altDisplays.size() - 1);
-                            boolean newRow = altDisplays.size() % 2 == 0;
-                            display = new AltDisplay(centerX + (newRow ? -ACCOUNT_WIDTH - ACCOUNT_SPACING / 2.0 : ACCOUNT_SPACING / 2.0), (newRow ? prevDisplay.getY() + prevDisplay.getHeight() + ACCOUNT_SPACING : prevDisplay.getY()), ACCOUNT_WIDTH, ACCOUNT_HEIGHT, account);
-                        } else {
-                            display = new AltDisplay(centerX - ACCOUNT_SPACING / 2.0 - ACCOUNT_WIDTH, 20, ACCOUNT_WIDTH, ACCOUNT_HEIGHT, account);
+                            AltDisplay display;
+                            if (!altDisplays.isEmpty()) {
+                                AltDisplay prevDisplay = altDisplays.get(altDisplays.size() - 1);
+                                boolean newRow = altDisplays.size() % 2 == 0;
+                                display = new AltDisplay(centerX + (newRow ? -ACCOUNT_WIDTH - ACCOUNT_SPACING / 2.0 : ACCOUNT_SPACING / 2.0), (newRow ? prevDisplay.getY() + prevDisplay.getHeight() + ACCOUNT_SPACING : prevDisplay.getY()), ACCOUNT_WIDTH, ACCOUNT_HEIGHT, account);
+                            } else {
+                                display = new AltDisplay(centerX - ACCOUNT_SPACING / 2.0 - ACCOUNT_WIDTH, 20, ACCOUNT_WIDTH, ACCOUNT_HEIGHT, account);
+                            }
+
+                            display.setSelected(true);
+                            this.unselectDisplays();
+                            this.altDisplays.add(display);
+                            Client.INSTANCE.getAltManager().set("alts");
                         }
-
-                        display.setSelected(true);
-                        this.unselectDisplays();
-                        this.altDisplays.add(display);
-                        Client.INSTANCE.getAltManager().set("alts");
                     }).start();
                 }
             });
@@ -253,6 +254,7 @@ public final class AltManagerMenu extends Menu {
 
     private MicrosoftLogin.LoginData loginWithRefreshToken(String refreshToken) {
         final MicrosoftLogin.LoginData loginData = MicrosoftLogin.login(refreshToken);
+        if (loginData == null) return null;
         mc.session = new Session(loginData.username, loginData.uuid, loginData.mcToken, "microsoft");
         return loginData;
     }

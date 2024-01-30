@@ -74,7 +74,7 @@ public class MicrosoftLogin {
                 AuthTokenResponse.class
         );
 
-        if (res == null) return new LoginData();
+        if (res == null) return null;
 
         final String accessToken = res.access_token;
         refreshToken = res.refresh_token;
@@ -85,7 +85,7 @@ public class MicrosoftLogin {
                         "{\"Properties\":{\"AuthMethod\":\"RPS\",\"SiteName\":\"user.auth.xboxlive.com\",\"RpsTicket\":\"d=" + accessToken + "\"},\"RelyingParty\":\"http://auth.xboxlive.com\",\"TokenType\":\"JWT\"}", true),
                 XblXstsResponse.class);
 
-        if (xblRes == null) return new LoginData();
+        if (xblRes == null) return null;
 
         // XSTS
         final XblXstsResponse xstsRes = gson.fromJson(
@@ -93,7 +93,7 @@ public class MicrosoftLogin {
                         "{\"Properties\":{\"SandboxId\":\"RETAIL\",\"UserTokens\":[\"" + xblRes.Token + "\"]},\"RelyingParty\":\"rp://api.minecraftservices.com/\",\"TokenType\":\"JWT\"}", true),
                 XblXstsResponse.class);
 
-        if (xstsRes == null) return new LoginData();
+        if (xstsRes == null) return null;
 
         // Minecraft
         final McResponse mcRes = gson.fromJson(
@@ -101,7 +101,7 @@ public class MicrosoftLogin {
                         "{\"identityToken\":\"XBL3.0 x=" + xblRes.DisplayClaims.xui[0].uhs + ";" + xstsRes.Token + "\"}", true),
                 McResponse.class);
 
-        if (mcRes == null) return new LoginData();
+        if (mcRes == null) return null;
 
         // Check game ownership
 //        final GameOwnershipResponse gameOwnershipRes = gson.fromJson(
@@ -115,7 +115,7 @@ public class MicrosoftLogin {
                 Browser.getBearerResponse("https://api.minecraftservices.com/minecraft/profile", mcRes.access_token),
                 ProfileResponse.class);
 
-        if (profileRes == null) return new LoginData();
+        if (profileRes == null) return null;
 
         return new LoginData(mcRes.access_token, refreshToken, profileRes.id, profileRes.name);
     }

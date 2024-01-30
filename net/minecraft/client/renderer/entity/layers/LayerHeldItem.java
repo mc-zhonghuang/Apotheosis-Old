@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer.entity.layers;
 
+import cn.hackedmc.apotheosis.module.impl.render.Animations;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -33,7 +34,7 @@ public class LayerHeldItem implements LayerRenderer<EntityLivingBase> {
                 GlStateManager.scale(f, f, f);
             }
 
-            if(entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).isBlocking()) {
+            if(Animations.INSTANCE.isEnabled() && entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).isBlocking()) {
                 if(entitylivingbaseIn.isSneaking()) {
                     ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0325F);
                     GlStateManager.translate(-0.58F, 0.3F, -0.2F);

@@ -2359,10 +2359,6 @@ public class EntityRenderer implements IResourceManagerReloadListener, InstanceA
             }
         }
 
-        if (this.mc.currentScreen instanceof GuiMainMenu) {
-            this.updateMainMenu((GuiMainMenu) this.mc.currentScreen);
-        }
-
         if (this.updatedWorld != world) {
             RandomEntities.worldChanged(this.updatedWorld, world);
             Config.updateThreadPriorities();
@@ -2393,32 +2389,6 @@ public class EntityRenderer implements IResourceManagerReloadListener, InstanceA
             }
         }
     }
-
-    private void updateMainMenu(final GuiMainMenu p_updateMainMenu_1_) {
-        try {
-            String s = null;
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            final int i = calendar.get(Calendar.DATE);
-            final int j = calendar.get(Calendar.MONTH) + 1;
-
-            if (i == 8 && j == 4) {
-                s = "Happy birthday, OptiFine!";
-            }
-
-            if (i == 14 && j == 8) {
-                s = "Happy birthday, sp614x!";
-            }
-
-            if (s == null) {
-                return;
-            }
-
-            Reflector.setFieldValue(p_updateMainMenu_1_, Reflector.GuiMainMenu_splashText, s);
-        } catch (final Throwable var6) {
-        }
-    }
-
     public boolean setFxaaShader(final int p_setFxaaShader_1_) {
         if (!OpenGlHelper.isFramebufferEnabled()) {
             return false;

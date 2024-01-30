@@ -64,6 +64,7 @@ Animations extends Module {
     private final NumberValue z = new NumberValue("Z", this, 0.0F, -2.0F, 2.0F, 0.05f);
 
     private final BooleanValue alwaysShow = new BooleanValue("Always Show", this, false);
+    public final NumberValue playerSize = new NumberValue("Player Size", this, 1.0, 0.1, 5, 0.1);
 
     private int attacks, swing;
     private Entity target;
