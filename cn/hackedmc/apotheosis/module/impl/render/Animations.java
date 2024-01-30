@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 @ModuleInfo(name = "module.render.animations.name", description = "module.render.animations.description", category = Category.RENDER)
 public final class
 Animations extends Module {
-
+    public static Animations INSTANCE;
     private final ModeValue blockAnimation = new ModeValue("Block Animation", this)
             .add(new SubMode("None"))
             .add(new SubMode("1.7"))
@@ -143,6 +143,7 @@ Animations extends Module {
                     GlStateManager.translate(0.0f, 0.1F, 0.0F);
                     itemRenderer.blockTransformation();
                     GlStateManager.rotate(convertedProgress * 35.0F / 2.0F, 0.0F, 1.0F, 1.5F);
+                    GlStateManager.rotate(-convertedProgress * 23.0F, 1.0F, 0.0F, 0.0F);
                     GlStateManager.rotate(-convertedProgress * 135.0F / 4.0F, 1.0f, 1.0F, 0.0F);
 
                     break;
@@ -327,5 +328,9 @@ Animations extends Module {
             swing = Math.max(0, swing - 1);
         }
     };
+
+    public Animations() {
+        INSTANCE = this;
+    }
 }
 

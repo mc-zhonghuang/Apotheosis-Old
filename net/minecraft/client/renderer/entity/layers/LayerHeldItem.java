@@ -33,7 +33,20 @@ public class LayerHeldItem implements LayerRenderer<EntityLivingBase> {
                 GlStateManager.scale(f, f, f);
             }
 
-            ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F);
+            if(entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).isBlocking()) {
+                if(entitylivingbaseIn.isSneaking()) {
+                    ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0325F);
+                    GlStateManager.translate(-0.58F, 0.3F, -0.2F);
+                    GlStateManager.rotate(-24390.0F, 137290.0F, -2009900.0F, -2054900.0F);
+                }else{
+                    ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0325F);
+                    GlStateManager.translate(-0.48F, 0.2F, -0.2F);
+                    GlStateManager.rotate(-24390.0F, 137290.0F, -2009900.0F, -2054900.0F);
+                }
+            }else{
+                ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F);
+            }
+
             GlStateManager.translate(-0.0625F, 0.4375F, 0.0625F);
 
             if (entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).fishEntity != null) {
