@@ -37,9 +37,9 @@ public final class Insults extends Module {
     private final NumberValue delay = new NumberValue("Delay", this, 0, 0, 50, 1);
 
     private final String[] defaultInsults = {
-            "Wow! My combo is Rise'n!",
-            "Why would someone as bad as you not use Rise 6.0?",
-            "Here's your ticket to spectator from Rise 6.0!",
+            "Wow! My combo is apotheosis'n!",
+            "Why would someone as bad as you not use apotheosis 6.0?",
+            "Here's your ticket to spectator from apotheosis 6.0!",
             "I see you're a pay to lose player, huh?",
             "Do you need some PvP advice? Well Rise 6.0 is all you need.",
             "Hey! Wise up, don't waste another day without Rise.",

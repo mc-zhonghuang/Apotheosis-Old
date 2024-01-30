@@ -4,6 +4,8 @@ import cn.hackedmc.apotheosis.module.impl.player.Scaffold;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
+import cn.hackedmc.apotheosis.util.player.MoveUtil;
+import cn.hackedmc.apotheosis.util.player.PlayerUtil;
 import cn.hackedmc.apotheosis.value.Mode;
 
 public class WatchdogTower extends Mode<Scaffold> {
@@ -11,14 +13,32 @@ public class WatchdogTower extends Mode<Scaffold> {
         super(name, parent);
     }
 
+    private int towerTick = 0;
+
+    @Override
+    public void onEnable() {
+        towerTick = 0;
+    }
+
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (!mc.gameSettings.keyBindJump.isKeyDown()) return;
+        if (mc.gameSettings.keyBindJump.isKeyDown() && PlayerUtil.blockNear(2)) {
+            towerTick++;
 
-        if (mc.thePlayer.onGround) {
-            mc.thePlayer.motionY = 0.42 - Math.random() / 10000;
-        } else if (mc.thePlayer.motionY >= 0.16 && mc.thePlayer.motionY <= 0.17) {
-            mc.thePlayer.motionY = 0;
+            if (mc.thePlayer.onGround)
+                towerTick = 0;
+
+            mc.thePlayer.motionY = 0.41965;
+            MoveUtil.strafe(0.265);
+
+            if (towerTick == 1)
+                mc.thePlayer.motionY = 0.33;
+            else if (towerTick == 2)
+                mc.thePlayer.motionY = 1 - mc.thePlayer.posY % 1;
+            else if (towerTick >= 3)
+                towerTick = 0;
+        } else {
+            towerTick = 0;
         }
     };
 }

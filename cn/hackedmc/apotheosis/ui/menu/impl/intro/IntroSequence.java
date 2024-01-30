@@ -24,8 +24,8 @@ public class IntroSequence extends GuiScreen {
     private final String usernameMod = username == "" ? username : ", " + username + ",";
 
     private final ArrayList<Line> lines = new ArrayList<Line>() {{
-        add(new Line("Around the release of Rise 5.3, the team behind Rise began to envision a new project", 10000));
-        add(new Line("This project came to be known as Rise 6.", 5000));
+        add(new Line("Around the release of apotheosis 5.3, the team behind apotheosis began to envision a new project", 10000));
+        add(new Line("This project came to be known as apotheosis 6.", 5000));
         add(new Line("", 500));
         add(new Line("Today", 2000));
         add(new Line("Thousands of development hours from some of the most talented minds in the community", 7500));
@@ -37,7 +37,7 @@ public class IntroSequence extends GuiScreen {
         add(new Line("The highest frame rates ever seen in a Minecraft client of any kind", 6000));
         add(new Line("The smoothest and most meticulously polished user experience ever", 6000));
         add(new Line("And so many more powerful and unique features in development for updates in the very near future", 9000));
-        add(new Line("We're so incredibly proud to show you the future of Rise.", 6000));
+        add(new Line("We're so incredibly proud to show you the future of apotheosis.", 6000));
         add(new Line("", 500));
         add(new Line("Welcome" + usernameMod + " to the pioneer of the next generation of Minecraft clients.", 7000));
     }};

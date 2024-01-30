@@ -2022,31 +2022,31 @@
       }
     ]
   },
-  "rise.toggle.enable": {
+  "apotheosis.toggle.enable": {
     "category": "master",
     "sounds": [
       "apotheosis/toggle/enable"
     ]
   },
-  "rise.toggle.disable": {
+  "apotheosis.toggle.disable": {
     "category": "master",
     "sounds": [
       "apotheosis/toggle/disable"
     ]
   },
-  "rise.click.standard": {
+  "apotheosis.click.standard": {
     "category": "master",
     "sounds": [
       "apotheosis/click/standard"
     ]
   },
-  "rise.click.double": {
+  "apotheosis.click.double": {
     "category": "master",
     "sounds": [
       "apotheosis/click/double"
     ]
   },
-  "rise.click.alan": {
+  "apotheosis.click.alan": {
     "category": "master",
     "sounds": [
       "apotheosis/click/alan"

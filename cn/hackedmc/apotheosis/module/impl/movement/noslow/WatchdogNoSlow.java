@@ -35,7 +35,7 @@ public class WatchdogNoSlow extends Mode<NoSlow> {
             if (mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)
                 PacketUtil.send(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
             else if (mc.thePlayer.ticksExisted % 3 == 0)
-                PacketUtil.send(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), EnumFacing.DOWN.getIndex(), null, 0, 0, 0));
+                PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), EnumFacing.DOWN.getIndex(), null, 0, 0, 0));
         }
     };
 
