@@ -233,9 +233,11 @@ public class ModernInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<TickEvent> onTick = event -> {
-        if (Client.CLIENT_TYPE != Type.RISE || mc.thePlayer == null || !mc.getNetHandler().doneLoadingTerrain) return;
+        if (Client.CLIENT_TYPE != Type.RISE || !mc.getNetHandler().doneLoadingTerrain) return;
 
         threadPool.execute(() -> {
+            if (mc.thePlayer == null) return;
+
             glow = this.shader.getValue().getName().equals("Glow");
             shadow = this.shader.getValue().getName().equals("Shadow");
             arrayListFont = this.font.getValue().getName().equals("Minecraft") ? minecraft : productSansRegular;

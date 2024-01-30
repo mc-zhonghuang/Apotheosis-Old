@@ -299,11 +299,7 @@ float sinslope(float t)
 // Here's where you would normally have your final void mainImage()
 vec4  fC ( in vec2 fragCoord ) // Change the void mainImage of your shader to this.
 {
-    float off = sin(time/1.75);
-    if(off < 0.)
-    off=0.;
-    else if(off > .8)
-    off=.8;
+    float off = max(0.0, min(mouse.x * 1.5 / resolution.x, 2.0));
 
     m = transform(mouse.xy * resolution.xy);
     vec2 p = transform(fragCoord.xy);

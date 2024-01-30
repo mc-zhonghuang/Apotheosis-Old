@@ -172,9 +172,7 @@ public enum Client {
                         this.packetLogManager.add((Check) clazz.getConstructor().newInstance());
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException exception) {
-                    exception.printStackTrace();
-                }
+                         NoSuchMethodException ignored) {}
             }
 
             break;

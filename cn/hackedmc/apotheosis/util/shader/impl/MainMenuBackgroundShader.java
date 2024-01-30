@@ -7,7 +7,6 @@ import cn.hackedmc.apotheosis.util.shader.base.ShaderUniforms;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -42,11 +41,8 @@ public class MainMenuBackgroundShader extends RiseShader {
             this.program.start();
             ShaderUniforms.uniform2f(programID, "resolution", mc.displayWidth, mc.displayHeight);
             ShaderUniforms.uniform1f(programID, "time", (System.currentTimeMillis() - mc.getStartMillisTime()) / 1000F);
-            if (Mouse.isButtonDown(0)) {
-                final Point point = MouseInfo.getPointerInfo().getLocation();
-
-                ShaderUniforms.uniform4f(programID, "mouse", (float) point.getX(), (float) point.getY(), (float) point.getX(), (float) point.getY());
-            }
+            final Point point = MouseInfo.getPointerInfo().getLocation();
+            ShaderUniforms.uniform4f(programID, "mouse", (float) point.getX(), (float) point.getY(), (float) point.getX(), (float) point.getY());
             RiseShaderProgram.drawQuad();
             RiseShaderProgram.stop();
         }

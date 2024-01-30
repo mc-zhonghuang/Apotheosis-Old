@@ -66,9 +66,7 @@ public class ReflectionUtil {
                 String classname = buildClassname(packageName, filename);
                 try {
                     classes.add(Class.forName(classname));
-                } catch (ClassNotFoundException e) {
-                    System.err.println("Error creating class " + classname);
-                }
+                } catch (ClassNotFoundException ignored) {}
             } else if (!filename.contains(".")) {
                 String name = packageName + (packageName.endsWith(".") ? "" : ".") + filename;
                 classes.addAll(Arrays.asList(getClassesInPackage(name, getPackageDirectory(name))));
