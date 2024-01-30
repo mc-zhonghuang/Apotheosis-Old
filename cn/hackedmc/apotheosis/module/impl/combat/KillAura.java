@@ -38,6 +38,10 @@ import cn.hackedmc.apotheosis.util.packet.PacketUtil;
 import cn.hackedmc.apotheosis.util.rotation.RotationUtil;
 import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import cn.hackedmc.apotheosis.value.impl.*;
+import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Type;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.network.Packet;
@@ -737,8 +741,13 @@ public final class KillAura extends Module {
 //                InventoryDeSyncComponent.setActive("/booster");
 
                 if (mc.thePlayer.isUsingItem()) {
-                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
-                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
+                   PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                      PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                    /*     */             useItem.write((Type)Type.VAR_INT, Integer.valueOf(1));
+                    /*     */             PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class);
+                    /*     */             blocking = true;
+                   // PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
+                   // PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
                 }
 
                 break;
@@ -760,9 +769,12 @@ public final class KillAura extends Module {
                 break;
 
             case "Old Intave":
+                /*
                 if (mc.thePlayer.isUsingItem() && InventoryDeSyncComponent.isDeSynced()) {
                     PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
                 }
+
+                 */
                 break;
         }
     }
