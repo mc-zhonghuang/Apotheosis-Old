@@ -83,7 +83,6 @@ public final class KillAura extends Module {
             .add(new SubMode("Fake"))
             .add(new SubMode("Vanilla"))
             .add(new SubMode("NCP"))
-            .add(new SubMode("Watchdog"))
             .add(new SubMode("Watchdog 1.9+"))
             .add(new SubMode("Watchdog HvH"))
             .add(new SubMode("GrimAC"))
@@ -738,22 +737,20 @@ public final class KillAura extends Module {
                 break;
 
             case "Old Intave":
-//                InventoryDeSyncComponent.setActive("/booster");
-
                 if (mc.thePlayer.isUsingItem()) {
-                   PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
-                      PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
-                    /*     */             useItem.write((Type)Type.VAR_INT, Integer.valueOf(1));
-                    /*     */             PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class);
-                    /*     */             blocking = true;
-                   // PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
-                   // PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
+                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
+                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
                 }
 
                 break;
 
             case "GrimAC":
                 this.unblock(true);
+
+                break;
+
+            case "Watchdog 1.9+":
+                this.block(false, false);
 
                 break;
         }
@@ -764,17 +761,14 @@ public final class KillAura extends Module {
             case "NCP":
             case "New NCP":
             case "GrimAC":
-            case "watchdog 1.9+":
                 this.block(true, false);
                 break;
 
             case "Old Intave":
-                /*
                 if (mc.thePlayer.isUsingItem() && InventoryDeSyncComponent.isDeSynced()) {
                     PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
                 }
 
-                 */
                 break;
         }
     }

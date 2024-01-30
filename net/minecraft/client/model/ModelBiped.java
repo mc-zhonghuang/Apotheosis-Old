@@ -1,6 +1,8 @@
 package net.minecraft.client.model;
 
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
@@ -141,11 +143,12 @@ public class ModelBiped extends ModelBase {
      */
     public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity entityIn) {
         this.bipedHead.rotateAngleY = p_78087_4_ / (180F / (float) Math.PI);
-
-        final Minecraft mc = Minecraft.getMinecraft();
-
-
         this.bipedHead.rotateAngleX = p_78087_5_ / (180F / (float) Math.PI);
+
+        final EntityPlayerSP entityPlayer = InstanceAccess.mc.thePlayer;
+        if (entityIn == entityPlayer) {
+            this.bipedHead.rotateAngleX = (entityPlayer.prevRenderPitchHead + (entityPlayer.renderPitchHead - entityPlayer.prevRenderPitchHead) * Minecraft.getMinecraft().timer.renderPartialTicks) / (180.0F / (float) Math.PI);
+        }
 
         this.bipedRightArm.rotateAngleX = MathHelper.cos(p_78087_1_ * 0.6662F + (float) Math.PI) * 2.0F * p_78087_2_ * 0.5F;
         this.bipedLeftArm.rotateAngleX = MathHelper.cos(p_78087_1_ * 0.6662F) * 2.0F * p_78087_2_ * 0.5F;
