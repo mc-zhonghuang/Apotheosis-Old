@@ -69,7 +69,7 @@ import java.util.List;
 @Rise
 @ModuleInfo(name = "module.combat.killaura.name", description = "module.combat.killaura.description", category = Category.COMBAT)
 public final class KillAura extends Module {
-
+    public static KillAura INSTANCE;
     private final ModeValue mode = new ModeValue("Attack Mode", this)
             .add(new SubMode("Single"))
             .add(new SubMode("Switch"))
@@ -164,6 +164,8 @@ public final class KillAura extends Module {
         }
 
         movementCorrection.setDefault(MovementFix.OFF);
+
+        INSTANCE = this;
     }
 
     @EventLink()
@@ -190,7 +192,7 @@ public final class KillAura extends Module {
     public void onDisable() {
         target = null;
 
-        this.unblock(false);
+        this.unblock(true);
     }
 
     @EventLink()
@@ -606,7 +608,7 @@ public final class KillAura extends Module {
 
     @EventLink(value = Priorities.HIGH)
     public final Listener<RenderItemEvent> onRenderItem = event -> {
-        if (target != null && !autoBlock.getValue().getName().equals("None") && this.canBlock()) {
+        if (this.canRenderBlock()) {
             event.setEnumAction(EnumAction.BLOCK);
             event.setUseItem(true);
         }
@@ -771,6 +773,12 @@ public final class KillAura extends Module {
 
                 break;
         }
+    }
+
+    public boolean canRenderBlock() {
+        final String modeValue = autoBlock.getValue().getName();
+
+        return mc.thePlayer != null && target != null && canBlock() && !(modeValue.equalsIgnoreCase("Old Intave") || modeValue.equalsIgnoreCase("None")|| modeValue.equalsIgnoreCase("Legit"));
     }
 
     private boolean canBlock() {

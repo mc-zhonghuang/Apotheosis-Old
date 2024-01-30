@@ -31,7 +31,6 @@ public class GrimACVelocity extends Mode<Velocity> {
             .add(new SubMode("1.17+"))
             .setDefault("Block Spoof");
     private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
-    private KillAura killAura;
     private int lastSprint = -1;
 
     @Override
@@ -88,8 +87,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                         break;
                     }
                     case "attack reduce": {
-                        if (killAura == null) killAura = getModule(KillAura.class);
-                        if (killAura.target != null) {
+                        if (KillAura.INSTANCE.target != null) {
                             event.setCancelled();
 
                             if (!EntityPlayerSP.serverSprintState) {
@@ -103,7 +101,7 @@ public class GrimACVelocity extends Mode<Velocity> {
 
                             for (int i = 0;i < 8;i++) {
                                 if (ViaMCP.getInstance().getVersion() <= 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(killAura.target, C02PacketUseEntity.Action.ATTACK));
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(KillAura.INSTANCE.target, C02PacketUseEntity.Action.ATTACK));
                                 if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 

@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
+import cn.hackedmc.apotheosis.module.impl.combat.KillAura;
 import cn.hackedmc.apotheosis.module.impl.render.Animations;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -87,7 +88,7 @@ public class RenderPlayer extends RendererLivingEntity<AbstractClientPlayer> {
             else {
                 modelplayer.heldItemRight = 1;
 
-                if (clientPlayer.getItemInUseCount() > 0) {
+                if (clientPlayer.getItemInUseCount() > 0 || (clientPlayer == InstanceAccess.mc.thePlayer && KillAura.INSTANCE.canRenderBlock())) {
                     EnumAction enumaction = itemstack.getItemUseAction();
 
                     if (enumaction == EnumAction.BLOCK) {
