@@ -27,7 +27,7 @@ public class GrimACJesus extends Mode<Jesus> {
     private final Listener<PreMotionEvent> onPreMotion = event -> {
         switch (mode.getValue().getName().toLowerCase()) {
             case "normal": {
-
+                // TODO : ADD
 
                 break;
             }
