@@ -415,7 +415,7 @@ public class Manager extends Module {
 
             if (Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.watchdog.getValue()) {
                 mc.playerController.windowClick(0, this.slot(slot), 0, 0, mc.thePlayer);
-                mc.playerController.windowClick(0, 8 - ((ItemArmor) mc.thePlayer.inventory.getItemStack().getItem()).armorType, 0, 0, mc.thePlayer);
+                mc.playerController.windowClick(0, 5 + ((ItemArmor) mc.thePlayer.inventory.getItemStack().getItem()).armorType, 0, 0, mc.thePlayer);
             } else {
                 InstanceAccess.mc.playerController.windowClick(InstanceAccess.mc.thePlayer.inventoryContainer.windowId, this.slot(slot), 0, 1, InstanceAccess.mc.thePlayer);
             }

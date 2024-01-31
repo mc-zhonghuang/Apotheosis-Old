@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
 import cn.hackedmc.apotheosis.newevent.impl.inventory.SyncCurrentItemEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.BlockBreakEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.BlockDamageEvent;
+import cn.hackedmc.apotheosis.util.chat.ChatUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
