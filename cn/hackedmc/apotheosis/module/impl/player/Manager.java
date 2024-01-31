@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.component.impl.player.SelectorDetectionComponent;
 import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
+import cn.hackedmc.apotheosis.module.impl.exploit.Disabler;
 import cn.hackedmc.apotheosis.module.impl.movement.InventoryMove;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
@@ -412,7 +413,12 @@ public class Manager extends Module {
                 this.openInventory();
             }
 
-            InstanceAccess.mc.playerController.windowClick(InstanceAccess.mc.thePlayer.inventoryContainer.windowId, this.slot(slot), 0, 1, InstanceAccess.mc.thePlayer);
+            if (Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.watchdog.getValue()) {
+                mc.playerController.windowClick(0, this.slot(slot), 0, 0, mc.thePlayer);
+                mc.playerController.windowClick(0, 8 - ((ItemArmor) mc.thePlayer.inventory.getItemStack().getItem()).armorType, 0, 0, mc.thePlayer);
+            } else {
+                InstanceAccess.mc.playerController.windowClick(InstanceAccess.mc.thePlayer.inventoryContainer.windowId, this.slot(slot), 0, 1, InstanceAccess.mc.thePlayer);
+            }
 
             this.nextClick = Math.round(MathUtil.getRandom(this.delay.getValue().intValue(), this.delay.getSecondValue().intValue()));
             this.stopwatch.reset();

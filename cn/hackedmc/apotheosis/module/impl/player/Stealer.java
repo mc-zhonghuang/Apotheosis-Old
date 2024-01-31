@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.component.impl.player.GUIDetectionComponent;
 import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
+import cn.hackedmc.apotheosis.module.impl.exploit.Disabler;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
@@ -54,7 +55,26 @@ public class Stealer extends Module {
                 }
 
                 this.nextClick = Math.round(MathUtil.getRandom(this.delay.getValue().intValue(), this.delay.getSecondValue().intValue()));
-                mc.playerController.windowClick(container.windowId, i, 0, 1, mc.thePlayer);
+                if (Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.watchdog.getValue()) {
+                    int emptySlot = -1;
+                    for (int index = 0; index < mc.thePlayer.inventory.mainInventory.length; index++) {
+                        if (mc.thePlayer.inventory.mainInventory[index] == null) {
+                            emptySlot = index;
+                            break;
+                        }
+                    }
+
+                    if (emptySlot != -1) {
+                        mc.playerController.windowClick(container.windowId, i, 0, 0, mc.thePlayer);
+                        if (emptySlot <= 8) {
+                            mc.playerController.windowClick(container.windowId, emptySlot + 54, 0, 0, mc.thePlayer);
+                        } else {
+                            mc.playerController.windowClick(container.windowId, emptySlot + 18, 0, 0, mc.thePlayer);
+                        }
+                    }
+                } else {
+                    mc.playerController.windowClick(container.windowId, i, 0, 1, mc.thePlayer);
+                }
                 this.stopwatch.reset();
                 this.lastClick = 0;
                 if (this.nextClick > 0) return;

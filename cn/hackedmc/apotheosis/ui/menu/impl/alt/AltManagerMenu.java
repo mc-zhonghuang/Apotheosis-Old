@@ -152,7 +152,7 @@ public final class AltManagerMenu extends Menu {
                     Account account = altDisplay.getAccount();
                     String refreshToken = account.getRefreshToken();
                     if (refreshToken != null) {
-                        if (refreshToken.equals("")) {
+                        if (account.getPassword().equalsIgnoreCase("Offline")) {
                             mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), "mojang");
                             for (AltDisplay d : altDisplays) if (d.isSelected()) d.setSelected(false);
                             altDisplay.setSelected(true);
