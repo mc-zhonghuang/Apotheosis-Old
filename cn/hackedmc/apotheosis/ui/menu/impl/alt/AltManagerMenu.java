@@ -152,9 +152,10 @@ public final class AltManagerMenu extends Menu {
                     Account account = altDisplay.getAccount();
                     String refreshToken = account.getRefreshToken();
                     if (refreshToken != null) {
-                        if (account.getPassword().equalsIgnoreCase("Offline")) {
+                        if (refreshToken.equals("")) {
                             mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), "mojang");
-                            return;
+                            for (AltDisplay d : altDisplays) if (d.isSelected()) d.setSelected(false);
+                            altDisplay.setSelected(true);
                         } else {
                             new Thread(() -> {
                                 MicrosoftLogin.LoginData loginData = loginWithRefreshToken(refreshToken);
@@ -221,8 +222,8 @@ public final class AltManagerMenu extends Menu {
             final String name = getClipboardString().equals("") || getClipboardString().length() > 30 ? RandomUtil.randomName() : getClipboardString();
             Account account = new Account(name, "Offline");
             account.setOfflineUsername(name);
-            account.setRefreshToken("0");
-            mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), mc.session.getSessionType().name());
+            account.setRefreshToken("");
+            mc.session = new Session(account.getUsername(), account.getUuid(), account.getRefreshToken(), "mojang");
             Client.INSTANCE.getAltManager().getAccounts().add(account);
 
             AltDisplay display;

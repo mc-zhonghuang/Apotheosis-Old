@@ -16,14 +16,14 @@ public class Util {
             p_181617_0_.run();
             return p_181617_0_.get();
         } catch (final ExecutionException executionexception) {
-            p_181617_1_.fatal("Error executing task", executionexception);
+//            p_181617_1_.fatal("Error executing task", executionexception);
 
             if (executionexception.getCause() instanceof OutOfMemoryError) {
                 final OutOfMemoryError outofmemoryerror = (OutOfMemoryError) executionexception.getCause();
                 throw outofmemoryerror;
             }
         } catch (final InterruptedException interruptedexception) {
-            p_181617_1_.fatal("Error executing task", interruptedexception);
+//            p_181617_1_.fatal("Error executing task", interruptedexception);
         }
 
         return null;
