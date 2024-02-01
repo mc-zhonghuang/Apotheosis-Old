@@ -64,6 +64,8 @@ public class Scaffold extends Module {
             .add(new SubMode("UPDATED-NCP"))
             .setDefault("Normal");
 
+    private final NumberValue tellyTick = new NumberValue("Telly Ticks", this, 3, 1, 6, 1, () -> !mode.getValue().getName().equalsIgnoreCase("Telly"));
+
     private final ModeValue rayCast = new ModeValue("Ray Cast", this)
             .add(new SubMode("Off"))
             .add(new SubMode("Normal"))
@@ -104,8 +106,9 @@ public class Scaffold extends Module {
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation Speed", this, 5, 10, 0, 10, 1);
     private final BoundsNumberValue placeDelay = new BoundsNumberValue("Place Delay", this, 0, 0, 0, 5, 1);
     private final NumberValue timer = new NumberValue("Timer", this, 1, 0.1, 10, 0.1);
-    private final NumberValue tellyTick = new NumberValue("Telly Ticks", this, 3, 1, 6, 1, () -> !mode.getValue().getName().equalsIgnoreCase("Telly"));
     public final BooleanValue movementCorrection = new BooleanValue("Movement Correction", this, false);
+    private final BooleanValue clickSpoof = new BooleanValue("Click Spoof", this, false);
+    private final BoundsNumberValue clickRate = new BoundsNumberValue("Click Rate", this, 0.5, 1.0, 0.1, 1.0, 0.1, () -> !clickSpoof.getValue());
     public final BooleanValue safeWalk = new BooleanValue("Safe Walk", this, true);
     private final BooleanValue sneak = new BooleanValue("Sneak", this, false);
     public final BoundsNumberValue startSneaking = new BoundsNumberValue("Start Sneaking", this, 0, 0, 0, 5, 1, () -> !sneak.getValue());
@@ -321,16 +324,6 @@ public class Scaffold extends Module {
         }
     }
 
-    public void runMode() {
-        switch (this.mode.getValue().getName()) {
-            case "Telly": {
-                if (InstanceAccess.mc.thePlayer.onGround && MoveUtil.isMoving()) {
-//                    mc.thePlayer.jump();
-                }
-            }
-        }
-    }
-
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
         InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
@@ -410,10 +403,9 @@ public class Scaffold extends Module {
                 if (SlotComponent.getItemStack() != null && SlotComponent.getItemStack().stackSize == 0) {
                     InstanceAccess.mc.thePlayer.inventory.mainInventory[SlotComponent.getItemIndex()] = null;
                 }
-            } else if (Math.random() > 0.92 && InstanceAccess.mc.rightClickDelayTimer <= 0) {
+            } else if (clickSpoof.getValue() && Math.random() <= MathUtil.getRandom(clickRate.getValue().doubleValue(), clickRate.getSecondValue().doubleValue())) {
 //                ChatUtil.display("Drag: " + Math.random());
                 PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
-                InstanceAccess.mc.rightClickDelayTimer = 0;
             }
         }
 
@@ -457,8 +449,6 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<StrafeEvent> onStrafe = event -> {
-        this.runMode();
-
         if (!Objects.equals(yawOffset.getValue().getName(), "0") && !movementCorrection.getValue()) {
             MoveUtil.useDiagonalSpeed();
         }
