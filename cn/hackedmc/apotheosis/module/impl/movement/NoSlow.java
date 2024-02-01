@@ -21,6 +21,7 @@ public class NoSlow extends Module {
             .add(new WatchdogNoSlow("Watchdog", this))
             .add(new NewNCPNoSlow("New NCP", this))
             .add(new CatACNoSlow("Cat Anti Cheat", this))
+            .add(new BlinkNoSlow("Blink", this))
             .add(new BlocksMCNoSlow("BlocksMC", this))
             .add(new SpoofNoSlow("Spoof", this))
             .add(new IntaveNoSlow("Intave", this))

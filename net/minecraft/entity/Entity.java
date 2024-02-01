@@ -1,10 +1,12 @@
 package net.minecraft.entity;
 
 import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.motion.LavaEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PostStrafeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.StrafeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.WaterEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.StepEvent;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -1050,14 +1052,12 @@ public abstract class Entity implements ICommandSender {
      * Checks if this entity is inside water (if inWater field is true as a result of handleWaterMovement() returning
      * true)
      */
-    StopWatch stopWatch = new StopWatch();
 
     public boolean isInWater() {
-        if (this == Minecraft.getMinecraft().thePlayer && stopWatch.finished(100)) {
+        if (this == Minecraft.getMinecraft().thePlayer) {
             final WaterEvent event = new WaterEvent(this.inWater);
             Client.INSTANCE.getEventBus().handle(event);
             this.inWater = event.isWater();
-            stopWatch.reset();
         }
 
         return this.inWater;
@@ -1159,6 +1159,13 @@ public abstract class Entity implements ICommandSender {
     }
 
     public boolean isInLava() {
+        if (this == InstanceAccess.mc.thePlayer) {
+            final LavaEvent lavaEvent = new LavaEvent(this.worldObj.isMaterialInBB(this.getEntityBoundingBox().expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.lava));
+            Client.INSTANCE.getEventBus().handle(lavaEvent);
+
+            return lavaEvent.isLava();
+        }
+
         return this.worldObj.isMaterialInBB(this.getEntityBoundingBox().expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.lava);
     }
 
