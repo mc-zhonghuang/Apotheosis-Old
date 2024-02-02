@@ -6,6 +6,7 @@ import cn.hackedmc.apotheosis.module.impl.movement.NoSlow;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.SlowDownEvent;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.value.Mode;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
@@ -45,6 +46,11 @@ public class BlinkNoSlow extends Mode<NoSlow> {
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
         }
     }
+
+    @EventLink
+    private final Listener<SlowDownEvent> onSlowDown = event -> {
+        if (mc.thePlayer.isUsingItem() && ((mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) || food.getValue())) event.setCancelled();
+    };
 
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {

@@ -47,7 +47,7 @@ public class GrimACJesus extends Mode<Jesus> {
                                 final BlockPos bp = new BlockPos(mc.thePlayer).add(i, i2, i3);
                                 final Block block = mc.theWorld.getBlockState(bp).getBlock();
                                 if (block instanceof BlockLiquid)
-                                    mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, bp, EnumFacing.UP));
+                                    mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, bp, EnumFacing.UP));
                             }
                         }
                     }
@@ -66,7 +66,7 @@ public class GrimACJesus extends Mode<Jesus> {
                             final Block block = blockState.getBlock();
 
                             if (block instanceof BlockLiquid) {
-                                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, blockPos, EnumFacing.DOWN));
+                                mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, blockPos, EnumFacing.DOWN));
                                 mc.theWorld.setBlockToAir(blockPos);
                             }
                         }

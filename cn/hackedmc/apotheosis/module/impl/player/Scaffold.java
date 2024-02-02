@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.component.impl.player.BadPacketsComponent;
 import cn.hackedmc.apotheosis.component.impl.player.BlinkComponent;
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.component.impl.render.SmoothCameraComponent;
 import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
@@ -16,6 +17,7 @@ import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.input.MoveInputEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreUpdateEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.StrafeEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.TickEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.util.RandomUtil;
 import cn.hackedmc.apotheosis.util.RayCastUtil;
@@ -102,7 +104,7 @@ public class Scaffold extends Module {
             .add(new SubMode("On"))
             .add(new SubMode("Auto Jump"))
             .setDefault("Off");
-
+    private final BooleanValue hideJump = new BooleanValue("Hide Jump", this, false, () -> !sameY.getValue().getName().equalsIgnoreCase("Auto Jump"));
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation Speed", this, 5, 10, 0, 10, 1);
     private final BoundsNumberValue placeDelay = new BoundsNumberValue("Place Delay", this, 0, 0, 0, 5, 1);
     private final NumberValue timer = new NumberValue("Timer", this, 1, 0.1, 10, 0.1);
@@ -164,7 +166,15 @@ public class Scaffold extends Module {
 
         // This is a temporary patch
         SlotComponent.setSlot(InstanceAccess.mc.thePlayer.inventory.currentItem);
+
+        if (timer.getValue().floatValue() != 1.0F) mc.timer.timerSpeed = 1.0F;
     }
+
+    @EventLink
+    private final Listener<TickEvent> onTick = event -> {
+        final float timerValue = timer.getValue().floatValue();
+        if (timerValue != 1.0F) mc.timer.timerSpeed = timerValue;
+    };
 
     @EventLink()
     public final Listener<PacketReceiveEvent> onPacketReceiveEvent = event -> {
@@ -326,6 +336,10 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
+            SmoothCameraComponent.setY(startY, 0.1F);
+        }
+
         InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
 
         // Getting ItemSlot
@@ -354,6 +368,8 @@ public class Scaffold extends Module {
         enumFacing = PlayerUtil.getEnumFacing(targetBlock);
 
         if (enumFacing == null) {
+            checkClick();
+
             return;
         }
 
@@ -362,12 +378,16 @@ public class Scaffold extends Module {
         blockFace = position.add(enumFacing.getOffset().xCoord, enumFacing.getOffset().yCoord, enumFacing.getOffset().zCoord);
 
         if (blockFace == null || enumFacing == null) {
+            checkClick();
+
             return;
         }
 
         this.calculateRotations();
 
         if (targetBlock == null || enumFacing == null || blockFace == null) {
+            checkClick();
+
             return;
         }
 
@@ -403,9 +423,8 @@ public class Scaffold extends Module {
                 if (SlotComponent.getItemStack() != null && SlotComponent.getItemStack().stackSize == 0) {
                     InstanceAccess.mc.thePlayer.inventory.mainInventory[SlotComponent.getItemIndex()] = null;
                 }
-            } else if (clickSpoof.getValue() && Math.random() <= MathUtil.getRandom(clickRate.getValue().doubleValue(), clickRate.getSecondValue().doubleValue())) {
-//                ChatUtil.display("Drag: " + Math.random());
-                PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+            } else {
+                checkClick();
             }
         }
 
@@ -418,6 +437,13 @@ public class Scaffold extends Module {
             startY = InstanceAccess.mc.thePlayer.posY;
         }
     };
+
+    private void checkClick() {
+        if (clickSpoof.getValue() && Math.random() <= MathUtil.getRandom(clickRate.getValue().doubleValue(), clickRate.getSecondValue().doubleValue())) {
+//                ChatUtil.display("Drag: " + Math.random());
+            PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+        }
+    }
 
     @EventLink()
     public final Listener<MoveInputEvent> onMove = this::calculateSneaking;

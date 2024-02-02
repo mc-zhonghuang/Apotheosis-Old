@@ -66,7 +66,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                 switch (mode.getValue().getName().toLowerCase()) {
                     case "block spoof": {
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
-                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
                         mc.timer.lastSyncSysClock += 1;
                         event.setCancelled();
 
@@ -81,7 +81,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                                 RotationComponent.rotations.y,
                                 mc.thePlayer.onGround
                         ));
-                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
                         event.setCancelled();
 
                         break;
@@ -105,17 +105,9 @@ public class GrimACVelocity extends Mode<Velocity> {
                                 if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 
-                            double velocityX = wrapped.motionX / 8000.0;
-                            double velocityZ = wrapped.motionZ / 8000.0;
-
-                            if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
-                                mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
-                            } else {
-                                mc.thePlayer.motionX = velocityX * (velocityX / 15);
-                                mc.thePlayer.motionZ = velocityZ * (velocityZ / 15);
-                            }
-
-                            mc.thePlayer.motionY = wrapped.motionY / 8000.0;
+                            mc.thePlayer.addVelocity(wrapped.motionX / 8000.0, wrapped.motionY / 8000.0, wrapped.motionZ / 8000.0);
+                            mc.thePlayer.motionZ *= Math.pow(0.6, 5);
+                            mc.thePlayer.motionX *= Math.pow(0.6, 5);
 
                             if (!EntityPlayerSP.serverSprintState && !legitSprint.getValue())
                                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));

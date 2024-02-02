@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
 import cn.hackedmc.apotheosis.module.impl.movement.phase.ClipPhase;
+import cn.hackedmc.apotheosis.module.impl.movement.phase.HuaYuTingPhase;
 import cn.hackedmc.apotheosis.module.impl.movement.phase.NormalPhase;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
 
@@ -19,6 +20,7 @@ public class Phase extends Module {
 
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new NormalPhase("Normal", this))
+            .add(new HuaYuTingPhase("HuaYuTing", this))
             .add(new ClipPhase("Clip", this))
             .setDefault("Normal");
 

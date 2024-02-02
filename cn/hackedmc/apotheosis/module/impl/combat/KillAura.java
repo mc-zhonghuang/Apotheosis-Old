@@ -549,7 +549,6 @@ public final class KillAura extends Module {
         this.attack = Math.min(Math.max(this.attack, this.attack + 2), 5);
 
         Client.INSTANCE.getEventBus().handle(new ClickEvent());
-        if (!this.noSwing.getValue()) mc.thePlayer.swingItem();
 
         final AttackEvent event = new AttackEvent(target);
         Client.INSTANCE.getEventBus().handle(event);

@@ -9,24 +9,38 @@ import util.time.StopWatch;
 
 @Rise
 public class SmoothCameraComponent extends Component {
-
+    public static float bobbing;
     public static double y;
     public static StopWatch stopWatch = new StopWatch();
 
     public static void setY(double y) {
         stopWatch.reset();
         SmoothCameraComponent.y = y;
+        bobbing = 0;
     }
 
     public static void setY() {
         if (stopWatch.finished(80)) SmoothCameraComponent.y = mc.thePlayer.lastTickPosY;
         stopWatch.reset();
+        bobbing = 0;
+    }
+
+    public static void setY(double y, float bobbing) {
+        stopWatch.reset();
+        SmoothCameraComponent.y = y;
+        SmoothCameraComponent.bobbing = bobbing;
+    }
+
+    public static void setY(float bobbing) {
+        if (stopWatch.finished(80)) SmoothCameraComponent.y = mc.thePlayer.lastTickPosY;
+        stopWatch.reset();
+        SmoothCameraComponent.bobbing = bobbing;
     }
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotion = event -> {
         if (stopWatch.finished(80)) return;
-        mc.thePlayer.cameraYaw = 0;
-        mc.thePlayer.cameraPitch = 0;
+        mc.thePlayer.cameraYaw = bobbing;
+        mc.thePlayer.cameraPitch = bobbing;
     };
 }
