@@ -306,9 +306,6 @@ public class Scaffold extends Module {
                         oldTargetPitch = targetPitch;
 //                        targetPitch = mc.thePlayer.rotationPitch;
 //                        targetYaw = mc.thePlayer.rotationYaw;
-                    } else {
-                        targetPitch = oldTargetPitch;
-                        targetYaw = oldTargetYaw;
                     }
                 } else {
                     getRotations(Float.parseFloat(String.valueOf(this.yawOffset.getValue().getName())));
@@ -341,54 +338,6 @@ public class Scaffold extends Module {
     }
 
     private void work() {
-        if (targetBlock == null || enumFacing == null || blockFace == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump))) {
-            checkClick();
-
-            return;
-        }
-
-        if (mode.getValue().getName().equalsIgnoreCase("Telly") && InstanceAccess.mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? tellyTick.getValue().intValue() + 1 : tellyTick.getValue().intValue())) return;
-
-        // Same Y
-        final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump)) && MoveUtil.isMoving();
-
-        if (startY - 1 != Math.floor(targetBlock.yCoord) && sameY) {
-            return;
-        }
-
-        if (InstanceAccess.mc.thePlayer.inventory.alternativeCurrentItem == SlotComponent.getItemIndex()) {
-            if (!BadPacketsComponent.bad(false, true, false, false, true) &&
-                    ticksOnAir > MathUtil.getRandom(placeDelay.getValue().intValue(), placeDelay.getSecondValue().intValue()) &&
-                    (RayCastUtil.overBlock(enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict")) || rayCast.getValue().getName().equals("Off"))) {
-
-                Vec3 hitVec = this.getHitVec();
-
-                if (InstanceAccess.mc.playerController.onPlayerRightClick(InstanceAccess.mc.thePlayer, InstanceAccess.mc.theWorld, SlotComponent.getItemStack(), blockFace, enumFacing.getEnumFacing(), hitVec)) {
-                    if (noSwing.getValue()) PacketUtil.send(new C0APacketAnimation());
-                    else InstanceAccess.mc.thePlayer.swingItem();
-                }
-
-                InstanceAccess.mc.rightClickDelayTimer = 0;
-                ticksOnAir = 0;
-
-                assert SlotComponent.getItemStack() != null;
-                if (SlotComponent.getItemStack() != null && SlotComponent.getItemStack().stackSize == 0) {
-                    InstanceAccess.mc.thePlayer.inventory.mainInventory[SlotComponent.getItemIndex()] = null;
-                }
-            } else {
-                checkClick();
-            }
-        }
-    }
-
-    @EventLink
-    private final Listener<PossibleClickEvent> onPossibleClick = event -> {
-        if (placeTime.getValue().getName().equalsIgnoreCase("Legit"))
-            work();
-    };
-
-    @EventLink()
-    public final Listener<PreUpdateEvent> onPreUpdate = event -> {
         if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
             SmoothCameraComponent.setY(startY, 0.1F);
         }
@@ -442,8 +391,38 @@ public class Scaffold extends Module {
             InstanceAccess.mc.gameSettings.keyBindJump.setPressed((InstanceAccess.mc.thePlayer.onGround && MoveUtil.isMoving()) || GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump));
         }
 
-        if (placeTime.getValue().getName().equalsIgnoreCase("Pre"))
-            work();
+        if (mode.getValue().getName().equalsIgnoreCase("Telly") && InstanceAccess.mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? tellyTick.getValue().intValue() + 1 : tellyTick.getValue().intValue())) return;
+
+        // Same Y
+        final boolean sameY = ((!this.sameY.getValue().getName().equals("Off") || this.getModule(Speed.class).isEnabled()) && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump)) && MoveUtil.isMoving();
+
+        if (startY - 1 != Math.floor(targetBlock.yCoord) && sameY) {
+            return;
+        }
+
+        if (InstanceAccess.mc.thePlayer.inventory.alternativeCurrentItem == SlotComponent.getItemIndex()) {
+            if (!BadPacketsComponent.bad(false, true, false, false, true) &&
+                    ticksOnAir > MathUtil.getRandom(placeDelay.getValue().intValue(), placeDelay.getSecondValue().intValue()) &&
+                    (RayCastUtil.overBlock(enumFacing.getEnumFacing(), blockFace, rayCast.getValue().getName().equals("Strict")) || rayCast.getValue().getName().equals("Off"))) {
+
+                Vec3 hitVec = this.getHitVec();
+
+                if (InstanceAccess.mc.playerController.onPlayerRightClick(InstanceAccess.mc.thePlayer, InstanceAccess.mc.theWorld, SlotComponent.getItemStack(), blockFace, enumFacing.getEnumFacing(), hitVec)) {
+                    if (noSwing.getValue()) PacketUtil.send(new C0APacketAnimation());
+                    else InstanceAccess.mc.thePlayer.swingItem();
+                }
+
+                InstanceAccess.mc.rightClickDelayTimer = 0;
+                ticksOnAir = 0;
+
+                assert SlotComponent.getItemStack() != null;
+                if (SlotComponent.getItemStack() != null && SlotComponent.getItemStack().stackSize == 0) {
+                    InstanceAccess.mc.thePlayer.inventory.mainInventory[SlotComponent.getItemIndex()] = null;
+                }
+            } else {
+                checkClick();
+            }
+        }
 
         //For Same Y
         if (InstanceAccess.mc.thePlayer.onGround || GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump)) {
@@ -453,6 +432,18 @@ public class Scaffold extends Module {
         if (InstanceAccess.mc.thePlayer.posY < startY) {
             startY = InstanceAccess.mc.thePlayer.posY;
         }
+    }
+
+    @EventLink
+    private final Listener<PossibleClickEvent> onPossibleClick = event -> {
+        if (placeTime.getValue().getName().equalsIgnoreCase("Legit"))
+            work();
+    };
+
+    @EventLink()
+    public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        if (placeTime.getValue().getName().equalsIgnoreCase("Pre"))
+            work();
     };
 
     @EventLink

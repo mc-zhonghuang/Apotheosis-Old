@@ -104,7 +104,7 @@ public final class KillAura extends Module {
             .add(new SubMode("1.9+ (1.8 Visuals)"))
             .setDefault("Normal");
 
-    private final NumberValue range = new NumberValue("Range", this, 3, 3, 6, 0.1);
+    public final NumberValue range = new NumberValue("Range", this, 3, 3, 6, 0.1);
     private final BoundsNumberValue cps = new BoundsNumberValue("CPS", this, 10, 15, 1, 20, 1);
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation speed", this, 5, 10, 0, 10, 1);
     private final ListValue<MovementFix> movementCorrection = new ListValue<>("Movement correction", this);

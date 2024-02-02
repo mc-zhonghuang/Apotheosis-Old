@@ -7,6 +7,7 @@ import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.module.impl.combat.Velocity;
+import cn.hackedmc.apotheosis.util.RayCastUtil;
 import cn.hackedmc.apotheosis.util.player.MoveUtil;
 import cn.hackedmc.apotheosis.value.Mode;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
@@ -19,6 +20,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.viamcp.ViaMCP;
 
 public class GrimACVelocity extends Mode<Velocity> {
@@ -31,6 +33,7 @@ public class GrimACVelocity extends Mode<Velocity> {
             .add(new SubMode("1.17+"))
             .setDefault("Block Spoof");
     private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
+    private final BooleanValue rayCast = new BooleanValue("Ray cast", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
     private int lastSprint = -1;
 
     @Override
@@ -87,7 +90,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                         break;
                     }
                     case "attack reduce": {
-                        if (KillAura.INSTANCE.target != null) {
+                        if (KillAura.INSTANCE.target != null && (!rayCast.getValue() || RayCastUtil.rayCast(RotationComponent.rotations, KillAura.INSTANCE.range.getValue().doubleValue()).typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)) {
                             event.setCancelled();
 
                             if (!EntityPlayerSP.serverSprintState) {
