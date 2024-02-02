@@ -38,9 +38,9 @@ public class HuaYuTingPhase extends Mode<Phase> {
                     final C03PacketPlayer wrapped = (C03PacketPlayer) packet;
 
                     if (wrapped.rotating) {
-                        PacketUtil.sendNoEvent(new C03PacketPlayer.C05PacketPlayerLook(wrapped.yaw, wrapped.pitch, wrapped.onGround));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer.C05PacketPlayerLook(wrapped.yaw, wrapped.pitch, true));
                     } else {
-                        PacketUtil.sendNoEvent(new C03PacketPlayer(wrapped.onGround));
+                        PacketUtil.sendNoEvent(new C03PacketPlayer(true));
                     }
                 }
             });

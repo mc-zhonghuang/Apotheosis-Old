@@ -40,10 +40,10 @@ public class BlinkNoSlow extends Mode<NoSlow> {
 
     private void release() {
         if (mode.getValue().getName().equalsIgnoreCase("Release")) {
-            mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
-            mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
+            mc.getNetHandler().addToSendQueueUnregistered(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
+            mc.getNetHandler().addToSendQueueUnregistered(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
         } else {
-            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
         }
     }
 
@@ -63,8 +63,11 @@ public class BlinkNoSlow extends Mode<NoSlow> {
 
                 if (usingTime == blinkTick.getValue().intValue()) {
                     release();
-                    BlinkComponent.dispatch();
-                    mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getCurrentEquippedItem()));
+                    BlinkComponent.packets.forEach(packet -> {
+                        mc.getNetHandler().addToSendQueueUnregistered(packet);
+                    });
+                    BlinkComponent.packets.clear();
+                    mc.getNetHandler().addToSendQueueUnregistered(new C08PacketPlayerBlockPlacement(mc.thePlayer.getCurrentEquippedItem()));
                 }
             }
         } else {
