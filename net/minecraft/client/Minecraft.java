@@ -1757,8 +1757,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 }
             }
 
-            Client.INSTANCE.getEventBus().handle(new PossibleClickEvent());
-
             if (this.thePlayer.isUsingItem()) {
                 if (!this.gameSettings.keyBindUseItem.isKeyDown()) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
@@ -1782,6 +1780,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.rightClickMouse();
             }
 
+            Client.INSTANCE.getEventBus().handle(new PossibleClickEvent());
             this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus);
         }
 

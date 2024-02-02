@@ -15,8 +15,10 @@ import cn.hackedmc.apotheosis.module.impl.player.scaffold.tower.*;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.input.MoveInputEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.PostMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreUpdateEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.StrafeEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.PossibleClickEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.TickEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.util.RandomUtil;
@@ -65,7 +67,11 @@ public class Scaffold extends Module {
             .add(new SubMode("Telly"))
             .add(new SubMode("UPDATED-NCP"))
             .setDefault("Normal");
-
+    private final ModeValue placeTime = new ModeValue("Place Time", this)
+            .add(new SubMode("Pre"))
+            .add(new SubMode("Post"))
+            .add(new SubMode("Legit"))
+            .setDefault("Pre");
     private final NumberValue tellyTick = new NumberValue("Telly Ticks", this, 3, 1, 6, 1, () -> !mode.getValue().getName().equalsIgnoreCase("Telly"));
 
     private final ModeValue rayCast = new ModeValue("Ray Cast", this)
@@ -334,65 +340,11 @@ public class Scaffold extends Module {
         }
     }
 
-    @EventLink()
-    public final Listener<PreUpdateEvent> onPreUpdate = event -> {
-        if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
-            SmoothCameraComponent.setY(startY, 0.1F);
-        }
-
-        InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
-
-        // Getting ItemSlot
-        SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue());
-
-        //Used to detect when to place a block, if over air, allow placement of blocks
-        if (PlayerUtil.blockRelativeToPlayer(0, upSideDown.getValue() ? 2 : -1, 0) instanceof BlockAir) {
-            ticksOnAir++;
-        } else {
-            ticksOnAir = 0;
-        }
-
-        this.calculateSneaking();
-
-        // Gets block to place
-        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, 5);
-
-        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump))) {
-            if (mode.getValue().getName().equalsIgnoreCase("Telly") && InstanceAccess.mc.thePlayer.offGroundTicks >= tellyTick.getValue().intValue()) {
-                RotationComponent.setRotations(new Vector2f(oldTargetYaw, oldTargetPitch), 10, movementCorrection.getValue() ? MovementFix.NORMAL : MovementFix.OFF);
-            }
-            return;
-        }
-
-        //Gets EnumFacing
-        enumFacing = PlayerUtil.getEnumFacing(targetBlock);
-
-        if (enumFacing == null) {
+    private void work() {
+        if (targetBlock == null || enumFacing == null || blockFace == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump))) {
             checkClick();
 
             return;
-        }
-
-        final BlockPos position = new BlockPos(targetBlock.xCoord, targetBlock.yCoord, targetBlock.zCoord);
-
-        blockFace = position.add(enumFacing.getOffset().xCoord, enumFacing.getOffset().yCoord, enumFacing.getOffset().zCoord);
-
-        if (blockFace == null || enumFacing == null) {
-            checkClick();
-
-            return;
-        }
-
-        this.calculateRotations();
-
-        if (targetBlock == null || enumFacing == null || blockFace == null) {
-            checkClick();
-
-            return;
-        }
-
-        if (this.sameY.getValue().getName().equals("Auto Jump")) {
-            InstanceAccess.mc.gameSettings.keyBindJump.setPressed((InstanceAccess.mc.thePlayer.onGround && MoveUtil.isMoving()) || GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump));
         }
 
         if (mode.getValue().getName().equalsIgnoreCase("Telly") && InstanceAccess.mc.thePlayer.offGroundTicks < (sprint.getValue().getName().equalsIgnoreCase("HuaYuTing") ? tellyTick.getValue().intValue() + 1 : tellyTick.getValue().intValue())) return;
@@ -427,6 +379,71 @@ public class Scaffold extends Module {
                 checkClick();
             }
         }
+    }
+
+    @EventLink
+    private final Listener<PossibleClickEvent> onPossibleClick = event -> {
+        if (placeTime.getValue().getName().equalsIgnoreCase("Legit"))
+            work();
+    };
+
+    @EventLink()
+    public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
+            SmoothCameraComponent.setY(startY, 0.1F);
+        }
+
+        InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
+
+        // Getting ItemSlot
+        SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue());
+
+        //Used to detect when to place a block, if over air, allow placement of blocks
+        if (PlayerUtil.blockRelativeToPlayer(0, upSideDown.getValue() ? 2 : -1, 0) instanceof BlockAir) {
+            ticksOnAir++;
+        } else {
+            ticksOnAir = 0;
+        }
+
+        this.calculateSneaking();
+
+        // Gets block to place
+        targetBlock = PlayerUtil.getPlacePossibility(0, upSideDown.getValue() ? 3 : 0, 0, 5);
+
+        if (targetBlock == null || (mode.getValue().getName().equalsIgnoreCase("Telly") && targetBlock.yCoord > startY && !GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump))) {
+            if (mode.getValue().getName().equalsIgnoreCase("Telly") && InstanceAccess.mc.thePlayer.offGroundTicks >= tellyTick.getValue().intValue()) {
+                RotationComponent.setRotations(new Vector2f(oldTargetYaw, oldTargetPitch), 10, movementCorrection.getValue() ? MovementFix.NORMAL : MovementFix.OFF);
+            }
+            return;
+        }
+
+        //Gets EnumFacing
+        enumFacing = PlayerUtil.getEnumFacing(targetBlock);
+
+        if (enumFacing == null) {
+            return;
+        }
+
+        final BlockPos position = new BlockPos(targetBlock.xCoord, targetBlock.yCoord, targetBlock.zCoord);
+
+        blockFace = position.add(enumFacing.getOffset().xCoord, enumFacing.getOffset().yCoord, enumFacing.getOffset().zCoord);
+
+        if (blockFace == null || enumFacing == null) {
+            return;
+        }
+
+        this.calculateRotations();
+
+        if (targetBlock == null || enumFacing == null || blockFace == null) {
+            return;
+        }
+
+        if (this.sameY.getValue().getName().equals("Auto Jump")) {
+            InstanceAccess.mc.gameSettings.keyBindJump.setPressed((InstanceAccess.mc.thePlayer.onGround && MoveUtil.isMoving()) || GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump));
+        }
+
+        if (placeTime.getValue().getName().equalsIgnoreCase("Pre"))
+            work();
 
         //For Same Y
         if (InstanceAccess.mc.thePlayer.onGround || GameSettings.isKeyDown(InstanceAccess.mc.gameSettings.keyBindJump)) {
@@ -436,6 +453,12 @@ public class Scaffold extends Module {
         if (InstanceAccess.mc.thePlayer.posY < startY) {
             startY = InstanceAccess.mc.thePlayer.posY;
         }
+    };
+
+    @EventLink
+    private final Listener<PostMotionEvent> onPostMotion = event -> {
+        if (placeTime.getValue().getName().equalsIgnoreCase("Post"))
+            work();
     };
 
     private void checkClick() {
