@@ -48,7 +48,7 @@ public class WatchdogLongJump extends Mode<LongJump> {
             if (mc.thePlayer.onGround) {
                 BlinkComponent.dispatch();
                 BlinkComponent.blinking = false;
-                this.toggle();
+                this.getParent().toggle();
             }
         }
     };

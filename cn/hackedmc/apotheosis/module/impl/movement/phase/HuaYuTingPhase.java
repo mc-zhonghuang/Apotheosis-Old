@@ -7,11 +7,11 @@ import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.BlockAABBEvent;
-import cn.hackedmc.apotheosis.util.packet.PacketUtil;
 import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import cn.hackedmc.apotheosis.value.Mode;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
 
 public class HuaYuTingPhase extends Mode<Phase> {
@@ -19,15 +19,16 @@ public class HuaYuTingPhase extends Mode<Phase> {
         super(name, parent);
     }
     private Vector3d startPlayer;
-    private int phaseTick = 0;
+    private boolean phasing;
     private BlockPos startPos;
 
     @Override
     public void onEnable() {
         startPlayer = new Vector3d(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
         startPos = new BlockPos(mc.thePlayer).down();
-        phaseTick = 5;
+        phasing = true;
         BlinkComponent.blinking = true;
+        BlinkComponent.setExempt(C08PacketPlayerBlockPlacement.class);
     }
 
     @Override
@@ -37,12 +38,14 @@ public class HuaYuTingPhase extends Mode<Phase> {
                 if (packet instanceof C03PacketPlayer) {
                     final C03PacketPlayer wrapped = (C03PacketPlayer) packet;
 
-                    if (wrapped.rotating) {
-                        PacketUtil.sendNoEvent(new C03PacketPlayer.C05PacketPlayerLook(wrapped.yaw, wrapped.pitch, true));
-                    } else {
-                        PacketUtil.sendNoEvent(new C03PacketPlayer(true));
+                    if (wrapped.moving) {
+                        wrapped.x = startPlayer.getX();
+                        wrapped.y = startPlayer.getY();
+                        wrapped.z = startPlayer.getZ();
                     }
                 }
+
+                mc.getNetHandler().addToSendQueueUnregistered(packet);
             });
             BlinkComponent.packets.clear();
 
@@ -53,18 +56,18 @@ public class HuaYuTingPhase extends Mode<Phase> {
 
     @EventLink
     private final Listener<BlockAABBEvent> onBlockAABB = event -> {
-        if (phaseTick > 0)
+        if (phasing)
             event.setBoundingBox(null);
     };
 
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (phaseTick > 0) {
-            phaseTick--;
-        } else {
+        if (mc.thePlayer.posY + 3.1 < startPos.getY()) {
+            phasing = false;
+
             if (mc.theWorld.getBlockState(startPos).getBlock() instanceof BlockAir) {
                 BlinkComponent.blinking = false;
-                toggle();
+                this.getParent().toggle();
                 NotificationComponent.post("Phase", "Operation successful!");
             }
         }
