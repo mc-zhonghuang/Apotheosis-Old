@@ -105,9 +105,17 @@ public class GrimACVelocity extends Mode<Velocity> {
                                 if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 
-                            mc.thePlayer.addVelocity(wrapped.motionX / 8000.0, wrapped.motionY / 8000.0, wrapped.motionZ / 8000.0);
-                            mc.thePlayer.motionZ *= Math.pow(0.6, 5);
-                            mc.thePlayer.motionX *= Math.pow(0.6, 5);
+                            double velocityX = wrapped.motionX / 8000.0;
+                            double velocityZ = wrapped.motionZ / 8000.0;
+
+                            if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
+                                mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
+                            } else {
+                                mc.thePlayer.motionX = velocityX * 0.15;
+                                mc.thePlayer.motionZ = velocityZ * 0.15;
+                            }
+
+                            mc.thePlayer.motionY = wrapped.motionY / 8000.0;
 
                             if (!EntityPlayerSP.serverSprintState && !legitSprint.getValue())
                                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
