@@ -42,9 +42,11 @@ import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
@@ -85,6 +87,7 @@ public final class KillAura extends Module {
             .add(new SubMode("NCP"))
             .add(new SubMode("Watchdog 1.9+"))
             .add(new SubMode("Watchdog HvH"))
+            .add(new SubMode("HuaYuTing"))
             .add(new SubMode("GrimAC"))
             .add(new SubMode("Legit"))
             .add(new SubMode("Intave"))
@@ -146,7 +149,7 @@ public final class KillAura extends Module {
 
     private float randomYaw, randomPitch, angle;
     public boolean blocking, swing, allowAttack;
-
+    private int blockingTick = 0;
     private long nextSwing;
 
     public static List<Entity> targets;
@@ -177,7 +180,8 @@ public final class KillAura extends Module {
         }
 
         if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
-            this.unblock(false);
+            this.unblock(true);
+            this.blockingTick = 0;
             target = null;
         }
     };
@@ -186,6 +190,7 @@ public final class KillAura extends Module {
     protected void onEnable() {
         this.attack = 0;
         this.switchChangeTicks.reset();
+        this.blockingTick = 0;
     }
 
     @Override
@@ -737,6 +742,16 @@ public final class KillAura extends Module {
                 }
                 break;
 
+            case "HuaYuTing":
+                if (this.blocking) {
+                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
+                    PacketUtil.send(new C17PacketCustomPayload("MadeByLvZiQiao", new PacketBuffer(Unpooled.buffer())));
+                    PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
+                    this.blocking = false;
+                }
+
+                break;
+
             case "Old Intave":
                 if (mc.thePlayer.isUsingItem()) {
                     PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex() % 8 + 1));
@@ -763,6 +778,20 @@ public final class KillAura extends Module {
             case "New NCP":
             case "GrimAC":
                 this.block(true, false);
+                break;
+
+            case "HuaYuTing":
+                if (blockingTick == 0) {
+                    PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+                    blockingTick++;
+                } else {
+                    if (ViaMCP.getInstance().getVersion() > 47) {
+                        PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                        useItem.write(Type.VAR_INT, 1);
+                        com.viaversion.viarewind.utils.PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
+                    }
+                }
+
                 break;
 
             case "Old Intave":
