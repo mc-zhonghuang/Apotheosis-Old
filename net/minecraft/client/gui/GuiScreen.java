@@ -58,7 +58,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback, Instanc
     /**
      * Holds a instance of RenderItem, used to draw the achievement icons on screen (is based on ItemStack)
      */
-    protected RenderItem itemRender;
+    public RenderItem itemRender;
 
     /**
      * The width of the screen object.

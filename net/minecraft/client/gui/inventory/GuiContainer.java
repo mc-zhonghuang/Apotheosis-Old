@@ -1,5 +1,7 @@
 package net.minecraft.client.gui.inventory;
 
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.newevent.impl.render.ChestRenderEvent;
 import cn.hackedmc.apotheosis.util.font.Font;
 import cn.hackedmc.apotheosis.util.font.FontManager;
 import com.google.common.collect.Sets;
@@ -118,6 +120,13 @@ public abstract class GuiContainer extends GuiScreen {
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+        final ChestRenderEvent chestRenderEvent = new ChestRenderEvent(this);
+
+        Client.INSTANCE.getEventBus().handle(chestRenderEvent);
+
+        if (chestRenderEvent.isCancelled())
+            return;
+
         this.drawDefaultBackground();
         final int i = this.guiLeft;
         final int j = this.guiTop;
