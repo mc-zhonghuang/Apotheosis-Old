@@ -51,6 +51,7 @@ public class Stealer extends Module {
     private final StopWatch stopwatch = new StopWatch();
     private BlockPos blockPos;
     private long showTime;
+    private BlockPos animatedPos;
     private long nextClick;
     private int lastClick;
     private int lastSteal;
@@ -68,12 +69,14 @@ public class Stealer extends Module {
 
         if (packet instanceof C0DPacketCloseWindow) {
             blockPos = null;
+
+            showTime = System.currentTimeMillis();
         }
     };
 
     @EventLink
     private final Listener<Render3DEvent> onRender3D = event -> {
-        if (!silent.getValue() || blockPos == null) {
+        if (!silent.getValue() || (blockPos == null && animatedPos == null)) {
             showTime = System.currentTimeMillis();
 
             return;
@@ -82,58 +85,118 @@ public class Stealer extends Module {
         mc.theWorld.loadedTileEntityList.forEach(entity -> {
             if (entity instanceof TileEntityChest) {
                 final TileEntityChest chest = (TileEntityChest) entity;
-                if (chest.getPos().equals(blockPos)) {
-                    final RenderManager renderManager = mc.getRenderManager();
+                if (blockPos != null) {
+                    if (chest.getPos().equals(blockPos)) {
+                        final RenderManager renderManager = mc.getRenderManager();
 
-                    final double posX = (blockPos.getX() + 0.5) - renderManager.renderPosX;
-                    final double posY = blockPos.getY() - renderManager.renderPosY;
-                    final double posZ = (blockPos.getZ() + 0.5) - renderManager.renderPosZ;
+                        final double posX = (blockPos.getX() + 0.5) - renderManager.renderPosX;
+                        final double posY = blockPos.getY() - renderManager.renderPosY;
+                        final double posZ = (blockPos.getZ() + 0.5) - renderManager.renderPosZ;
 
-                    GL11.glPushMatrix();
-                    GL11.glTranslated(posX, posY, posZ);
-                    GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
-                    GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
-
-                    glDisable(GL_DEPTH_TEST);
-                    glEnable(GL_BLEND);
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                    glDisable(GL_TEXTURE_2D);
-
-                    GL11.glDepthMask(true);
-
-                    final int x = -81;
-                    final int y = -127;
-                    final int width = 162;
-                    final int height = 54;
-
-                    RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
-                    NORMAL_BLUR_RUNNABLES.add(() -> {
                         GL11.glPushMatrix();
                         GL11.glTranslated(posX, posY, posZ);
                         GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
                         GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
 
-                        RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+                        glDisable(GL_DEPTH_TEST);
+                        glEnable(GL_BLEND);
+                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                        glDisable(GL_TEXTURE_2D);
 
-                        GL11.glPopMatrix();
-                    });
+                        GL11.glDepthMask(true);
 
-                    GlStateManager.enableDepth();
-                    for (int yi = 1;yi <= 3;yi++) {
-                        for (int xi = 1;xi <= 9;xi++) {
-                            final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+                        final int x = -81;
+                        final int y = -127;
+                        final int width = 162;
+                        final int height = 54;
 
-                            if (itemStack != null) {
-                                mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
-                                mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
+                        RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
+                        NORMAL_BLUR_RUNNABLES.add(() -> {
+                            GL11.glPushMatrix();
+                            GL11.glTranslated(posX, posY, posZ);
+                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+
+                            RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+
+                            GL11.glPopMatrix();
+                        });
+
+                        GlStateManager.enableDepth();
+                        for (int yi = 1;yi <= 3;yi++) {
+                            for (int xi = 1;xi <= 9;xi++) {
+                                final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+
+                                if (itemStack != null) {
+                                    mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+                                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
+                                }
                             }
                         }
+
+                        glEnable(GL_DEPTH_TEST);
+                        glDisable(GL_BLEND);
+
+                        GL11.glPopMatrix();
                     }
+                } else {
+                    if (System.currentTimeMillis() - showTime <= 150) {
+                        if (chest.getPos().equals(animatedPos)) {
+                            final RenderManager renderManager = mc.getRenderManager();
 
-                    glEnable(GL_DEPTH_TEST);
-                    glDisable(GL_BLEND);
+                            final double posX = (animatedPos.getX() + 0.5) - renderManager.renderPosX;
+                            final double posY = animatedPos.getY() - renderManager.renderPosY;
+                            final double posZ = (animatedPos.getZ() + 0.5) - renderManager.renderPosZ;
 
-                    GL11.glPopMatrix();
+                            GL11.glPushMatrix();
+                            GL11.glTranslated(posX, posY, posZ);
+                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                            GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
+
+                            glDisable(GL_DEPTH_TEST);
+                            glEnable(GL_BLEND);
+                            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                            glDisable(GL_TEXTURE_2D);
+
+                            GL11.glDepthMask(true);
+
+                            final int x = -81;
+                            final int y = -127;
+                            final int width = 162;
+                            final int height = 54;
+
+                            RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
+                            NORMAL_BLUR_RUNNABLES.add(() -> {
+                                GL11.glPushMatrix();
+                                GL11.glTranslated(posX, posY, posZ);
+                                GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                                GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
+
+                                RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+
+                                GL11.glPopMatrix();
+                            });
+
+                            GlStateManager.enableDepth();
+                            for (int yi = 1;yi <= 3;yi++) {
+                                for (int xi = 1;xi <= 9;xi++) {
+                                    final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+
+                                    if (itemStack != null) {
+                                        mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+                                        mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
+                                    }
+                                }
+                            }
+
+                            glEnable(GL_DEPTH_TEST);
+                            glDisable(GL_BLEND);
+
+                            GL11.glPopMatrix();
+                        }
+                    } else {
+                        animatedPos = null;
+                    }
                 }
             }
         });
