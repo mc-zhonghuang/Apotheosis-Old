@@ -68,8 +68,8 @@ public class Stealer extends Module {
         }
 
         if (packet instanceof C0DPacketCloseWindow) {
+            animatedPos = blockPos;
             blockPos = null;
-
             showTime = System.currentTimeMillis();
         }
     };
