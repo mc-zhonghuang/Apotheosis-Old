@@ -87,6 +87,7 @@ public class Stealer extends Module {
                 final TileEntityChest chest = (TileEntityChest) entity;
                 if (blockPos != null) {
                     if (chest.getPos().equals(blockPos)) {
+                        final int length = chest.getSizeInventory() / 9;
                         final RenderManager renderManager = mc.getRenderManager();
 
                         final double posX = (blockPos.getX() + 0.5) - renderManager.renderPosX;
@@ -123,7 +124,7 @@ public class Stealer extends Module {
                         });
 
                         GlStateManager.enableDepth();
-                        for (int yi = 1;yi <= 3;yi++) {
+                        for (int yi = 1;yi <= length;yi++) {
                             for (int xi = 1;xi <= 9;xi++) {
                                 final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
 
@@ -142,6 +143,7 @@ public class Stealer extends Module {
                 } else {
                     if (System.currentTimeMillis() - showTime <= 150) {
                         if (chest.getPos().equals(animatedPos)) {
+                            final int length = chest.getSizeInventory() / 9;
                             final RenderManager renderManager = mc.getRenderManager();
 
                             final double posX = (animatedPos.getX() + 0.5) - renderManager.renderPosX;
@@ -178,7 +180,7 @@ public class Stealer extends Module {
                             });
 
                             GlStateManager.enableDepth();
-                            for (int yi = 1;yi <= 3;yi++) {
+                            for (int yi = 1;yi <= length;yi++) {
                                 for (int xi = 1;xi <= 9;xi++) {
                                     final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
 
