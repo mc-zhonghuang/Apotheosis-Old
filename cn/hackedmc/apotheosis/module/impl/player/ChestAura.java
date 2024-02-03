@@ -1,5 +1,6 @@
 package cn.hackedmc.apotheosis.module.impl.player;
 
+import cn.hackedmc.apotheosis.component.impl.player.BlinkComponent;
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
 import cn.hackedmc.apotheosis.component.impl.player.rotationcomponent.MovementFix;
@@ -63,7 +64,7 @@ public class ChestAura extends Module {
 
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (!stopWatch.finished(nextWait) || mc.currentScreen != null) return;
+        if (!stopWatch.finished(nextWait) || mc.currentScreen != null || BlinkComponent.blinking) return;
         int reach = range.getValue().intValue();
 
         for (int x = -reach;x <= reach; x++) {

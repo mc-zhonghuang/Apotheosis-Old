@@ -34,7 +34,6 @@ public class ProjectionComponent extends Component {
         if (mc.theWorld == null) return;
 
         tp.execute(() -> {
-
             if (progress && !stopWatch.finished(1000)) {
                 return;
             }

@@ -9,14 +9,35 @@ import cn.hackedmc.apotheosis.module.impl.exploit.Disabler;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
+import cn.hackedmc.apotheosis.newevent.impl.packet.PacketSendEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.ChestRenderEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.Render3DEvent;
 import cn.hackedmc.apotheosis.util.math.MathUtil;
 import cn.hackedmc.apotheosis.util.player.ItemUtil;
+import cn.hackedmc.apotheosis.util.render.RenderUtil;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.BoundsNumberValue;
+import net.minecraft.block.BlockChest;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.util.BlockPos;
+import org.lwjgl.opengl.GL11;
 import util.time.StopWatch;
+
+import java.awt.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 
 @Rise
@@ -24,12 +45,112 @@ import util.time.StopWatch;
 public class Stealer extends Module {
 
     private final BoundsNumberValue delay = new BoundsNumberValue("Delay", this, 100, 150, 0, 500, 50);
+    private final BooleanValue silent = new BooleanValue("Silent", this, false);
     private final BooleanValue ignoreTrash = new BooleanValue("Ignore Trash", this, true);
 
     private final StopWatch stopwatch = new StopWatch();
+    private BlockPos blockPos;
+    private long showTime;
     private long nextClick;
     private int lastClick;
     private int lastSteal;
+
+    @EventLink
+    private final Listener<PacketSendEvent> onPacketSend = event -> {
+        final Packet<?> packet = event.getPacket();
+
+        if (packet instanceof C08PacketPlayerBlockPlacement) {
+            final BlockPos bp = ((C08PacketPlayerBlockPlacement) packet).getPosition();
+
+            if (mc.theWorld.getBlockState(bp).getBlock() instanceof BlockChest)
+                blockPos = bp;
+        }
+
+        if (packet instanceof C0DPacketCloseWindow) {
+            blockPos = null;
+        }
+    };
+
+    @EventLink
+    private final Listener<Render3DEvent> onRender3D = event -> {
+        if (!silent.getValue() || blockPos == null) {
+            showTime = System.currentTimeMillis();
+
+            return;
+        }
+
+        mc.theWorld.loadedTileEntityList.forEach(entity -> {
+            if (entity instanceof TileEntityChest) {
+                final TileEntityChest chest = (TileEntityChest) entity;
+                if (chest.getPos().equals(blockPos)) {
+                    final RenderManager renderManager = mc.getRenderManager();
+
+                    final double posX = (blockPos.getX() + 0.5) - renderManager.renderPosX;
+                    final double posY = blockPos.getY() - renderManager.renderPosY;
+                    final double posZ = (blockPos.getZ() + 0.5) - renderManager.renderPosZ;
+
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(posX, posY, posZ);
+                    GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                    GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+
+                    glDisable(GL_DEPTH_TEST);
+                    glEnable(GL_BLEND);
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                    glDisable(GL_TEXTURE_2D);
+
+                    GL11.glDepthMask(true);
+
+                    final int x = -81;
+                    final int y = -127;
+                    final int width = 162;
+                    final int height = 54;
+
+                    RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
+                    NORMAL_BLUR_RUNNABLES.add(() -> {
+                        GL11.glPushMatrix();
+                        GL11.glTranslated(posX, posY, posZ);
+                        GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                        GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+
+                        RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+
+                        GL11.glPopMatrix();
+                    });
+
+                    GlStateManager.enableDepth();
+                    for (int yi = 1;yi <= 3;yi++) {
+                        for (int xi = 1;xi <= 9;xi++) {
+                            final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+
+                            if (itemStack != null) {
+                                mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+                                mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
+                            }
+                        }
+                    }
+
+                    glEnable(GL_DEPTH_TEST);
+                    glDisable(GL_BLEND);
+
+                    GL11.glPopMatrix();
+                }
+            }
+        });
+    };
+
+    @EventLink
+    private final Listener<ChestRenderEvent> onChestRender = event ->{
+        if (silent.getValue() && blockPos != null) {
+            final GuiContainer container = event.getScreen();
+            if (container instanceof GuiChest) {
+                event.setCancelled();
+                mc.inGameHasFocus = true;
+                mc.mouseHelper.grabMouseCursor();
+                mc.setIngameFocus();
+            }
+        }
+    };
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {

@@ -12,32 +12,42 @@ import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.AttackEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketSendEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.ChestRenderEvent;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.math.MathUtil;
 import cn.hackedmc.apotheosis.util.packet.PacketUtil;
 import cn.hackedmc.apotheosis.util.player.ItemUtil;
+import cn.hackedmc.apotheosis.util.player.MoveUtil;
 import cn.hackedmc.apotheosis.util.player.PlayerUtil;
+import cn.hackedmc.apotheosis.util.render.RenderUtil;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.BoundsNumberValue;
 import cn.hackedmc.apotheosis.value.impl.NumberValue;
+import net.minecraft.block.BlockChest;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.*;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0DPacketCloseWindow;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import org.lwjgl.opengl.GL11;
 import util.time.StopWatch;
+
+import java.awt.*;
 
 @Rise
 @ModuleInfo(name = "module.player.manager.name", description = "module.player.manager.description", category = Category.PLAYER)
 public class Manager extends Module {
 
     private final BoundsNumberValue delay = new BoundsNumberValue("Delay", this, 100, 150, 0, 500, 50);
-
     private final BooleanValue legit = new BooleanValue("Legit", this, false);
 
     private final NumberValue swordSlot = new NumberValue("Sword Slot", this, 1, 1, 9, 1);
@@ -83,7 +93,7 @@ public class Manager extends Module {
             return;
         }
 
-        if (!this.getModule(InventoryMove.class).isEnabled() && !(InstanceAccess.mc.currentScreen instanceof GuiInventory)) {
+        if (!this.getModule(InventoryMove.class).isEnabled() && MoveUtil.isMoving()) {
             return;
         }
 

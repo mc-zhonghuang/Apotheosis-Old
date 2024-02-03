@@ -344,9 +344,6 @@ public class Scaffold extends Module {
 
         InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
 
-        // Getting ItemSlot
-        SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue());
-
         //Used to detect when to place a block, if over air, allow placement of blocks
         if (PlayerUtil.blockRelativeToPlayer(0, upSideDown.getValue() ? 2 : -1, 0) instanceof BlockAir) {
             ticksOnAir++;
@@ -370,6 +367,8 @@ public class Scaffold extends Module {
         enumFacing = PlayerUtil.getEnumFacing(targetBlock);
 
         if (enumFacing == null) {
+            checkClick();
+
             return;
         }
 
@@ -378,12 +377,16 @@ public class Scaffold extends Module {
         blockFace = position.add(enumFacing.getOffset().xCoord, enumFacing.getOffset().yCoord, enumFacing.getOffset().zCoord);
 
         if (blockFace == null || enumFacing == null) {
+            checkClick();
+
             return;
         }
 
         this.calculateRotations();
 
         if (targetBlock == null || enumFacing == null || blockFace == null) {
+            checkClick();
+
             return;
         }
 
@@ -442,6 +445,9 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        // Getting ItemSlot
+        SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue()); // it must work in PreUpdate.
+
         if (placeTime.getValue().getName().equalsIgnoreCase("Pre"))
             work();
     };
@@ -453,7 +459,7 @@ public class Scaffold extends Module {
     };
 
     private void checkClick() {
-        if (clickSpoof.getValue() && Math.random() <= MathUtil.getRandom(clickRate.getValue().doubleValue(), clickRate.getSecondValue().doubleValue())) {
+        if (clickSpoof.getValue() && Math.random() <= MathUtil.getRandom(clickRate.getValue().doubleValue(), clickRate.getSecondValue().doubleValue()) && SlotComponent.getItemStack() != null && SlotComponent.getItemStack().getItem() instanceof ItemBlock) {
 //                ChatUtil.display("Drag: " + Math.random());
             PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
         }
