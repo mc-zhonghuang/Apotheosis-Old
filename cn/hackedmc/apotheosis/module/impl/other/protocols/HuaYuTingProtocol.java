@@ -123,7 +123,7 @@ public class HuaYuTingProtocol extends Mode<ServerProtocol> {
 
                             for(String n : buttons.keySet()){
                                 ChatComponentText textComponents = new ChatComponentText("");
-                                textComponents.appendSibling(createClickableText("§8[§f"+n+"§8] ","/germ-btn-click "+n));
+                                textComponents.appendSibling(createClickableText("§f"+n,"/germ-btn-click "+n));
                                 mc.thePlayer.addChatComponentMessage(textComponents);
                             }
                         }
