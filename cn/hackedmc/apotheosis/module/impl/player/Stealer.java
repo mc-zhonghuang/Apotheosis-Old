@@ -76,7 +76,7 @@ public class Stealer extends Module {
 
     @EventLink
     private final Listener<Render3DEvent> onRender3D = event -> {
-        if (!silent.getValue() || (blockPos == null && animatedPos == null)) {
+        if (!silent.getValue() || (blockPos == null && animatedPos == null) || !(mc.currentScreen instanceof GuiChest)) {
             showTime = System.currentTimeMillis();
 
             return;
@@ -84,6 +84,8 @@ public class Stealer extends Module {
 
         mc.theWorld.loadedTileEntityList.forEach(entity -> {
             if (entity instanceof TileEntityChest) {
+                final GuiChest guiChest = (GuiChest) mc.currentScreen;
+
                 final TileEntityChest chest = (TileEntityChest) entity;
                 if (blockPos != null) {
                     if (chest.getPos().equals(blockPos)) {
@@ -123,10 +125,9 @@ public class Stealer extends Module {
                             GL11.glPopMatrix();
                         });
 
-                        GlStateManager.enableDepth();
                         for (int yi = 1;yi <= length;yi++) {
                             for (int xi = 1;xi <= 9;xi++) {
-                                final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+                                final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
 
                                 if (itemStack != null) {
                                     mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
@@ -182,7 +183,7 @@ public class Stealer extends Module {
                             GlStateManager.enableDepth();
                             for (int yi = 1;yi <= length;yi++) {
                                 for (int xi = 1;xi <= 9;xi++) {
-                                    final ItemStack itemStack = chest.getStackInSlot(yi * xi - 1);
+                                    final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
 
                                     if (itemStack != null) {
                                         mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
