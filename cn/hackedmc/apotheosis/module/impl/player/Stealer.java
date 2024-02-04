@@ -189,11 +189,10 @@ public class Stealer extends Module {
 
                             GlStateManager.enableRescaleNormal();
                             RenderHelper.enableGUIStandardItemLighting();
-
                             glTranslated(0, 0, 50);
                             for (int yi = 1;yi <= length;yi++) {
                                 for (int xi = 1;xi <= 9;xi++) {
-                                    final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
+                                    final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get((yi - 1) * 9 + xi - 1).getStack();
 
                                     if (itemStack != null) {
                                         mc.getRenderItem().renderItemIntoGUI3D(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
