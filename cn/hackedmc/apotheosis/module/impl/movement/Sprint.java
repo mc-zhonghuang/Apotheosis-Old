@@ -18,14 +18,14 @@ import cn.hackedmc.apotheosis.value.impl.BooleanValue;
  */
 @ModuleInfo(name = "module.movement.sprint.name", description = "module.movement.sprint.description", category = Category.MOVEMENT)
 public class Sprint extends Module {
-    private final BooleanValue legit = new BooleanValue("Legit", this, true, () -> Client.CLIENT_TYPE != Type.RISE);
+    private final BooleanValue legit = new BooleanValue("Legit", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
 
     @EventLink(value = Priorities.LOW)
     public final Listener<StrafeEvent> onStrafe = event -> {
 
         mc.gameSettings.keyBindSprint.setPressed(true);
 
-        if (Client.CLIENT_TYPE != Type.RISE) return;
+        if (Client.CLIENT_TYPE != Type.BASIC) return;
 
         if (mc.thePlayer.omniSprint && MoveUtil.isMoving() && !legit.getValue()) {
             mc.thePlayer.setSprinting(true);

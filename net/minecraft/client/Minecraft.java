@@ -542,7 +542,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             this.gameSettings.saveOptions();
         }
 
-        Client.INSTANCE.initRise();
+        Client.INSTANCE.initClient();
 
         this.renderGlobal.makeEntityOutlineShader();
     }

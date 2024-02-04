@@ -34,6 +34,7 @@ import cn.hackedmc.apotheosis.util.file.insult.InsultManager;
 import cn.hackedmc.apotheosis.util.localization.Locale;
 import cn.hackedmc.apotheosis.util.math.MathConst;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
+import cn.hackedmc.fucker.Fucker;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -45,6 +46,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@SuppressWarnings("UnusedDeclaration")
 @Getter
 @Native
 public enum Client {
@@ -63,13 +65,13 @@ public enum Client {
     public static boolean DEVELOPMENT_SWITCH = true;
     public static boolean BETA_SWITCH = true;
     public static boolean FIRST_LAUNCH = true;
-    public static Type CLIENT_TYPE = Type.RISE;
+    public static Type CLIENT_TYPE;
 
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Setter
-    private Locale locale = Locale.EN_US; // The language of the client
+    private Locale locale; // The language of the client
 
     private EventBus eventBus;
     private ModuleManager moduleManager;
@@ -106,7 +108,7 @@ public enum Client {
      * finish executing our client gets called and that's where we
      * can start loading our own classes and modules.
      */
-    public void initRise() {
+    public void initClient() {
         // Crack Protection
 //        if (!this.validated && !DEVELOPMENT_SWITCH) {
 //            return;
@@ -126,24 +128,7 @@ public enum Client {
         mc.gameSettings.ofSmoothFps = false;
         mc.gameSettings.ofFastMath = false;
 
-        this.moduleManager = new ModuleManager();
-        this.componentManager = new ComponentManager();
-        this.commandManager = new CommandManager();
-        this.fileManager = new FileManager();
-        this.configManager = new ConfigManager();
-        this.altManager = new AltManager();
-        this.insultManager = new InsultManager();
-        this.dataManager = new DataManager();
-        this.securityManager = new ExploitManager();
-        this.botManager = new BotManager();
-        this.themeManager = new ThemeManager();
-//        this.networkManager = new NetworkManager();
-        this.scriptManager = new ScriptManager();
-        this.targetManager = new TargetManager();
-        this.cheatDetector = new CheatDetector();
-        this.constantManager = new ConstantManager();
-        this.eventBus = new EventBus<>();
-        this.packetLogManager = new PacketLogManager();
+        Fucker.fuckClass(this.getClass(), this);
 
         // Register
         String[] paths = {
