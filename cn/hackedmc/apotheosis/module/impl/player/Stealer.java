@@ -112,16 +112,6 @@ public class Stealer extends Module {
                         final int height = 54;
 
                         RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
-                        NORMAL_BLUR_RUNNABLES.add(() -> {
-                            GL11.glPushMatrix();
-                            GL11.glTranslated(posX, posY, posZ);
-                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
-                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
-
-                            RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
-
-                            GL11.glPopMatrix();
-                        });
 
                         GlStateManager.enableDepth();
                         for (int yi = 1;yi <= length;yi++) {
@@ -202,6 +192,7 @@ public class Stealer extends Module {
                 }
             }
         });
+
     };
 
     @EventLink
