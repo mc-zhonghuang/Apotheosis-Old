@@ -424,6 +424,54 @@ public class RenderItem implements IResourceManagerReloadListener {
         }
     }
 
+    public void renderItemIntoGUI3D(final ItemStack stack, final double x, final double y) {
+        this.renderItemGui = true;
+        IBakedModel ibakedmodel = this.itemModelMesher.getItemModel(stack);
+        GlStateManager.pushMatrix();
+        this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
+        this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 771);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.setupGuiTransform3D(x, y, ibakedmodel.isGui3d());
+
+        if (Reflector.ForgeHooksClient_handleCameraTransforms.exists()) {
+            ibakedmodel = (IBakedModel) Reflector.call(Reflector.ForgeHooksClient_handleCameraTransforms, new Object[]{ibakedmodel, ItemCameraTransforms.TransformType.GUI});
+        } else {
+            ibakedmodel.getItemCameraTransforms().func_181689_a(ItemCameraTransforms.TransformType.GUI);
+        }
+
+        this.renderItem(stack, ibakedmodel);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
+        this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
+        this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+        this.renderItemGui = false;
+    }
+
+    private void setupGuiTransform3D(final double xPosition, final double yPosition, final boolean isGui3d) {
+        GlStateManager.translate((float) xPosition, (float) yPosition, 0);
+        GlStateManager.translate(8.0F, 8.0F, 0.0F);
+        GlStateManager.scale(1.0F, 1.0F, -1.0F);
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
+        if (isGui3d) {
+            GlStateManager.scale(40.0F, 40.0F, 40.0F);
+            GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.enableLighting();
+        } else {
+            GlStateManager.scale(64.0F, 64.0F, 64.0F);
+            GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.disableLighting();
+        }
+    }
+
     public void renderItemAndEffectIntoGUI(final ItemStack stack, final double xPosition, final double yPosition) {
         if (stack != null && stack.getItem() != null) {
             this.zLevel += 50.0F;

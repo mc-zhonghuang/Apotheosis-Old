@@ -21,6 +21,7 @@ import net.minecraft.block.BlockChest;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -99,12 +100,12 @@ public class Stealer extends Module {
                         GL11.glPushMatrix();
                         GL11.glTranslated(posX, posY, posZ);
                         GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                        GL11.glRotated(-mc.getRenderManager().playerViewX, -1F, 0F, 0F);
                         GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
 
                         glDisable(GL_DEPTH_TEST);
-                        glEnable(GL_BLEND);
-                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                        glDisable(GL_TEXTURE_2D);
+                        GlStateManager.enableBlend();
+                        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
                         GL11.glDepthMask(true);
 
@@ -114,27 +115,33 @@ public class Stealer extends Module {
                         final int height = 54;
 
                         RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
-                        NORMAL_BLUR_RUNNABLES.add(() -> {
-                            GL11.glPushMatrix();
-                            GL11.glTranslated(posX, posY, posZ);
-                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
-                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+//                        NORMAL_BLUR_RUNNABLES.add(() -> {
+//                            GL11.glPushMatrix();
+//                            GL11.glTranslated(posX, posY, posZ);
+//                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+//                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+//
+//                            RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+//
+//                            GL11.glPopMatrix();
+//                        });
 
-                            RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
-
-                            GL11.glPopMatrix();
-                        });
+                        GlStateManager.enableRescaleNormal();
+                        RenderHelper.enableGUIStandardItemLighting();
 
                         for (int yi = 1;yi <= length;yi++) {
                             for (int xi = 1;xi <= 9;xi++) {
                                 final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
 
                                 if (itemStack != null) {
-                                    mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+                                    mc.getRenderItem().renderItemIntoGUI3D(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
                                     mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
                                 }
                             }
                         }
+
+                        RenderHelper.disableStandardItemLighting();
+                        GlStateManager.disableRescaleNormal();
 
                         glEnable(GL_DEPTH_TEST);
                         glDisable(GL_BLEND);
@@ -154,12 +161,12 @@ public class Stealer extends Module {
                             GL11.glPushMatrix();
                             GL11.glTranslated(posX, posY, posZ);
                             GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                            GL11.glRotated(-mc.getRenderManager().playerViewX, -1F, 0F, 0F);
                             GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
 
                             glDisable(GL_DEPTH_TEST);
-                            glEnable(GL_BLEND);
-                            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                            glDisable(GL_TEXTURE_2D);
+                            GlStateManager.enableBlend();
+                            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
                             GL11.glDepthMask(true);
 
@@ -169,28 +176,35 @@ public class Stealer extends Module {
                             final int height = 54;
 
                             RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
-                            NORMAL_BLUR_RUNNABLES.add(() -> {
-                                GL11.glPushMatrix();
-                                GL11.glTranslated(posX, posY, posZ);
-                                GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
-                                GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
+//                            NORMAL_BLUR_RUNNABLES.add(() -> {
+//                                GL11.glPushMatrix();
+//                                GL11.glTranslated(posX, posY, posZ);
+//                                GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+//                                GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
+//
+//                                RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+//
+//                                GL11.glPopMatrix();
+//                            });
 
-                                RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+                            GlStateManager.enableRescaleNormal();
+                            RenderHelper.enableGUIStandardItemLighting();
 
-                                GL11.glPopMatrix();
-                            });
-
-                            GlStateManager.enableDepth();
+                            glTranslated(0, 0, 50);
                             for (int yi = 1;yi <= length;yi++) {
                                 for (int xi = 1;xi <= 9;xi++) {
                                     final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
 
                                     if (itemStack != null) {
-                                        mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+                                        mc.getRenderItem().renderItemIntoGUI3D(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
                                         mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
                                     }
                                 }
                             }
+                            glTranslated(0, 0, -50);
+
+                            RenderHelper.disableStandardItemLighting();
+                            GlStateManager.disableRescaleNormal();
 
                             glEnable(GL_DEPTH_TEST);
                             glDisable(GL_BLEND);
