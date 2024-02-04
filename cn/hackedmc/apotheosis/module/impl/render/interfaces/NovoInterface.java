@@ -37,30 +37,30 @@ public class NovoInterface extends Mode<Interface> {
     private final Font productSansMedium18 = FontManager.getProductSansMedium(18);
     private final StopWatch stopWatch = new StopWatch();
 
-    private final ModeValue colorMode = new ModeValue("ArrayList Color Mode", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final ModeValue colorMode = new ModeValue("ArrayList Color Mode", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("Static"));
         add(new SubMode("Fade"));
         add(new SubMode("Breathe"));
         setDefault("Fade");
     }};
 
-    private final ModeValue font = new ModeValue("ArrayList Font", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final ModeValue font = new ModeValue("ArrayList Font", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("Product Sans"));
         add(new SubMode("Minecraft"));
         setDefault("Product Sans");
     }};
 
-    private final ModeValue shader = new ModeValue("Shader Effect", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final ModeValue shader = new ModeValue("Shader Effect", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("Glow"));
         add(new SubMode("Shadow"));
         add(new SubMode("None"));
         setDefault("Shadow");
     }};
 
-    private final BooleanValue dropShadow = new BooleanValue("Drop Shadow", this, true, () -> Client.CLIENT_TYPE != Type.RISE);
-    private final BooleanValue sidebar = new BooleanValue("Sidebar", this, true, () -> Client.CLIENT_TYPE != Type.RISE);
-    private final BooleanValue particles = new BooleanValue("Particles on Kill", this, true, () -> Client.CLIENT_TYPE != Type.RISE);
-    private final ModeValue background = new ModeValue("BackGround", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final BooleanValue dropShadow = new BooleanValue("Drop Shadow", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
+    private final BooleanValue sidebar = new BooleanValue("Sidebar", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
+    private final BooleanValue particles = new BooleanValue("Particles on Kill", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
+    private final ModeValue background = new ModeValue("BackGround", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("Off"));
         add(new SubMode("Normal"));
         add(new SubMode("Blur"));
@@ -86,7 +86,7 @@ public class NovoInterface extends Mode<Interface> {
         int left = FontManager.getProductSansRegular(20).width(text);
         position.scale = new Vector2d(200, 100);
 
-        if (mc == null || mc.gameSettings.showDebugInfo || mc.theWorld == null || mc.thePlayer == null || Client.CLIENT_TYPE != Type.RISE) {
+        if (mc == null || mc.gameSettings.showDebugInfo || mc.theWorld == null || mc.thePlayer == null || Client.CLIENT_TYPE != Type.BASIC) {
             return;
         }
 
@@ -241,7 +241,7 @@ public class NovoInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<KillEvent> onKill = event -> {
-        if (Client.CLIENT_TYPE != Type.RISE) return;
+        if (Client.CLIENT_TYPE != Type.BASIC) return;
 
         if (!stopWatch.finished(2000) && this.particles.getValue()) {
             for (int i = 0; i <= 10; i++) {
@@ -255,7 +255,7 @@ public class NovoInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<TickEvent> onTick = event -> {
-        if (Client.CLIENT_TYPE != Type.RISE || mc.thePlayer == null || !mc.getNetHandler().doneLoadingTerrain) return;
+        if (Client.CLIENT_TYPE != Type.BASIC || mc.thePlayer == null || !mc.getNetHandler().doneLoadingTerrain) return;
 
         threadPool.execute(() -> {
             glow = this.shader.getValue().getName().equals("Glow");

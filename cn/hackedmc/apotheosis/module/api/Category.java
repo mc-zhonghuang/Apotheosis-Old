@@ -17,14 +17,14 @@ import lombok.Getter;
 @Getter
 public enum Category {
     SEARCH("category.search", FontManager.getIconsThree(17), "U", 0x1, new SearchScreen(), Type.BOTH),
-    COMBAT("category.combat", FontManager.getIconsOne(17), "a", 0x2, new CategoryScreen(), Type.RISE),
-    MOVEMENT("category.movement", FontManager.getIconsOne(17), "b", 0x3, new CategoryScreen(), Type.RISE),
-    PLAYER("category.player", FontManager.getIconsOne(17), "c", 0x4, new CategoryScreen(), Type.RISE),
-    RENDER("category.render", FontManager.getIconsOne(17), "g", 0x5, new CategoryScreen(), Type.RISE),
-    EXPLOIT("category.exploit", FontManager.getIconsOne(17), "a", 0x6, new CategoryScreen(), Type.RISE),
-    GHOST("category.ghost", FontManager.getIconsOne(17), "f", 0x7, new CategoryScreen(), Type.RISE),
-    OTHER("category.other", FontManager.getIconsOne(17), "e", 0x8, new CategoryScreen(), Type.RISE),
-    SCRIPT("category.script", FontManager.getIconsThree(17), "m", 0x7, new CategoryScreen(), Type.RISE),
+    COMBAT("category.combat", FontManager.getIconsOne(17), "a", 0x2, new CategoryScreen(), Type.BASIC),
+    MOVEMENT("category.movement", FontManager.getIconsOne(17), "b", 0x3, new CategoryScreen(), Type.BASIC),
+    PLAYER("category.player", FontManager.getIconsOne(17), "c", 0x4, new CategoryScreen(), Type.BASIC),
+    RENDER("category.render", FontManager.getIconsOne(17), "g", 0x5, new CategoryScreen(), Type.BASIC),
+    EXPLOIT("category.exploit", FontManager.getIconsOne(17), "a", 0x6, new CategoryScreen(), Type.BASIC),
+    GHOST("category.ghost", FontManager.getIconsOne(17), "f", 0x7, new CategoryScreen(), Type.BASIC),
+    OTHER("category.other", FontManager.getIconsOne(17), "e", 0x8, new CategoryScreen(), Type.BASIC),
+    SCRIPT("category.script", FontManager.getIconsThree(17), "m", 0x7, new CategoryScreen(), Type.BASIC),
 
     THEME("category.themes", FontManager.getIconsThree(17), "U", 0xA, new ThemeScreen(), Type.BOTH),
 

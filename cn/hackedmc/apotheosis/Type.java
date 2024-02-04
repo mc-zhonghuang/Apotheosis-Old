@@ -1,7 +1,7 @@
 package cn.hackedmc.apotheosis;
 
 public enum Type {
-    RISE,
+    BASIC,
     CLOVER,
     BOTH
 }

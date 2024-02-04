@@ -35,14 +35,14 @@ import java.util.stream.Collectors;
 @ModuleInfo(name = "module.render.interface.name", description = "module.render.interface.description", category = Category.RENDER, autoEnabled = true)
 public final class Interface extends Module {
 
-    private final ModeValue mode = new ModeValue("Mode", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final ModeValue mode = new ModeValue("Mode", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new ModernInterface("Modern", (Interface) this.getParent()));
         add(new NovoInterface("Novo", (Interface) this.getParent()));
         add(new WurstInterface("Wurst", (Interface) this.getParent()));
         setDefault("Modern");
     }};
 
-    private final ModeValue modulesToShow = new ModeValue("Modules to Show", this, () -> Client.CLIENT_TYPE != Type.RISE) {{
+    private final ModeValue modulesToShow = new ModeValue("Modules to Show", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("All"));
         add(new SubMode("Exclude render"));
         add(new SubMode("Only bound"));
@@ -52,9 +52,9 @@ public final class Interface extends Module {
     public final BooleanValue limitChatWidth = new BooleanValue("Limit Chat Width", this, false);
     public final BooleanValue smoothHotBar = new BooleanValue("Smooth Hot Bar", this, true);
 
-    public BooleanValue suffix = new BooleanValue("Suffix", this, true, () -> Client.CLIENT_TYPE != Type.RISE);
-    public BooleanValue lowercase = new BooleanValue("Lowercase", this, false, () -> Client.CLIENT_TYPE != Type.RISE);
-    public BooleanValue removeSpaces = new BooleanValue("Remove Spaces", this, false, () -> Client.CLIENT_TYPE != Type.RISE);
+    public BooleanValue suffix = new BooleanValue("Suffix", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
+    public BooleanValue lowercase = new BooleanValue("Lowercase", this, false, () -> Client.CLIENT_TYPE != Type.BASIC);
+    public BooleanValue removeSpaces = new BooleanValue("Remove Spaces", this, false, () -> Client.CLIENT_TYPE != Type.BASIC);
 
     public BooleanValue shaders = new BooleanValue("Shaders", this, true);
     private ArrayList<ModuleComponent> allModuleComponents = new ArrayList<>(),
