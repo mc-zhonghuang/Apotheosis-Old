@@ -14,6 +14,7 @@ import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.AttackEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.TeleportEvent;
+import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.render.Render3DEvent;
 import cn.hackedmc.apotheosis.util.player.PlayerUtil;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
@@ -126,6 +127,11 @@ public class Flight extends Module {
         if (event.getTarget() == entityDragon) {
             event.setCancelled(true);
         }
+    };
+
+    @EventLink
+    private final Listener<WorldChangeEvent> onWorldChange = event -> {
+        this.toggle();
     };
 
     @EventLink()
