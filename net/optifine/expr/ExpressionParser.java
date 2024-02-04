@@ -182,21 +182,30 @@ public class ExpressionParser {
         }
     }
 
-    private FunctionType getFunctionType(final Token tokens, final Deque<Token> deque) throws ParseException {
-        final Token token = deque.peek();
+    private FunctionType getFunctionType(Token token, Deque<Token> deque) throws ParseException
+    {
+        Token tokennext = deque.peek();
 
-        if (tokens != null && token.getType() == TokenType.BRACKET_OPEN) {
-            final FunctionType functiontype1 = FunctionType.parse(token.getText());
+        if (tokennext != null && tokennext.getType() == TokenType.BRACKET_OPEN)
+        {
+            FunctionType functiontype1 = FunctionType.parse(token.getText());
             checkNull(functiontype1, "Unknown function: " + token);
             return functiontype1;
-        } else {
-            final FunctionType functiontype = FunctionType.parse(token.getText());
+        }
+        else
+        {
+            FunctionType functiontype = FunctionType.parse(token.getText());
 
-            if (functiontype == null) {
+            if (functiontype == null)
+            {
                 return null;
-            } else if (functiontype.getParameterCount(new IExpression[0]) > 0) {
+            }
+            else if (functiontype.getParameterCount(new IExpression[0]) > 0)
+            {
                 throw new ParseException("Missing arguments: " + functiontype);
-            } else {
+            }
+            else
+            {
                 return functiontype;
             }
         }

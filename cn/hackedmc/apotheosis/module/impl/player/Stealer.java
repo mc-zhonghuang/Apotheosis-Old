@@ -11,10 +11,14 @@ import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketSendEvent;
 import cn.hackedmc.apotheosis.newevent.impl.render.ChestRenderEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.Render2DEvent;
 import cn.hackedmc.apotheosis.newevent.impl.render.Render3DEvent;
 import cn.hackedmc.apotheosis.util.math.MathUtil;
 import cn.hackedmc.apotheosis.util.player.ItemUtil;
 import cn.hackedmc.apotheosis.util.render.RenderUtil;
+import cn.hackedmc.apotheosis.util.render.Stencil;
+import cn.hackedmc.apotheosis.util.render.StencilUtil;
+import cn.hackedmc.apotheosis.util.shader.base.RiseShaderProgram;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.BoundsNumberValue;
 import net.minecraft.block.BlockChest;
@@ -25,6 +29,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
@@ -75,6 +80,42 @@ public class Stealer extends Module {
         }
     };
 
+    private GuiChest guiChest;
+    private TileEntityChest chest;
+    private Framebuffer framebuffer = new Framebuffer(1, 1, false);
+
+    @EventLink
+    private final Listener<Render2DEvent> onRender2D = event -> {
+        if (this.guiChest != null && this.chest != null) {
+            final int length = chest.getSizeInventory() / 9;
+            framebuffer = RenderUtil.createFrameBuffer(framebuffer, true);
+            framebuffer.framebufferClear();
+            framebuffer.bindFramebuffer(false);
+            GlStateManager.enableDepth();
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.enableRescaleNormal();
+            RenderHelper.enableGUIStandardItemLighting();
+
+            for (int yi = 1; yi <= length; yi++) {
+                for (int xi = 1; xi <= 9; xi++) {
+                    final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
+
+                    if (itemStack != null) {
+                        mc.getRenderItem().renderItemIntoGUI3D(itemStack, ((xi - 1) * 18), ((yi - 1) * 18));
+                        mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, ((xi - 1) * 18), ((yi - 1) * 18), null);
+                    }
+                }
+            }
+
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableBlend();
+            framebuffer.unbindFramebuffer();
+            mc.getFramebuffer().bindFramebuffer(false);
+        }
+    };
+
     @EventLink
     private final Listener<Render3DEvent> onRender3D = event -> {
         if (!silent.getValue() || (blockPos == null && animatedPos == null) || !(mc.currentScreen instanceof GuiChest)) {
@@ -85,12 +126,12 @@ public class Stealer extends Module {
 
         mc.theWorld.loadedTileEntityList.forEach(entity -> {
             if (entity instanceof TileEntityChest) {
-                final GuiChest guiChest = (GuiChest) mc.currentScreen;
+                this.guiChest = (GuiChest) mc.currentScreen;
+                this.chest = (TileEntityChest) entity;
 
-                final TileEntityChest chest = (TileEntityChest) entity;
                 if (blockPos != null) {
                     if (chest.getPos().equals(blockPos)) {
-                        final int length = chest.getSizeInventory() / 9;
+//                        final int length = chest.getSizeInventory() / 9;
                         final RenderManager renderManager = mc.getRenderManager();
 
                         final double posX = (blockPos.getX() + 0.5) - renderManager.renderPosX;
@@ -104,45 +145,72 @@ public class Stealer extends Module {
                         GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
 
                         glDisable(GL_DEPTH_TEST);
+                        glDepthMask(false);
                         GlStateManager.enableBlend();
                         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-                        GL11.glDepthMask(true);
+                        final int x = -86;
+                        final int y = -132;
+                        final int width = 172;
+                        final int height = 64;
 
-                        final int x = -81;
-                        final int y = -127;
-                        final int width = 162;
-                        final int height = 54;
+                        RenderUtil.roundedRectangle(x, y, width, height, 6, new Color(0, 0, 0, 80));
 
-                        RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
-//                        NORMAL_BLUR_RUNNABLES.add(() -> {
-//                            GL11.glPushMatrix();
-//                            GL11.glTranslated(posX, posY, posZ);
-//                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
-//                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+                        UI_BLOOM_RUNNABLES.add(() -> {
+                            GL11.glPushMatrix();
+                            GL11.glTranslated(posX, posY, posZ);
+                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                            GL11.glRotated(-mc.getRenderManager().playerViewX, -1F, 0F, 0F);
+                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+
+                            RenderUtil.roundedRectangle(x, y, width, height, 6, new Color(0, 0, 0, 80));
+
+                            GL11.glPopMatrix();
+                        });
+
+
+                        NORMAL_BLUR_RUNNABLES.add(() -> {
+                            GL11.glPushMatrix();
+                            GL11.glTranslated(posX, posY, posZ);
+                            GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                            GL11.glRotated(-mc.getRenderManager().playerViewX, -1F, 0F, 0F);
+                            GL11.glScaled(Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.max((showTime - System.currentTimeMillis()) / 10000.0, -0.015), Math.min((System.currentTimeMillis() - showTime) / 10000.0, 0.015));
+
+                            Stencil.write(false);
+                            GlStateManager.translate(0, 0, -2D);
+                            GlStateManager.bindTexture(framebuffer.framebufferTexture);
+                            RiseShaderProgram.drawQuad(x + 5, y + 7, framebuffer.framebufferTextureWidth / (double) mc.scaledResolution.getScaleFactor(), framebuffer.framebufferTextureHeight / (double) mc.scaledResolution.getScaleFactor());
+                            GlStateManager.translate(0, 0, 2D);
+                            Stencil.erase(true);
+                            StencilUtil.bindReadStencilBuffer(0);
+                            RenderUtil.roundedRectangle(x, y, width, height, 6, Color.BLACK);
+                            Stencil.dispose();
+
+                            GL11.glPopMatrix();
+                        });
+
+                        GlStateManager.translate(0, 0, -2D);
+                        GlStateManager.bindTexture(framebuffer.framebufferTexture);
+                        RiseShaderProgram.drawQuad(x + 5, y + 7, framebuffer.framebufferTextureWidth / (double) mc.scaledResolution.getScaleFactor(), framebuffer.framebufferTextureHeight / (double) mc.scaledResolution.getScaleFactor());
+
+//                        GlStateManager.enableRescaleNormal();
+//                        RenderHelper.enableGUIStandardItemLighting();
 //
-//                            RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
+//                        for (int yi = 1;yi <= length;yi++) {
+//                            for (int xi = 1;xi <= 9;xi++) {
+//                                final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
 //
-//                            GL11.glPopMatrix();
-//                        });
+//                                if (itemStack != null) {
+//                                    mc.getRenderItem().renderItemIntoGUI3D(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
+//                                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
+//                                }
+//                            }
+//                        }
+//
+//                        RenderHelper.disableStandardItemLighting();
+//                        GlStateManager.disableRescaleNormal();
 
-                        GlStateManager.enableRescaleNormal();
-                        RenderHelper.enableGUIStandardItemLighting();
-
-                        for (int yi = 1;yi <= length;yi++) {
-                            for (int xi = 1;xi <= 9;xi++) {
-                                final ItemStack itemStack = guiChest.inventorySlots.inventorySlots.get(yi * xi - 1).getStack();
-
-                                if (itemStack != null) {
-                                    mc.getRenderItem().renderItemIntoGUI3D(itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18));
-                                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, itemStack, x + ((xi - 1) * 18), y + ((yi - 1) * 18), null);
-                                }
-                            }
-                        }
-
-                        RenderHelper.disableStandardItemLighting();
-                        GlStateManager.disableRescaleNormal();
-
+                        glDepthMask(true);
                         glEnable(GL_DEPTH_TEST);
                         glDisable(GL_BLEND);
 
@@ -180,6 +248,7 @@ public class Stealer extends Module {
 //                                GL11.glPushMatrix();
 //                                GL11.glTranslated(posX, posY, posZ);
 //                                GL11.glRotated(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+//                                GL11.glRotated(-mc.getRenderManager().playerViewX, -1F, 0F, 0F);
 //                                GL11.glScaled(Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.min((System.currentTimeMillis() - showTime - 150) / 10000.0, 0), Math.max((showTime - System.currentTimeMillis() + 150) / 10000.0, 0));
 //
 //                                RenderUtil.roundedRectangle(x, y, width, height, 3, Color.BLACK);
