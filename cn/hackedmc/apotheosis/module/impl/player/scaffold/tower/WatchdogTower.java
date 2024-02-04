@@ -30,7 +30,8 @@ public class WatchdogTower extends Mode<Scaffold> {
                     towerTick = 0;
 
                 mc.thePlayer.motionY = 0.41965;
-                MoveUtil.strafe(0.265);
+                mc.thePlayer.motionX = Math.min(mc.thePlayer.motionX, 0.265);
+                mc.thePlayer.motionZ = Math.min(mc.thePlayer.motionZ, 0.265);
 
                 if (towerTick == 1)
                     mc.thePlayer.motionY = 0.33;

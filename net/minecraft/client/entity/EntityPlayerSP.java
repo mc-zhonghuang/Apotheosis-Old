@@ -1,6 +1,7 @@
 package net.minecraft.client.entity;
 
 import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.player.Stealer;
 import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.*;
 import cn.hackedmc.apotheosis.newevent.impl.other.MoveEvent;
@@ -324,6 +325,9 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
     public void closeScreen() {
         this.sendQueue.addToSendQueue(new C0DPacketCloseWindow(this.openContainer.windowId));
         this.closeScreenAndDropStack();
+        Stealer.INSTANCE.showTime = System.currentTimeMillis();
+        Stealer.INSTANCE.animatedPos = Stealer.INSTANCE.blockPos;
+        Stealer.INSTANCE.blockPos = null;
     }
 
     public void closeScreenAndDropStack() {
