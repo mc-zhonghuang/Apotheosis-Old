@@ -11,6 +11,11 @@ import static org.lwjgl.opengl.GL11.*;
  * @since 11/16/2021
  */
 public class StencilUtil implements InstanceAccess {
+    public long lastMs;
+
+    public void reset() {
+        this.lastMs = System.currentTimeMillis();
+    }
 
     private static void recreate(final Framebuffer framebuffer) {
         GL30.glDeleteRenderbuffers(framebuffer.depthBuffer);

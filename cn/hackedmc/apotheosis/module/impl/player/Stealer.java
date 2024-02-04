@@ -45,9 +45,9 @@ import static org.lwjgl.opengl.GL11.*;
 public class Stealer extends Module {
 
     private final BoundsNumberValue delay = new BoundsNumberValue("Delay", this, 100, 150, 0, 500, 50);
-    private final BooleanValue silent = new BooleanValue("Silent", this, false);
+    public final BooleanValue silent = new BooleanValue("Silent", this, false);
     private final BooleanValue ignoreTrash = new BooleanValue("Ignore Trash", this, true);
-
+    public static boolean isChest;
     private final StopWatch stopwatch = new StopWatch();
     private BlockPos blockPos;
     private long showTime;
@@ -154,7 +154,11 @@ public class Stealer extends Module {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-
+        /*
+        if (!isChest && onlychest.getValueState())
+            return;
+            
+         */
         if (mc.currentScreen instanceof GuiChest) {
             final ContainerChest container = (ContainerChest) mc.thePlayer.openContainer;
 
