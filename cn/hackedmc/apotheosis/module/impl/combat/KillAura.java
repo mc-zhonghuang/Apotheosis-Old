@@ -512,13 +512,12 @@ public final class KillAura extends Module {
                      * Attacking target
                      */
                     final double range = this.range.getValue().doubleValue();
-                    final MovingObjectPosition movingObjectPosition = mc.objectMouseOver;
+                    final MovingObjectPosition movingObjectPosition = RayCastUtil.rayCast(RotationComponent.rotations, range);
 
                     switch (this.mode.getValue().getName()) {
                         case "Single":
                         case "Switch": {
-                            if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) ||
-                                    (rayCast.getValue() && movingObjectPosition != null && movingObjectPosition.entityHit == target) || RayCastUtil.rayCast(RotationComponent.rotations, range).typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+                            if ((mc.thePlayer.getDistanceToEntity(target) <= range && !rayCast.getValue()) || RayCastUtil.isEntity(target, movingObjectPosition)) {
                                 this.attack(target);
                             } else if (movingObjectPosition != null && movingObjectPosition.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                                 this.attack(movingObjectPosition.entityHit);

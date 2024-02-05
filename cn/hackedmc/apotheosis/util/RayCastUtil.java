@@ -15,6 +15,12 @@ import java.util.List;
  * @since 11/17/2021
  */
 public final class RayCastUtil implements InstanceAccess {
+    public static boolean isEntity(final Entity entity, final MovingObjectPosition movingObjectPosition) {
+        if (movingObjectPosition == null || movingObjectPosition.typeOfHit != MovingObjectPosition.MovingObjectType.ENTITY) return false;
+
+        return movingObjectPosition.entityHit == entity;
+    }
+
 
     public static MovingObjectPosition rayCast(final Vector2f rotation, final double range) {
         return rayCast(rotation, range, 0);
