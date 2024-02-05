@@ -1211,7 +1211,6 @@ public class EntityRenderer implements IResourceManagerReloadListener, InstanceA
 
                     Interface interfaceModule = getModule(Interface.class);
                     boolean shaders = interfaceModule == null || interfaceModule.shaders.getValue();
-
                     InstanceAccess.render2DRunnables(partialTicks, shaders);
                     InstanceAccess.clearRunnables();
 
