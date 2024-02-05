@@ -212,10 +212,8 @@ public class NovoInterface extends Mode<Interface> {
         if (mc.gameSettings.showDebugInfo) return;
         Color color1 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y)));
         Color color2 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y + position.scale.y * 8.75)));
-
         //background
         RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, left + position.scale.x - sb + 2, position.scale.y - 80, 0, new Color(0,0,0,100));
-        //sb
         FontManager.getProductSansRegular(20).drawStringWithShadow(Client.NAME, position.position.x + 13, position.position.y + 17, logoColor.getRGB());
         //client name
         FontManager.getProductSansRegular(20).drawStringWithShadow(text, position.position.x + 67, position.position.y + 17, -1);
@@ -227,12 +225,6 @@ public class NovoInterface extends Mode<Interface> {
         this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
 
         this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
-
-
-        NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
-            //shadow
-            FontManager.getProductSansRegular(20).drawStringWithShadow(Client.NAME, position.position.x + 13 , position.position.y + 17, logoColor.getRGB());
-        });
 
         if (mc.thePlayer.ticksExisted % 150 == 0) {
             stopWatch.reset();

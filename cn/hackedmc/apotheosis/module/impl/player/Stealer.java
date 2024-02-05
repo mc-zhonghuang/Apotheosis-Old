@@ -139,6 +139,9 @@ public class Stealer extends Module {
 
                         RenderUtil.roundedRectangle(x, y, width, height, 6, new Color(0, 0, 0, 80));
 
+<<<<<<< HEAD
+                        RenderUtil.roundedRectangle(x, y, width, height, 3, new Color(0, 0, 0, 50));
+=======
                         UI_BLOOM_RUNNABLES.add(() -> {
                             GL11.glPushMatrix();
                             GL11.glTranslated(posX, posY, posZ);
@@ -150,6 +153,7 @@ public class Stealer extends Module {
 
                             GL11.glPopMatrix();
                         });
+>>>>>>> 941a3814f502cf149897e11fcff803419eeaea5f
 
 
                         NORMAL_BLUR_RUNNABLES.add(() -> {
@@ -293,6 +297,7 @@ public class Stealer extends Module {
                 }
             }
         });
+
     };
 
     @EventLink
