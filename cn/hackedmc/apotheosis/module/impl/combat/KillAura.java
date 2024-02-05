@@ -189,7 +189,7 @@ public final class KillAura extends Module {
     protected void onEnable() {
         this.attack = 0;
         this.switchChangeTicks.reset();
-        this.blockingTick = 0;
+       // this.blockingTick = 0;
     }
 
     @Override
