@@ -150,7 +150,6 @@ public final class KillAura extends Module {
 
     private float randomYaw, randomPitch, angle;
     public boolean blocking, swing, allowAttack;
-    private int blockingTick = 0;
     private long nextSwing;
 
     public static List<Entity> targets;
@@ -182,7 +181,6 @@ public final class KillAura extends Module {
 
         if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
             this.unblock(true);
-            this.blockingTick = 0;
             target = null;
         }
     };
@@ -781,15 +779,11 @@ public final class KillAura extends Module {
                 break;
 
             case "HuaYuTing":
-                if (blockingTick == 0) {
-                    PacketUtil.send(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
-                    blockingTick++;
-                } else {
-                    if (ViaMCP.getInstance().getVersion() > 47) {
-                        PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
-                        useItem.write(Type.VAR_INT, 1);
-                        com.viaversion.viarewind.utils.PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
-                    }
+                PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+                if (ViaMCP.getInstance().getVersion() > 47) {
+                    PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                    useItem.write(Type.VAR_INT, 1);
+                    com.viaversion.viarewind.utils.PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
                 }
 
                 break;

@@ -60,6 +60,7 @@ public class HuaYuTingNoSlow extends Mode<NoSlow> {
     @EventLink()
     private final Listener<PostMotionEvent> onPostMotion = event -> {
         if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword && mc.thePlayer.isUsingItem()) {
+            mc.getNetHandler().addToSendQueueUnregistered(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
             PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
             useItem.write(Type.VAR_INT, 1);
             PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
