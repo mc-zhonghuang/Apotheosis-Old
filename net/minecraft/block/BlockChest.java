@@ -1,5 +1,6 @@
 package net.minecraft.block;
 
+import cn.hackedmc.apotheosis.module.impl.player.Stealer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
@@ -355,6 +356,8 @@ public class BlockChest extends BlockContainer {
                 } else if (this.chestType == 1) {
                     playerIn.triggerAchievement(StatList.field_181737_U);
                 }
+
+                Stealer.INSTANCE.blockPos = pos;
             }
 
             return true;

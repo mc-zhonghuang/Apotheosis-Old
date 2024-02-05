@@ -477,13 +477,17 @@ public final class RenderUtil implements InstanceAccess {
     }
 
     public static Framebuffer createFrameBuffer(final Framebuffer framebuffer) {
+        return createFrameBuffer(framebuffer, false);
+    }
+
+    public static Framebuffer createFrameBuffer(final Framebuffer framebuffer, boolean useDepth) {
         if (framebuffer == null || framebuffer.framebufferWidth != mc.displayWidth || framebuffer.framebufferHeight != mc.displayHeight) {
 
             if (framebuffer != null) {
                 framebuffer.deleteFramebuffer();
             }
 
-            return new Framebuffer(mc.displayWidth, mc.displayHeight, false);
+            return new Framebuffer(mc.displayWidth, mc.displayHeight, useDepth);
         }
         return framebuffer;
     }

@@ -103,6 +103,7 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback {
         // Server Finder
         int width = 100;
         this.buttonList.add(new GuiButton(9, this.width - width - 5, 5, width, 20, "Server Finder"));
+        this.buttonList.add(new GuiButton(9, this.width - width - 5, 5, width, 20, "Client Spoof"));
         width = 50;
         this.buttonList.add(new GuiButton(10, this.width - width - 5, this.height - 28, width, 20, "Change"));
         this.buttonList.add(this.btnClearList = new GuiButton(11, this.width - width - 5, this.height - 52, width, 20, "Clear"));

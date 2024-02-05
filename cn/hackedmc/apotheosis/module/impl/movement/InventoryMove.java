@@ -18,11 +18,15 @@ import cn.hackedmc.apotheosis.value.impl.ModeValue;
 @Rise
 @ModuleInfo(name = "module.movement.inventorymove.name", description = "module.movement.inventorymove.description", category = Category.MOVEMENT)
 public class InventoryMove extends Module {
-
+    public static InventoryMove INSTANCE;
     private final ModeValue bypassMode = new ModeValue("Bypass Mode", this)
             .add(new NormalInventoryMove("Normal", this))
             .add(new BufferAbuseInventoryMove("Buffer Abuse", this))
             .add(new CancelInventoryMove("Cancel", this))
             .add(new WatchdogInventoryMove("Watchdog", this))
             .setDefault("Normal");
+
+    public InventoryMove() {
+        INSTANCE = this;
+    }
 }

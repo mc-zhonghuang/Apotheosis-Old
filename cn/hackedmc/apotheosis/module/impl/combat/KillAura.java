@@ -128,6 +128,7 @@ public final class KillAura extends Module {
     private final BooleanValue subTicks = new BooleanValue("Attack outside ticks", this, false, () -> !advanced.getValue());
     private final StringValue runMovementFixIfNot = new StringValue("Exclude MovementCorrection if", this, "", () -> !advanced.getValue());
     private final ModeValue rotationMode = new ModeValue("Rotation Mode", this, () -> !advanced.getValue())
+            .add(new SubMode("Off"))
             .add(new SubMode("Legit/Normal"))
             .add(new SubMode("Autistic AntiCheat"))
             .setDefault("Legit/Normal");

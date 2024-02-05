@@ -124,7 +124,7 @@ public final class RayCastUtil implements InstanceAccess {
     public static boolean overBlock(final EnumFacing enumFacing, final BlockPos pos, final boolean strict) {
         final MovingObjectPosition movingObjectPosition = mc.objectMouseOver;
 
-        if (movingObjectPosition == null) return false;
+        if (movingObjectPosition == null || movingObjectPosition.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) return false;
 
         final Vec3 hitVec = movingObjectPosition.hitVec;
         if (hitVec == null) return false;
