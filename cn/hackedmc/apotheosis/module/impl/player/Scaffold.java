@@ -532,7 +532,7 @@ public class Scaffold extends Module {
                 break;
         }
 
-        if (movingObjectPosition != null && movingObjectPosition.getBlockPos().equals(blockFace) &&
+        if (movingObjectPosition != null && movingObjectPosition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && movingObjectPosition.getBlockPos().equals(blockFace) &&
                 movingObjectPosition.sideHit == enumFacing.getEnumFacing()) {
             hitVec = movingObjectPosition.hitVec;
         }
