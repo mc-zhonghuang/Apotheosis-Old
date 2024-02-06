@@ -70,6 +70,18 @@ public class Stealer extends Module {
     private TileEntityChest chest;
     private Framebuffer framebuffer = new Framebuffer(1, 1, false);
 
+    @EventLink
+    private final Listener<PacketSendEvent> onPacketSend = event -> {
+        final Packet<?> packet = event.getPacket();
+
+        if (packet instanceof C08PacketPlayerBlockPlacement) {
+            final C08PacketPlayerBlockPlacement wrapped = (C08PacketPlayerBlockPlacement) packet;
+
+            if (mc.theWorld.getBlockState(wrapped.getPosition()).getBlock() instanceof BlockChest)
+                blockPos = wrapped.getPosition();
+        }
+    };
+
     @EventLink(value = Priorities.VERY_LOW)
     private final Listener<Render2DEvent> onRender2D = event -> {
         if (this.silent.getValue() && this.guiChest != null && this.chest != null && (blockPos != null || animatedPos != null)) {
