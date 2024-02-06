@@ -75,6 +75,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient {
     private static final Logger logger = LogManager.getLogger();
@@ -407,12 +408,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
         final Entity entity = packetIn.getEntity(this.clientWorldController);
 
         if (entity != null) {
-            if (entity instanceof EntityPlayer && entity != InstanceAccess.mc.thePlayer) {
-                final EntityPlayer player = new EntityOtherPlayerMP(this.clientWorldController, ((EntityPlayer) entity).gameProfile);
-                player.copyLocationAndAnglesFrom(entity);
-
-                Footprint.INSTANCE.positions.put(player, (short) 0);
-            }
             entity.serverPosX += packetIn.getPosX();
             entity.serverPosY += packetIn.getPosY();
             entity.serverPosZ += packetIn.getPosZ();

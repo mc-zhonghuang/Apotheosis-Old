@@ -14,6 +14,7 @@ import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
 import cn.hackedmc.apotheosis.value.impl.SubMode;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
@@ -46,11 +47,11 @@ public class GrimACVelocity extends Mode<Velocity> {
         if (mode.getValue().getName().equalsIgnoreCase("attack reduce") && legitSprint.getValue()) {
             if (lastSprint == 0) {
                 lastSprint--;
-                if (!MoveUtil.canSprint(true))
+                if (!mc.thePlayer.isSprinting())
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
             } else if (lastSprint > 0) {
                 lastSprint--;
-                if (mc.thePlayer.onGround && !MoveUtil.canSprint(true)) {
+                if (mc.thePlayer.onGround && !mc.thePlayer.isSprinting()) {
                     lastSprint = -1;
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
                 }
@@ -90,7 +91,18 @@ public class GrimACVelocity extends Mode<Velocity> {
                         break;
                     }
                     case "attack reduce": {
-                        if (KillAura.INSTANCE.target != null && (!rayCast.getValue() || RayCastUtil.rayCast(RotationComponent.rotations, KillAura.INSTANCE.range.getValue().doubleValue()).typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)) {
+                        Entity entity = null;
+
+                        if (rayCast.getValue()) {
+                            final MovingObjectPosition position = RayCastUtil.rayCast(RotationComponent.rotations, KillAura.INSTANCE.range.getValue().doubleValue());
+
+                            if (position != null && position.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
+                                entity = position.entityHit;
+                        } else {
+                            entity = KillAura.INSTANCE.target;
+                        }
+
+                        if (entity != null) {
                             event.setCancelled();
 
                             if (!EntityPlayerSP.serverSprintState) {
@@ -104,7 +116,7 @@ public class GrimACVelocity extends Mode<Velocity> {
 
                             for (int i = 0;i < 8;i++) {
                                 if (ViaMCP.getInstance().getVersion() <= 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(KillAura.INSTANCE.target, C02PacketUseEntity.Action.ATTACK));
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
                                 if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 
