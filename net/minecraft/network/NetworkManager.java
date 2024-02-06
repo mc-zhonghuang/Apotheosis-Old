@@ -148,6 +148,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                                 packet instanceof S22PacketMultiBlockChange ||
                                 packet instanceof S19PacketEntityStatus ||
                                 packet instanceof S06PacketUpdateHealth ||
+                                packet instanceof S05PacketSpawnPosition ||
+                                packet instanceof S2BPacketChangeGameState ||
+                                packet instanceof S01PacketJoinGame ||
+                                packet instanceof S38PacketPlayerListItem ||
+                                packet instanceof S39PacketPlayerAbilities ||
                                 packet instanceof S14PacketEntity ||
                                 packet instanceof S0FPacketSpawnMob ||
                                 packet instanceof S0CPacketSpawnPlayer ||
