@@ -32,8 +32,8 @@ public class GrimACVelocity extends Mode<Velocity> {
             .add(new SubMode("Attack Reduce"))
             .add(new SubMode("1.17+"))
             .setDefault("Block Spoof");
-    private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
-    private final BooleanValue rayCast = new BooleanValue("Ray cast", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
+    private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("Attack Reduce"));
+    private final BooleanValue rayCast = new BooleanValue("Ray cast", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("Attack Reduce"));
     private int lastSprint = -1;
 
     @Override

@@ -45,7 +45,7 @@ public class FullBox extends ESP implements InstanceAccess {
         float width = target.width;
         float height = target.height + (target.isSneaking() ? -0.2F : 0.1F);
 
-        RenderUtil.color(ColorUtil.withAlpha(getTheme().getFirstColor(), 50));
+        RenderUtil.color(ColorUtil.withAlpha(espColor.getNormalColor(), 50));
         RenderUtil.drawBoundingBox(new AxisAlignedBB(x - width + 0.25D, y + height + .1, z - width + 0.25D, x + width - 0.25D, y, z + width - 0.25D));
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -59,5 +59,4 @@ public class FullBox extends ESP implements InstanceAccess {
         RenderUtil.color(Color.WHITE);
 
     }
-
 }

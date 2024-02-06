@@ -1,8 +1,10 @@
 package net.minecraft.client.network;
 
 import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.render.Footprint;
 import cn.hackedmc.apotheosis.newevent.impl.other.TeleportEvent;
 import cn.hackedmc.apotheosis.ui.menu.impl.main.MainMenu;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -405,6 +407,12 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
         final Entity entity = packetIn.getEntity(this.clientWorldController);
 
         if (entity != null) {
+            if (entity instanceof EntityPlayer && entity != InstanceAccess.mc.thePlayer) {
+                final EntityPlayer player = new EntityOtherPlayerMP(this.clientWorldController, ((EntityPlayer) entity).gameProfile);
+                player.copyLocationAndAnglesFrom(entity);
+
+                Footprint.INSTANCE.positions.put(player, (short) 0);
+            }
             entity.serverPosX += packetIn.getPosX();
             entity.serverPosY += packetIn.getPosY();
             entity.serverPosZ += packetIn.getPosZ();

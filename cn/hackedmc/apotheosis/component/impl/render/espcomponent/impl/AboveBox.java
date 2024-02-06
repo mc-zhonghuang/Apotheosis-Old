@@ -47,7 +47,7 @@ public class AboveBox extends ESP implements InstanceAccess {
         float width = target.width;
         float height = target.height + (target.isSneaking() ? -0.2F : 0.1F);
 
-        RenderUtil.color(ColorUtil.withAlpha(color, 40));
+        RenderUtil.color(ColorUtil.withAlpha(espColor.getNormalColor(), 40));
         RenderUtil.drawBoundingBox(new AxisAlignedBB(x - width / 1.75, y, z - width / 1.75,x + width / 1.75, y + .1, z + width / 1.75));
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glEnable(GL11.GL_TEXTURE_2D);

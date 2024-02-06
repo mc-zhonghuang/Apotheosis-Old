@@ -35,7 +35,9 @@ import cn.hackedmc.apotheosis.newevent.impl.render.Render2DEvent;
 import cn.hackedmc.apotheosis.newevent.impl.render.RenderItemEvent;
 import cn.hackedmc.apotheosis.util.math.MathUtil;
 import cn.hackedmc.apotheosis.util.packet.PacketUtil;
+import cn.hackedmc.apotheosis.util.render.ColorUtil;
 import cn.hackedmc.apotheosis.util.rotation.RotationUtil;
+import cn.hackedmc.apotheosis.util.vector.Vector2d;
 import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import cn.hackedmc.apotheosis.value.impl.*;
 import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
@@ -120,6 +122,12 @@ public final class KillAura extends Module {
             .add(new SubMode("Above"))
             .add(new SubMode("Full"))
             .setDefault("Ring");
+
+    private final ModeValue colorMode = new ModeValue("Color Mode", this, () -> espMode.getValue().getName().equalsIgnoreCase("None"))
+            .add(new SubMode("Basic"))
+            .add(new SubMode("White"))
+            .add(new SubMode("Mixed"))
+            .setDefault("Basic");
 
     private final BooleanValue rayCast = new BooleanValue("Ray cast", this, false);
 
@@ -277,7 +285,27 @@ public final class KillAura extends Module {
             return;
         }
 
-        Color color = /*getTheme().getFirstColor()*/ Color.WHITE;
+        Color color = new Color(19, 89, 6, 4);
+        switch (colorMode.getValue().getName().toLowerCase()) {
+            case "basic": {
+                color = this.getTheme().getFirstColor();
+
+                break;
+            }
+
+            case "white": {
+                color = Color.WHITE;
+
+                break;
+            }
+
+            case "mixed": {
+                double factor = this.getTheme().getBlendFactor(new Vector2d(0, 0));
+                color = ColorUtil.mixColors(this.getTheme().getFirstColor(), this.getTheme().getSecondColor(), factor);
+
+                break;
+            }
+        }
 
         switch (espMode.getValue().getName()) {
             case "Ring":
@@ -779,11 +807,14 @@ public final class KillAura extends Module {
                 break;
 
             case "HuaYuTing":
-                PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
-                if (ViaMCP.getInstance().getVersion() > 47) {
-                    PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
-                    useItem.write(Type.VAR_INT, 1);
-                    com.viaversion.viarewind.utils.PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
+                if (!blocking) {
+                    PacketUtil.sendNoEvent(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
+                    if (ViaMCP.getInstance().getVersion() > 47) {
+                        PacketWrapper useItem = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                        useItem.write(Type.VAR_INT, 1);
+                        com.viaversion.viarewind.utils.PacketUtil.sendToServer(useItem, Protocol1_8To1_9.class, true, true);
+                    }
+                    blocking = true;
                 }
 
                 break;

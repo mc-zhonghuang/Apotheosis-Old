@@ -236,7 +236,7 @@ public class ModernInterface extends Mode<Interface> {
         if (Client.CLIENT_TYPE != Type.BASIC || !mc.getNetHandler().doneLoadingTerrain) return;
 
         threadPool.execute(() -> {
-            if (mc.thePlayer == null) return;
+            if (mc.thePlayer == null || mc.theWorld == null) return;
 
             glow = this.shader.getValue().getName().equals("Glow");
             shadow = this.shader.getValue().getName().equals("Shadow");
