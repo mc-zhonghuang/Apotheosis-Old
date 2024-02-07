@@ -94,6 +94,8 @@ public class Body extends Mode<Footprint> {
             final float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
 
             GlStateManager.pushMatrix();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDisable(GL11.GL_TEXTURE_2D);
             glDisable(GL_DEPTH_TEST);
             glDepthMask(false);
@@ -105,6 +107,7 @@ public class Body extends Mode<Footprint> {
             glDepthMask(true);
             glEnable(GL_DEPTH_TEST);
             glEnable(GL11.GL_TEXTURE_2D);
+            GlStateManager.disableBlend();
             GlStateManager.popMatrix();
 
             player.hide();
