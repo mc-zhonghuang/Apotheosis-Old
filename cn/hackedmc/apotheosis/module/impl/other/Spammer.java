@@ -17,7 +17,7 @@ import util.time.StopWatch;
 @ModuleInfo(name = "module.other.spammer.name", description = "module.other.spammer.description", category = Category.OTHER)
 public final class  Spammer extends Module {
 
-    private final StringValue message = new StringValue("Message", this, "Buy Rise at java.lang.NullPointerException!");
+    private final StringValue message = new StringValue("Message", this, "java.lang.NullPointerException!");
     private final NumberValue delay = new NumberValue("Delay", this, 3000, 0, 20000, 1);
 
     private final StopWatch stopWatch = new StopWatch();

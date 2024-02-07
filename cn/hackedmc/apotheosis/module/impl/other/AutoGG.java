@@ -13,7 +13,7 @@ import cn.hackedmc.apotheosis.value.impl.StringValue;
 @Rise
 @ModuleInfo(name = "module.other.autogg.name", description = "module.other.autogg.description", category = Category.OTHER)
 public final class AutoGG extends Module {
-    private StringValue message = new StringValue("Message", this, "Why waste another game without Rise?");
+    private StringValue message = new StringValue("Message", this, "GG");
     private boolean active;
 
     @EventLink()

@@ -22,6 +22,6 @@ public final class DeveloperReload extends Command {
     public void execute(final String[] args) {
         Client.INSTANCE.terminate();
         Client.INSTANCE.initClient();
-        ChatUtil.display("Reloaded Rise");
+        ChatUtil.display("Reloaded Apotheosis");
     }
 }

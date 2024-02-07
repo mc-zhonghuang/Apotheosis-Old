@@ -17,7 +17,7 @@ public final class AlertManager implements InstanceAccess {
 
     public void sendAlert(final Check check) {
         final String color = getTheme().getChatAccentColor().toString();
-        final String base = (color + "Rise " + color + "» " + color + "%player%§7 has failed " + color + "%check% §7(" + color +
+        final String base = (color + "Apotheosis " + color + "» " + color + "%player%§7 has failed " + color + "%check% §7(" + color +
                 "%type%§7)%dev% (" + color + "%vl%§7)")
                 .replaceAll("%player%", check.getData().getPlayer().getCommandSenderName())
                 .replaceAll("%check%", check.getCheckInfo().name())

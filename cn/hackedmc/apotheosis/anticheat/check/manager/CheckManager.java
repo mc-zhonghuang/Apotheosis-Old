@@ -3,6 +3,7 @@ package cn.hackedmc.apotheosis.anticheat.check.manager;
 import cn.hackedmc.apotheosis.anticheat.check.Check;
 import cn.hackedmc.apotheosis.anticheat.check.impl.combat.VelocityCancel;
 import cn.hackedmc.apotheosis.anticheat.check.impl.movement.FlightPrediction;
+import cn.hackedmc.apotheosis.anticheat.check.impl.movement.NoSlow;
 import cn.hackedmc.apotheosis.anticheat.check.impl.movement.SpeedLimit;
 import cn.hackedmc.apotheosis.anticheat.data.PlayerData;
 
@@ -15,6 +16,7 @@ public final class CheckManager {
     public static final Class<?>[] CHECKS = new Class[]{
             SpeedLimit.class,
             FlightPrediction.class,
+            NoSlow.class,
 
             VelocityCancel.class,
     };
