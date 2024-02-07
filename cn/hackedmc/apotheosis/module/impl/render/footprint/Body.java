@@ -74,6 +74,13 @@ public class Body extends Mode<Footprint> {
     @EventLink
     private Listener<Render3DEvent> onRender3D = event -> {
         final float partialTicks = event.getPartialTicks();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL11.GL_TEXTURE_2D);
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(false);
         for (final PlayerRenderData data : renderData) {
             final Entity player = data.getEntity();
             final Render<Entity> render = data.getRender();
@@ -82,7 +89,7 @@ public class Body extends Mode<Footprint> {
                 continue;
             }
 
-            final Color color = ColorUtil.withAlpha(ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), data.getTick() / getParent().amount.getValue().doubleValue()), (int) (255.0 * (1 - (data.getTick() / getParent().amount.getValue().doubleValue()))));
+            final Color color = ColorUtil.withAlpha(ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), data.getTick() / getParent().amount.getValue().doubleValue()), (int) (180 * (1 - (data.getTick() / getParent().amount.getValue().doubleValue()))));
 
             if (color.getAlpha() <= 0) {
                 continue;
@@ -93,25 +100,19 @@ public class Body extends Mode<Footprint> {
             final double z = player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks;
             final float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
 
-            GlStateManager.pushMatrix();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glDisable(GL11.GL_TEXTURE_2D);
-            glDisable(GL_DEPTH_TEST);
-            glDepthMask(false);
             GlStateManager.color(color.getRed() / 255.0F, color.getGreen() / 255.0F, color.getBlue() / 255.0F, color.getAlpha() / 255.0F);
             RendererLivingEntity.setShaderBrightnessWithAlpha(color);
             render.doRender(player, x - mc.getRenderManager().renderPosX, y - mc.getRenderManager().renderPosY, z - mc.getRenderManager().renderPosZ, yaw, partialTicks);
             RendererLivingEntity.unsetShaderBrightness();
             GlStateManager.color(1F, 1F, 1F, 1F);
-            glDepthMask(true);
-            glEnable(GL_DEPTH_TEST);
-            glEnable(GL11.GL_TEXTURE_2D);
-            GlStateManager.disableBlend();
-            GlStateManager.popMatrix();
 
             player.hide();
         }
+        glDepthMask(true);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
 
         RenderHelper.disableStandardItemLighting();
         mc.entityRenderer.disableLightmap();
