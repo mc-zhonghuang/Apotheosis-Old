@@ -16,11 +16,15 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glDepthMask;
 
 public class Body extends Mode<Footprint> {
     public Body(String name, Footprint parent) {
@@ -48,6 +52,9 @@ public class Body extends Mode<Footprint> {
             playerMP.rotationYawHead = player.rotationYawHead;
             playerMP.moveForward = player.moveForward;
             playerMP.moveStrafing = player.moveStrafing;
+            playerMP.setSneaking(player.isSneaking());
+            playerMP.setSprinting(player.isSprinting());
+            playerMP.setEating(player.isEating());
             playerMP.prevPosX = player.prevPosX;
             playerMP.prevPosY = player.prevPosY;
             playerMP.prevPosZ = player.prevPosZ;
@@ -75,7 +82,7 @@ public class Body extends Mode<Footprint> {
                 continue;
             }
 
-            final Color color = ColorUtil.withAlpha(ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), data.getTick() / getParent().amount.getValue().doubleValue()), (int) (255 * (1 - (data.getTick() / getParent().amount.getValue().doubleValue()))));
+            final Color color = ColorUtil.withAlpha(ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), data.getTick() / getParent().amount.getValue().doubleValue()), (int) (255.0 * (1 - (data.getTick() / getParent().amount.getValue().doubleValue()))));
 
             if (color.getAlpha() <= 0) {
                 continue;
@@ -86,9 +93,19 @@ public class Body extends Mode<Footprint> {
             final double z = player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks;
             final float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
 
+            GlStateManager.pushMatrix();
+            glDisable(GL11.GL_TEXTURE_2D);
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(false);
+            GlStateManager.color(color.getRed() / 255.0F, color.getGreen() / 255.0F, color.getBlue() / 255.0F, color.getAlpha() / 255.0F);
             RendererLivingEntity.setShaderBrightnessWithAlpha(color);
             render.doRender(player, x - mc.getRenderManager().renderPosX, y - mc.getRenderManager().renderPosY, z - mc.getRenderManager().renderPosZ, yaw, partialTicks);
             RendererLivingEntity.unsetShaderBrightness();
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            glEnable(GL11.GL_TEXTURE_2D);
+            GlStateManager.popMatrix();
 
             player.hide();
         }

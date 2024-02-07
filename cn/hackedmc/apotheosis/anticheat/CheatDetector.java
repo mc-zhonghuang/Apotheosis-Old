@@ -7,6 +7,7 @@ import cn.hackedmc.apotheosis.anticheat.listener.RegistrationListener;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +18,7 @@ public final class CheatDetector {
     public final Map<UUID, PlayerData> playerMap = new ConcurrentHashMap<>();
 
     private final RegistrationListener registrationListener = new RegistrationListener();
-    private final AlertManager alertManager = new AlertManager();
+    public final AlertManager alertManager = new AlertManager();
 
     public CheatDetector() {
         CheckManager.setup();

@@ -4,6 +4,7 @@ import cn.hackedmc.apotheosis.Client;
 import cn.hackedmc.apotheosis.anticheat.check.Check;
 import cn.hackedmc.apotheosis.anticheat.check.manager.CheckManager;
 import cn.hackedmc.apotheosis.anticheat.util.PacketUtil;
+import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.player.PlayerUtil;
 import lombok.Getter;
 import net.minecraft.block.BlockAir;
@@ -197,6 +198,8 @@ public final class PlayerData {
         this.ticksSinceLastTeleport++;
         this.ticksSinceAttack++;
         this.ticksSinceFall++;
+
+        if (InstanceAccess.mc.thePlayer.ticksExisted % 20 == 0) this.checks.forEach(Check::release);
     }
 
     public Check getCheck(Class<?> clazz) {

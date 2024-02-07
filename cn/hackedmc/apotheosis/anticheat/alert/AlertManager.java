@@ -11,6 +11,8 @@ import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 
+import java.util.HashMap;
+
 public final class AlertManager implements InstanceAccess {
 
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -18,12 +20,13 @@ public final class AlertManager implements InstanceAccess {
     public void sendAlert(final Check check) {
         final String color = getTheme().getChatAccentColor().toString();
         final String base = (color + "Apotheosis " + color + "» " + color + "%player%§7 has failed " + color + "%check% §7(" + color +
-                "%type%§7)%dev% (" + color + "%vl%§7)")
+                "%type%§7)%dev% " + color + "%vl%§7(" + color + "+%vla%§7)")
                 .replaceAll("%player%", check.getData().getPlayer().getCommandSenderName())
                 .replaceAll("%check%", check.getCheckInfo().name())
                 .replaceAll("%type%", check.getCheckInfo().type())
                 .replaceAll("%dev%", "")
-                .replaceAll("%vl%", String.valueOf(check.getViolations()));
+                .replaceAll("%vl%", String.valueOf(check.getViolations()))
+                .replaceAll("%vla%", String.valueOf(check.getViolations() - check.getLastViolations()));
 
         final NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
         final NetworkPlayerInfo targetInfo = mc.getNetHandler().getPlayerInfo(check.getData().getPlayer().getUniqueID());
@@ -45,12 +48,13 @@ public final class AlertManager implements InstanceAccess {
                 break;
 
             case "ServerSide":
-                PacketUtil.send(new C01PacketChatMessage("Rise > %player% has failed %check% (%type%)%dev% (x%vl%)"
+                PacketUtil.send(new C01PacketChatMessage("Apotheosis > %player% has failed %check% (%type%)%dev% %vl%(+%vla%)"
                         .replaceAll("%player%", check.getData().getPlayer().getCommandSenderName())
                         .replaceAll("%check%", check.getCheckInfo().name())
                         .replaceAll("%type%", check.getCheckInfo().type())
                         .replaceAll("%dev%", "")
-                        .replaceAll("%vl%", String.valueOf(check.getViolations()))));
+                        .replaceAll("%vl%", String.valueOf(check.getViolations()))
+                        .replaceAll("%vla%", String.valueOf(check.getViolations() - check.getLastViolations()))));
                 break;
         }
     }

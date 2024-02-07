@@ -229,7 +229,6 @@ public final class FlightPrediction extends Check {
 
                     if (getBuffer() > 0.3) {
                         fail();
-                        ChatUtil.display("Offset: " + closest);
 
                         resetBuffer();
                     }

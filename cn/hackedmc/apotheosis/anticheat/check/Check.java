@@ -13,7 +13,7 @@ public abstract class Check implements InstanceAccess {
 
     private final CheckInfo checkInfo;
 
-    protected double violations, buffer;
+    protected double violations, buffer, lastViolations;
 
     public Check(final PlayerData data) {
         this.data = data;
@@ -30,8 +30,12 @@ public abstract class Check implements InstanceAccess {
 
     public final void fail() {
         ++this.violations;
+    }
 
+    public final void release() {
+        if (this.lastViolations == this.violations) return;
         instance.getCheatDetector().getAlertManager().sendAlert(this);
+        this.lastViolations = this.violations;
     }
 
     public final double increaseBuffer() {
