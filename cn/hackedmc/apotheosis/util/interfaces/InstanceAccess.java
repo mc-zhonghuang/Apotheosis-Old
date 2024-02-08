@@ -1,7 +1,6 @@
 package cn.hackedmc.apotheosis.util.interfaces;
 
 import cn.hackedmc.apotheosis.component.impl.hud.DragComponent;
-import cn.hackedmc.apotheosis.ui.click.dropdown.DropdownClickGUI;
 import cn.hackedmc.apotheosis.ui.click.standard.RiseClickGUI;
 import cn.hackedmc.apotheosis.ui.ingame.GuiIngameCache;
 import cn.hackedmc.apotheosis.ui.theme.Themes;
@@ -79,10 +78,6 @@ public interface InstanceAccess {
 
     default RiseClickGUI getStandardClickGUI() {
         return instance.getStandardClickGUI();
-    }
-
-    default DropdownClickGUI getDropdownClickGUI() {
-        return instance.getDropdownClickGUI();
     }
 
     default CloverClickGUI getCloverClickGUI() {

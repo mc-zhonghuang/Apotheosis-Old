@@ -18,7 +18,6 @@ import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
 import cn.hackedmc.apotheosis.ui.click.clover.CloverClickGUI;
-import cn.hackedmc.apotheosis.ui.click.dropdown.DropdownClickGUI;
 import cn.hackedmc.apotheosis.ui.click.standard.RiseClickGUI;
 import cn.hackedmc.apotheosis.ui.menu.impl.alt.AltManagerMenu;
 import cn.hackedmc.apotheosis.ui.theme.ThemeManager;
@@ -98,7 +97,6 @@ public enum Client {
 
     private CloverClickGUI cloverClickGUI;
     private RiseClickGUI standardClickGUI;
-    private DropdownClickGUI dropdownClickGUI;
     private AltManagerMenu altManagerMenu;
 
     private RiseTab creativeTab;
@@ -187,7 +185,6 @@ public enum Client {
         this.insultManager.forEach(InsultFile::read);
 
         this.standardClickGUI = new RiseClickGUI();
-        this.dropdownClickGUI = new DropdownClickGUI();
         this.altManagerMenu = new AltManagerMenu();
 
         this.creativeTab = new RiseTab();
