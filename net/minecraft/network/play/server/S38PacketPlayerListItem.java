@@ -200,7 +200,7 @@ public class S38PacketPlayerListItem implements Packet<INetHandlerPlayClient> {
         private final int ping;
         private final WorldSettings.GameType gamemode;
         private final GameProfile profile;
-        private final IChatComponent displayName;
+        private IChatComponent displayName;
 
         public AddPlayerData(final GameProfile profile, final int pingIn, final WorldSettings.GameType gamemodeIn, final IChatComponent displayNameIn) {
             this.profile = profile;
@@ -223,6 +223,10 @@ public class S38PacketPlayerListItem implements Packet<INetHandlerPlayClient> {
 
         public IChatComponent getDisplayName() {
             return this.displayName;
+        }
+
+        public void setDisplayName(IChatComponent iChatComponent) {
+            this.displayName = iChatComponent;
         }
 
         public String toString() {

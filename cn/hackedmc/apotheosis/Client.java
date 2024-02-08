@@ -193,8 +193,6 @@ public enum Client {
         this.creativeTab = new RiseTab();
 
         ViaMCP.staticInit();
-
-        Display.setTitle(NAME + " " + VERSION_FULL);
     }
 
     /**

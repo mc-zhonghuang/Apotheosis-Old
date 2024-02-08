@@ -12,10 +12,12 @@ import cn.hackedmc.apotheosis.util.animation.Animation;
 import cn.hackedmc.apotheosis.util.animation.Easing;
 import cn.hackedmc.apotheosis.util.font.Font;
 import cn.hackedmc.apotheosis.util.font.FontManager;
+import cn.hackedmc.fucker.Fucker;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiSelectWorld;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.Display;
 
 import java.awt.*;
 import java.io.IOException;
@@ -84,6 +86,8 @@ public final class MainMenu extends Menu {
 
     @Override
     public void initGui() {
+        Display.setTitle(Client.NAME + " " + Client.VERSION_FULL + " | User:" + Fucker.name);
+
         InstanceAccess.clearRunnables();
         rice = Math.random() > 0.95;
         int centerX = this.width / 2;

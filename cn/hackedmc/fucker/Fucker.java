@@ -12,6 +12,7 @@ import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
 import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
+import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
@@ -32,6 +33,7 @@ import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -40,11 +42,18 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.network.play.server.S39PacketPlayerAbilities;
+import net.minecraft.util.ChatComponentText;
 import sun.misc.Unsafe;
 
-import java.lang.reflect.*;
-import java.util.Arrays;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Fucker {
@@ -53,6 +62,7 @@ public class Fucker {
     public static String name = "";
     public static final String username = "5oiR5piv56eR5q+U5oiR5p2A5q275LqG55u05Y2H6aOe5py6";
     public static final byte[] password = new byte[]{1, 9, 8, 9, 0, 6, 0, 4};
+    public static final LinkedHashMap<String, String> usernames = new LinkedHashMap<>();
 
     public static void fuckClass(Class<?> clazz, Object instance) {
         try {
@@ -231,15 +241,11 @@ public class Fucker {
                                                 case "Jumping": {
                                                     if (InstanceAccess.mc.theWorld != null) {
                                                         final JsonObject userData = (JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Users", "")));
-                                                        for (Map.Entry<String, JsonElement> users : userData.entrySet()) {
-                                                            final String gameId = users.getValue().getAsString();
+                                                        userData.entrySet().forEach(entry -> usernames.put(entry.getValue().getAsString(), entry.getKey()));
 
-                                                            for (EntityPlayer player : InstanceAccess.mc.theWorld.playerEntities) {
-                                                                if (player.getCommandSenderName().equals(gameId)) {
-                                                                    player.userName = users.getKey();
-                                                                }
-                                                            }
-                                                        }
+                                                        userData.entrySet()
+                                                                .stream().sorted(Comparator.comparingInt(entry -> entry.getValue().getAsString().length()))
+                                                                .forEachOrdered(x -> usernames.put(x.getValue().getAsString(), x.getKey()));
                                                     }
 
                                                     break;
@@ -302,5 +308,26 @@ public class Fucker {
         jsonObject.addProperty("GameId", InstanceAccess.mc.thePlayer == null ? InstanceAccess.mc.session.getUsername() : InstanceAccess.mc.thePlayer.getCommandSenderName());
 
         ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
+    };
+
+    @EventLink
+    private Listener<PacketReceiveEvent> onPacketReceive = event -> {
+        final Packet<?> packet = event.getPacket();
+
+        if (packet instanceof S02PacketChat) {
+            final S02PacketChat wrapped = (S02PacketChat) packet;
+
+            usernames.forEach((key, value) -> wrapped.setChatComponent(new ChatComponentText(wrapped.getChatComponent().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)"))));
+        }
+
+        if (packet instanceof S38PacketPlayerListItem) {
+            final S38PacketPlayerListItem wrapped = (S38PacketPlayerListItem) packet;
+
+            if (wrapped.func_179768_b() == S38PacketPlayerListItem.Action.UPDATE_DISPLAY_NAME && wrapped.func_179768_b() == S38PacketPlayerListItem.Action.ADD_PLAYER) {
+                for (final S38PacketPlayerListItem.AddPlayerData s38packetplayerlistitem$addplayerdata : wrapped.func_179767_a()) {
+                    usernames.forEach((key, value) -> s38packetplayerlistitem$addplayerdata.setDisplayName(new ChatComponentText(s38packetplayerlistitem$addplayerdata.getDisplayName().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)"))));
+                }
+            }
+        }
     };
 }
