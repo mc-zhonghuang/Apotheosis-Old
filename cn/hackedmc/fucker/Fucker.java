@@ -8,11 +8,15 @@ import cn.hackedmc.apotheosis.command.CommandManager;
 import cn.hackedmc.apotheosis.component.ComponentManager;
 import cn.hackedmc.apotheosis.manager.TargetManager;
 import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
+import cn.hackedmc.apotheosis.newevent.Listener;
+import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
+import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
 import cn.hackedmc.apotheosis.ui.theme.ThemeManager;
+import cn.hackedmc.apotheosis.util.ByteUtil;
 import cn.hackedmc.apotheosis.util.CryptUtil;
 import cn.hackedmc.apotheosis.util.JsonUtil;
 import cn.hackedmc.apotheosis.util.chat.ChatUtil;
@@ -25,6 +29,7 @@ import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Locale;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
 import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.netty.bootstrap.Bootstrap;
@@ -35,10 +40,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.Map;
 
 public class Fucker {
     public static Channel channel = null;
@@ -139,6 +146,8 @@ public class Fucker {
         } catch (Exception e) {
             fucker();
         }
+
+        Client.INSTANCE.getEventBus().register(new Fucker());
     }
 
     public static void tryConnection() {
@@ -149,6 +158,8 @@ public class Fucker {
                     jsonObject.addProperty("Packet", "Jumping");
                     jsonObject.addProperty("User", name);
                     jsonObject.addProperty("GameId", InstanceAccess.mc.thePlayer == null ? InstanceAccess.mc.session.getUsername() : InstanceAccess.mc.thePlayer.getCommandSenderName());
+
+                    ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
                 }
                 try {
                     Thread.sleep(60000L);
@@ -217,6 +228,23 @@ public class Fucker {
                                                     break;
                                                 }
 
+                                                case "Jumping": {
+                                                    if (InstanceAccess.mc.theWorld != null) {
+                                                        final JsonObject userData = (JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Users", "")));
+                                                        for (Map.Entry<String, JsonElement> users : userData.entrySet()) {
+                                                            final String gameId = users.getValue().getAsString();
+
+                                                            for (EntityPlayer player : InstanceAccess.mc.theWorld.playerEntities) {
+                                                                if (player.getCommandSenderName().equals(gameId)) {
+                                                                    player.userName = users.getKey();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    break;
+                                                }
+
                                                 case "FuckYourMother": {
                                                     fucker();
 
@@ -265,4 +293,14 @@ public class Fucker {
         System.exit(-1);
         throw new RuntimeException("Crack by Paimonqwq#1337");
     }
+
+    @EventLink
+    private final Listener<WorldChangeEvent> onWorldChange = event -> {
+        final JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Packet", "Jumping");
+        jsonObject.addProperty("User", name);
+        jsonObject.addProperty("GameId", InstanceAccess.mc.thePlayer == null ? InstanceAccess.mc.session.getUsername() : InstanceAccess.mc.thePlayer.getCommandSenderName());
+
+        ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
+    };
 }
