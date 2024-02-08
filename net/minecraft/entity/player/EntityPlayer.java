@@ -1944,7 +1944,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements java.io.S
      * Get the formatted ChatComponent that will be used for the sender's username in chat
      */
     public IChatComponent getDisplayName() {
-        final IChatComponent ichatcomponent = new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getCommandSenderName()) + userName);
+        final IChatComponent ichatcomponent = new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getCommandSenderName()) + " (§b" + userName + "§r)");
         ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + this.getCommandSenderName() + " "));
         ichatcomponent.getChatStyle().setChatHoverEvent(this.getHoverEvent());
         ichatcomponent.getChatStyle().setInsertion(this.getCommandSenderName());
