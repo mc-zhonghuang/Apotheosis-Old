@@ -45,6 +45,7 @@ public class Body extends Mode<Footprint> {
     @EventLink
     private Listener<PreUpdateEvent> onPreUpdate = event -> {
         for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            if (!mc.thePlayer.canEntityBeSeen(player)) continue;
             if (player == mc.thePlayer || (player.prevPosX == player.posX && player.prevPosY == player.posY && player.prevPosZ == player.posZ && player.prevRotationYaw == player.rotationYaw && player.prevRotationPitch == player.rotationPitch && player.prevRotationYawHead == player.rotationYawHead)) continue;
             final EntityOtherPlayerMP playerMP = new EntityOtherPlayerMP(mc.theWorld, player.gameProfile);
             playerMP.renderNameTag = false;

@@ -57,7 +57,7 @@ public final class MainMenu extends Menu {
         final double destination = this.singlePlayerButton.getY() - this.fontRenderer.height();
         this.animation.run(destination);
         // String name
-        String name = rice ? "Apotheosis" : Client.NAME;
+        String name = rice ? "Ap0the0515" : Client.NAME;
         // Render the eo "logo"
         final double value = this.animation.getValue();
         this.fontRenderer.drawCenteredString(name, width / 2.0F, value, new Color(255,255,255).getRGB());

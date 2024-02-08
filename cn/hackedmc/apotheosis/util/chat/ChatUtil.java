@@ -32,10 +32,12 @@ public class ChatUtil implements InstanceAccess {
     }
 
     public void displayNoPrefix(final Object message, final Object... objects) {
-        if (mc.thePlayer != null) {
-            final String format = String.format(message.toString(), objects);
+        final String format = String.format(message.toString(), objects);
 
-            mc.thePlayer.addChatMessage(new ChatComponentText(getPrefix() + format));
+        if (mc.thePlayer != null) {
+            mc.thePlayer.addChatMessage(new ChatComponentText(format));
+        } else {
+            System.out.println(format);
         }
     }
 

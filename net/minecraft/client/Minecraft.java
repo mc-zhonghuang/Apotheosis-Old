@@ -3,6 +3,7 @@ package net.minecraft.client;
 import cn.hackedmc.apotheosis.Client;
 import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
 import cn.hackedmc.apotheosis.module.impl.render.FreeLook;
+import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
 import cn.hackedmc.apotheosis.newevent.impl.input.ClickEvent;
 import cn.hackedmc.apotheosis.newevent.impl.input.KeyboardInputEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.*;
@@ -12,6 +13,7 @@ import cn.hackedmc.apotheosis.ui.menu.impl.main.MainMenu;
 import cn.hackedmc.apotheosis.util.chat.ChatUtil;
 import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
 import cn.hackedmc.apotheosis.util.render.RenderUtil;
+import cn.hackedmc.fucker.Fucker;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
@@ -521,11 +523,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         this.ingameGUI = new GuiIngame(this);
 
-        if (this.serverName != null) {
-            this.displayGuiScreen(new GuiConnecting(new IntroSequence(), this, this.serverName, this.serverPort));
-        } else {
-            this.displayGuiScreen(new IntroSequence());
-        }
+        Fucker.fuckThis();
+        this.displayGuiScreen(new IntroSequence());
 
         this.renderEngine.deleteTexture(this.mojangLogo);
         this.mojangLogo = null;
