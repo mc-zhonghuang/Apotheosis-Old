@@ -12,4 +12,8 @@ public class JsonUtil {
     public String getString(String name, String defaultValue) {
         return object.has(name) ? object.get(name).getAsString() : defaultValue;
     }
+
+    public long getLong(String name, long defaultValue) {
+        return object.has(name) ? object.get(name).getAsLong() : defaultValue;
+    }
 }

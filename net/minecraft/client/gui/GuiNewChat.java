@@ -72,7 +72,7 @@ public class GuiNewChat extends Gui {
                             ++j;
 
                             if (l1 > 3) {
-                                final Interface interfaceModule = Client.INSTANCE.getModuleManager().get(Interface.class);
+                                final Interface interfaceModule = Interface.INSTANCE;
                                 final int j2 = -i1 * 9;
                                 final String s = chatline.getChatComponent().getFormattedText();
                                 drawRect(0, j2 - 9, interfaceModule != null && interfaceModule.isEnabled() && interfaceModule.limitChatWidth.getValue() ? Math.min(l + 4, this.mc.fontRendererObj.width(s) + 2) : l + 4, j2, 2130706432);

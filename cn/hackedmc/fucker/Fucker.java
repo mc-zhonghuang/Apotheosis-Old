@@ -11,6 +11,7 @@ import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
+import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
@@ -30,10 +31,8 @@ import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Locale;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
 import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -45,21 +44,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
-import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.util.ChatComponentText;
+import org.apache.commons.lang3.StringUtils;
 import sun.misc.Unsafe;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Fucker {
     public static Channel channel = null;
     public static boolean login = false;
     public static String name = "";
+    public static Rank rank = Rank.NORMAL;
+    public static String uuid = "";
+    public static long time = 0;
     public static final String username = "5oiR5piv56eR5q+U5oiR5p2A5q275LqG55u05Y2H6aOe5py6";
     public static final byte[] password = new byte[]{1, 9, 8, 9, 0, 6, 0, 4};
     public static final LinkedHashMap<String, String> usernames = new LinkedHashMap<>();
@@ -206,30 +207,35 @@ public class Fucker {
                                             final JsonUtil json = new JsonUtil(jsonObject);
 
                                             switch (packetId) {
+                                                case "LoginHandler": {
+                                                    final JsonUtil user = new JsonUtil((JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("User", ""))));
+                                                    uuid = user.getString("UUID", "");
+                                                    rank = Rank.getFromName(user.getString("Rank", ""));
+                                                    time = user.getLong("Time", 0);
+                                                    login = true;
+                                                    tryConnection();
+
+                                                    break;
+                                                }
                                                 case "Text": {
                                                     final String type = json.getString("Type", "Info");
                                                     final String text = json.getString("Text", "");
 
                                                     switch (type) {
                                                         case "Error": {
-                                                            ChatUtil.displayNoPrefix("警告 >> " + text);
+                                                            ChatUtil.displayIRC("§c§l错误§r >> " + text);
 
                                                             break;
                                                         }
 
                                                         case "Info": {
-                                                            ChatUtil.displayNoPrefix("通知 >> " + text);
+                                                            ChatUtil.displayIRC("§7§l通知§r >> " + text);
 
                                                             break;
                                                         }
 
                                                         case "Success": {
-                                                            if (login) {
-                                                                ChatUtil.displayNoPrefix("成功 >> " + text);
-                                                            } else {
-                                                                login = true;
-                                                                tryConnection();
-                                                            }
+                                                            ChatUtil.displayIRC("§a§l成功§r >> " + text);
 
                                                             break;
                                                         }
@@ -271,7 +277,7 @@ public class Fucker {
                                                     final String prefix = json.getString("Rank", "§7Normal");
                                                     final String text = json.getString("Text", "我想说点什么，但是我忘记了。");
 
-                                                    ChatUtil.displayNoPrefix(prefix + " §r" + user + " >> " + text);
+                                                    ChatUtil.displayIRC(prefix + " §r" + user + " >> " + text);
 
                                                     break;
                                                 }
@@ -330,4 +336,73 @@ public class Fucker {
             }
         }
     };
+
+    @EventLink
+    private final Listener<ChatInputEvent> onChatInput = event -> {
+        String message = event.getMessage();
+
+        if (!message.startsWith("`")) return;
+        message = message.substring(1);
+
+        final int length = message.length();
+        if ((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) {
+            ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");
+        } else {
+            final JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("Packet", "Message");
+            jsonObject.addProperty("User", Fucker.name);
+            jsonObject.addProperty("Text", message);
+
+            ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
+        }
+
+        event.setCancelled();
+    };
+
+    public enum Rank {
+        NORMAL("Normal"),
+        VIP("VIP"),
+        SVIP("SVIP"),
+        MOD("Mod"),
+        ADMIN("Admin");
+
+        public static Rank getFromName(String name) {
+            for (Rank rank : values()) {
+                if (rank.name.toLowerCase().equalsIgnoreCase(name))
+                    return rank;
+            }
+
+            return NORMAL;
+        }
+        public String getDisplayName() {
+            switch (this) {
+                case NORMAL: {
+                    return "§7" + name;
+                }
+
+                case VIP: {
+                    return "§a" + name;
+                }
+
+                case SVIP: {
+                    return "§6" + name;
+                }
+
+                case MOD: {
+                    return "§b" + name;
+                }
+
+                case ADMIN: {
+                    return "§d" + name;
+                }
+            }
+
+            return name;
+        }
+
+        public final String name;
+        Rank(String name) {
+            this.name = name;
+        }
+    }
 }

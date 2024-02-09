@@ -1,6 +1,7 @@
 package cn.hackedmc.apotheosis.util.chat;
 
 import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.render.Interface;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Localization;
 import cn.hackedmc.apotheosis.util.packet.PacketUtil;
@@ -28,6 +29,18 @@ public class ChatUtil implements InstanceAccess {
             final String format = String.format(Localization.get(message.toString()), objects);
 
             mc.thePlayer.addChatMessage(new ChatComponentText(getPrefix() + format));
+        }
+    }
+
+    public void displayIRC(final Object message, final Object... objects) {
+        if (!Interface.INSTANCE.isEnabled() || !Interface.INSTANCE.irc.getValue()) return;
+
+        final String format = String.format(message.toString(), objects);
+
+        if (mc.thePlayer != null) {
+            mc.thePlayer.addChatMessage(new ChatComponentText("§l[§bIRC§r§l] §r" + format));
+        } else {
+            System.out.println(format);
         }
     }
 

@@ -7,6 +7,7 @@ import cn.hackedmc.apotheosis.module.impl.render.interfaces.NovoInterface;
 import cn.hackedmc.apotheosis.module.impl.render.interfaces.WurstInterface;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.render.Render2DEvent;
+import cn.hackedmc.apotheosis.util.font.FontManager;
 import cn.hackedmc.apotheosis.util.localization.Localization;
 import cn.hackedmc.apotheosis.Type;
 import cn.hackedmc.apotheosis.module.Module;
@@ -22,10 +23,13 @@ import cn.hackedmc.apotheosis.value.Value;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
 import cn.hackedmc.apotheosis.value.impl.SubMode;
+import cn.hackedmc.fucker.Fucker;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.gui.GuiChat;
 import util.time.StopWatch;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -34,7 +38,7 @@ import java.util.stream.Collectors;
 @Setter
 @ModuleInfo(name = "module.render.interface.name", description = "module.render.interface.description", category = Category.RENDER, autoEnabled = true)
 public final class Interface extends Module {
-
+    public static Interface INSTANCE;
     private final ModeValue mode = new ModeValue("Mode", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new ModernInterface("Modern", (Interface) this.getParent()));
         add(new NovoInterface("Novo", (Interface) this.getParent()));
@@ -49,6 +53,7 @@ public final class Interface extends Module {
         setDefault("Exclude render");
     }};
 
+    public final BooleanValue irc = new BooleanValue("Show IRC Message", this, true);
     public final BooleanValue limitChatWidth = new BooleanValue("Limit Chat Width", this, false);
     public final BooleanValue smoothHotBar = new BooleanValue("Smooth Hot Bar", this, true);
 
@@ -63,12 +68,15 @@ public final class Interface extends Module {
 
     private final StopWatch stopwatch = new StopWatch();
     private final StopWatch updateTags = new StopWatch();
+    private final Font productSansMedium18 = FontManager.getProductSansMedium(18);
 
     public Font widthComparator = nunitoNormal;
     public float moduleSpacing = 12, edgeOffset;
 
     public Interface() {
         createArrayList();
+
+        INSTANCE = this;
     }
 
     public void createArrayList() {
@@ -103,6 +111,12 @@ public final class Interface extends Module {
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
+        final String name = "Username:" + Fucker.name;
+        final String rank = "Rank:" + Fucker.rank.getDisplayName();
+        final String online = "Online:" + Fucker.usernames.size();
+        this.productSansMedium18.drawStringWithShadow(name, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 3 - 2, 0xFFCCCCCC);
+        this.productSansMedium18.drawStringWithShadow(rank, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width("Rank:" + Fucker.rank.name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, 0xFFCCCCCC);
+        this.productSansMedium18.drawStringWithShadow(online, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(online) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() - 2, 0xFFCCCCCC);
 
         for (final ModuleComponent moduleComponent : allModuleComponents) {
             if (moduleComponent.getModule().isEnabled()) {

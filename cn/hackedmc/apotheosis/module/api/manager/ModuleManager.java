@@ -106,7 +106,7 @@ public final class ModuleManager extends ArrayList<Module> {
 
 
     private void updateArraylistCache() {
-        final Interface interfaceModule = this.get(Interface.class);
+        final Interface interfaceModule = Interface.INSTANCE;
         if (interfaceModule == null) return;
 
         interfaceModule.createArrayList();

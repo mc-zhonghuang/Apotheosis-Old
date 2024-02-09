@@ -1209,7 +1209,7 @@ public class EntityRenderer implements IResourceManagerReloadListener, InstanceA
                     Client.INSTANCE.getEventBus().handle(new Render2DEvent(mc.scaledResolution, partialTicks));
                     GlStateManager.popMatrix();
 
-                    Interface interfaceModule = getModule(Interface.class);
+                    Interface interfaceModule = Interface.INSTANCE;
                     boolean shaders = interfaceModule == null || interfaceModule.shaders.getValue();
                     InstanceAccess.render2DRunnables(partialTicks, shaders);
                     InstanceAccess.clearRunnables();

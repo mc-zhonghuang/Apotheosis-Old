@@ -338,10 +338,6 @@ public class Scaffold extends Module {
     }
 
     private void work() {
-        if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
-            SmoothCameraComponent.setY(startY, 0.1F);
-        }
-
         InstanceAccess.mc.thePlayer.safeWalk = this.safeWalk.getValue() && InstanceAccess.mc.thePlayer.onGround;
 
         //Used to detect when to place a block, if over air, allow placement of blocks
@@ -445,6 +441,10 @@ public class Scaffold extends Module {
 
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
+        if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
+            SmoothCameraComponent.setY(startY, 0.1F);
+        }
+
         // Getting ItemSlot
         SlotComponent.setSlot(SlotUtil.findBlock(), render.getValue()); // it must work in PreUpdate.
 
@@ -490,8 +490,6 @@ public class Scaffold extends Module {
 
         targetYaw += sprint.getValue().getName().equalsIgnoreCase("Watchdog") ? RandomUtil.nextInt(10, 20) : 0;
     }
-
-
 
     @EventLink()
     public final Listener<StrafeEvent> onStrafe = event -> {

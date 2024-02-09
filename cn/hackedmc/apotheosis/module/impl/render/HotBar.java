@@ -90,7 +90,7 @@ public class HotBar extends Module {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         final int i = scaledResolution.getScaledWidth() / 2;
 
-        final Interface interfaceModule = Client.INSTANCE.getModuleManager().get(Interface.class);
+        final Interface interfaceModule = Interface.INSTANCE;
 
         if (interfaceModule == null || interfaceModule.smoothHotBar.getValue()) {
             for (int time = 0; time < stopwatch.getElapsedTime(); ++time) {

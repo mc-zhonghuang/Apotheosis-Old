@@ -235,7 +235,7 @@ public class FontRenderer extends cn.hackedmc.apotheosis.util.font.Font {
         char[] chars = str.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             char chr = chars[i];
-            if (chr == '\u00A7' && i != chars.length - 1)
+            if (chr == '§' && i != chars.length - 1)
                 continue;
             width += getOrGenerateCharWidthMap(chr >> 8)[chr & 0xFF];
         }
