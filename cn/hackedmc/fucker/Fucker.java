@@ -393,7 +393,7 @@ public class Fucker {
                 }
 
                 case ADMIN: {
-                    return "§d" + name;
+                    return "§4" + name;
                 }
             }
 
