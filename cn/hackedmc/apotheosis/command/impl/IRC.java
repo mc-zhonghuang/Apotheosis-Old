@@ -22,12 +22,14 @@ public final class IRC extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            error(".irc <chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) ? "/ban" : "") + "> (VALUE)");
+            error(".irc <chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute" : "") + "> (VALUE)");
         } else {
             if (args[1].equalsIgnoreCase("info")) {
+                ChatUtil.displayNoPrefix("·======§b§lIRC Info§r======·");
                 ChatUtil.displayNoPrefix("§bUsername§r -> " + Fucker.name);
-                ChatUtil.displayNoPrefix("§bRank§r -> " + Fucker.rank.getDisplayName());
+                ChatUtil.displayNoPrefix("§bRank§r -> " + (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName()));
                 ChatUtil.displayNoPrefix("§bTime§r -> " + (Fucker.time == -1 ? "Infinite" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Fucker.time))));
+                ChatUtil.displayNoPrefix("·===================·");
             } else if ((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat")) && args.length > 2) {
                 if (args[1].equalsIgnoreCase("ban")) {
                     final JsonObject jsonObject = new JsonObject();
@@ -39,7 +41,7 @@ public final class IRC extends Command {
                 } else {
                     final String message = StringUtils.join(Arrays.stream(args).skip(2).collect(Collectors.toList()), " ");
                     final int length = message.length();
-                    if ((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) {
+                    if (((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) && (length > Fucker.maxChat && Fucker.maxChat != -1)) {
                         ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");
                     } else {
                         final JsonObject jsonObject = new JsonObject();
@@ -51,7 +53,7 @@ public final class IRC extends Command {
                     }
                 }
             } else {
-                error(".irc <chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) ? "/ban" : "") + "> (VALUE)");
+                error(".irc <chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute" : "") + "> (VALUE)");
             }
         }
     }

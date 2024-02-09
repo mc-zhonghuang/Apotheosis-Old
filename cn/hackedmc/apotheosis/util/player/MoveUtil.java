@@ -305,6 +305,7 @@ public class MoveUtil implements InstanceAccess {
      * Stops the player from moving
      */
     public void stop() {
+        if (mc.thePlayer == null) return;
         mc.thePlayer.motionX = 0;
         mc.thePlayer.motionZ = 0;
     }

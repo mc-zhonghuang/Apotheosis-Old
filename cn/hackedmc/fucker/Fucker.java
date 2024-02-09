@@ -45,20 +45,22 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
-import org.apache.commons.lang3.StringUtils;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.net.InetAddress;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
 
 public class Fucker {
     public static Channel channel = null;
     public static boolean login = false;
     public static String name = "";
     public static Rank rank = Rank.NORMAL;
+    public static String customTag = "";
+    public static int maxChat = 0;
+    public static boolean mutable = false;
+    public static boolean ban = false;
     public static String uuid = "";
     public static long time = 0;
     public static final String username = "5oiR5piv56eR5q+U5oiR5p2A5q275LqG55u05Y2H6aOe5py6";
@@ -210,10 +212,18 @@ public class Fucker {
                                                 case "LoginHandler": {
                                                     final JsonUtil user = new JsonUtil((JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("User", ""))));
                                                     uuid = user.getString("UUID", "");
-                                                    rank = Rank.getFromName(user.getString("Rank", ""));
+                                                    final String rankName = user.getString("Rank", "");
+                                                    rank = Rank.getFromName(rankName);
+                                                    if (rank == Rank.CUSTOM) customTag = rankName;
                                                     time = user.getLong("Time", 0);
-                                                    login = true;
-                                                    tryConnection();
+                                                    final String hash = user.getString("Hash", "00");
+                                                    mutable = hash.startsWith("1");
+                                                    ban = hash.endsWith("1");
+                                                    maxChat = user.getInt("Hash2", 0);
+                                                    if (!login) {
+                                                        login = true;
+                                                        tryConnection();
+                                                    }
 
                                                     break;
                                                 }
@@ -287,7 +297,8 @@ public class Fucker {
                                 });
                             }
                         });
-                ChannelFuture channelFuture = bootstrap.connect("38.6.175.63", 19198).sync();
+                // 38.6.175.63
+                ChannelFuture channelFuture = bootstrap.connect(InetAddress.getByName("apotheosis.hackedmc.cn"), 19198).sync();
                 channel = channelFuture.channel();
                 channelFuture.channel().closeFuture().sync();
             } catch (Exception ignored) {} finally {
@@ -345,15 +356,15 @@ public class Fucker {
         message = message.substring(1);
 
         final int length = message.length();
-        if ((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) {
+        if (((rank == Rank.NORMAL && length > 15) || (rank == Rank.VIP && length > 20) || (rank == Rank.SVIP && length > 30) || (rank == Rank.MOD && length > 40)) && (length > maxChat && maxChat != -1)) {
             ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");
         } else {
             final JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("Packet", "Message");
-            jsonObject.addProperty("User", Fucker.name);
+            jsonObject.addProperty("User", name);
             jsonObject.addProperty("Text", message);
 
-            ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
+            ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
         }
 
         event.setCancelled();
@@ -364,7 +375,8 @@ public class Fucker {
         VIP("VIP"),
         SVIP("SVIP"),
         MOD("Mod"),
-        ADMIN("Admin");
+        ADMIN("Admin"),
+        CUSTOM("Custom");
 
         public static Rank getFromName(String name) {
             for (Rank rank : values()) {
@@ -372,7 +384,7 @@ public class Fucker {
                     return rank;
             }
 
-            return NORMAL;
+            return CUSTOM;
         }
         public String getDisplayName() {
             switch (this) {

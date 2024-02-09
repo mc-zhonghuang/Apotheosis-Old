@@ -16,4 +16,13 @@ public class JsonUtil {
     public long getLong(String name, long defaultValue) {
         return object.has(name) ? object.get(name).getAsLong() : defaultValue;
     }
+
+    public boolean getBoolean(String name, boolean defaultValue) {
+        return object.has(name) ? object.get(name).getAsBoolean() : defaultValue;
+    }
+
+    public int getInt(String name, int defaultValue) {
+        return object.has(name) ? object.get(name).getAsInt() : defaultValue;
+    }
+
 }

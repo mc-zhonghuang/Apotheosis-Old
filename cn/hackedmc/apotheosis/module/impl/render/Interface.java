@@ -112,10 +112,10 @@ public final class Interface extends Module {
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
         final String name = "Username:" + Fucker.name;
-        final String rank = "Rank:" + Fucker.rank.getDisplayName();
+        final String rank = "Rank:" + (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName());
         final String online = "Online:" + Fucker.usernames.size();
         this.productSansMedium18.drawStringWithShadow(name, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 3 - 2, 0xFFCCCCCC);
-        this.productSansMedium18.drawStringWithShadow(rank, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width("Rank:" + Fucker.rank.name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, 0xFFCCCCCC);
+        this.productSansMedium18.drawStringWithShadow(rank, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(rank) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, 0xFFCCCCCC);
         this.productSansMedium18.drawStringWithShadow(online, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(online) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() - 2, 0xFFCCCCCC);
 
         for (final ModuleComponent moduleComponent : allModuleComponents) {
