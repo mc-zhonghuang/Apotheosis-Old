@@ -66,7 +66,7 @@ public final class IRC extends Command {
                     jsonObject.addProperty("User", Fucker.name);
                     jsonObject.addProperty("MuteName", args[2]);
                     jsonObject.addProperty("Reason", args.length > 3 ? args[3] : "无");
-                    jsonObject.addProperty("Time", args.length > 4 ? Long.getLong(args[5]) * 1000 : -1);
+                    jsonObject.addProperty("Time", args.length > 4 ? Long.getLong(args[4]) * 1000 : -1);
 
                     ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
                 } else if (args[1].equalsIgnoreCase("unmute")) {
