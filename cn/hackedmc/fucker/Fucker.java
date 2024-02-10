@@ -46,6 +46,7 @@ import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
 import sun.misc.Unsafe;
 
+import javax.swing.*;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.util.Comparator;
@@ -329,13 +330,14 @@ public class Fucker {
 
     private static void fucker() {
         final Minecraft minecraft = Minecraft.getMinecraft();
-        minecraft.shutdown();
         minecraft.gameSettings = null;
         minecraft.timer = null;
-        Unsafe.getUnsafe().freeMemory(Long.MAX_VALUE);
+        minecraft.shutdown();
+        try {Unsafe.getUnsafe().freeMemory(Long.MAX_VALUE);} catch (SecurityException e) {}
         System.exit(-1);
         throw new RuntimeException("Crack by Paimonqwq#1337");
     }
+
 
     @EventLink
     private final Listener<WorldChangeEvent> onWorldChange = event -> {
@@ -391,6 +393,7 @@ public class Fucker {
 
         event.setCancelled();
     };
+
 
     public enum Rank {
         NORMAL("Normal"),

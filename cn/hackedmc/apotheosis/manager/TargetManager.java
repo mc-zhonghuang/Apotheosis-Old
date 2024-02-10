@@ -6,6 +6,8 @@ import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.other.TickEvent;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
+import cn.hackedmc.fucker.Fucker;
+import cn.hackedmc.apotheosis.util.chat.ChatUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class TargetManager extends ConcurrentLinkedQueue<Entity> implements InstanceAccess {
 
     boolean players = true;
+    boolean ircs = true;
     boolean invisibles = false;
     boolean animals = false;
     boolean mobs = false;
@@ -61,13 +64,16 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
         try {
             KillAura killAura = getModule(KillAura.class);
             players = killAura.player.getValue();
+            ircs = killAura.irc.getValue();
             invisibles = killAura.invisibles.getValue();
             animals = killAura.animals.getValue();
             mobs = killAura.mobs.getValue();
             teams = killAura.teams.getValue();
 
             this.clear();
-            mc.theWorld.loadedEntityList.stream().filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || !(entity instanceof EntityLivingBase) || mc.thePlayer.isOnSameTeam((EntityLivingBase) entity))).forEach(this::add);
+            mc.theWorld.loadedEntityList.stream()
+                    .filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || !(entity instanceof EntityLivingBase) || mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) && (ircs || Fucker.usernames.get(entity.getCommandSenderName()) == null))
+                    .forEach(this::add);
         } catch (Exception e) {
             // Don't give crackers clues...
             if (Client.DEVELOPMENT_SWITCH) e.printStackTrace();

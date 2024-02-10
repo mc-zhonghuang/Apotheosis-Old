@@ -10,6 +10,7 @@ import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
 import cn.hackedmc.apotheosis.newevent.Listener;
+import cn.hackedmc.fucker.Fucker;
 import cn.hackedmc.apotheosis.util.font.Font;
 import cn.hackedmc.apotheosis.util.font.FontManager;
 import cn.hackedmc.apotheosis.util.font.impl.minecraft.FontRenderer;
@@ -27,7 +28,6 @@ import java.awt.*;
 @Rise
 @ModuleInfo(name = "module.render.nametags.name", description = "module.render.nametags.description", category = Category.RENDER)
 public final class NameTags extends Module {
-
     private final BooleanValue health = new BooleanValue("Show Health", this, true);
     // Show health option doesn't work until we come up with a design that looks good without the health
     // To be honest I don't care alan
@@ -49,7 +49,14 @@ public final class NameTags extends Module {
                 continue;
             }
 
-            final String text = entity.getCommandSenderName();
+            String playerName = entity.getCommandSenderName();
+            String ircName = Fucker.usernames.get(playerName);
+            String text;
+            if (ircName != null) {
+                text = playerName + " §r(§b" + ircName + "§r)";
+            } else {
+                text = playerName;
+            }
             final double nameWidth = nunitoLightNormal.width(text);
 
             final double posX = (position.x + (position.z - position.x) / 2);

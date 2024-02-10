@@ -147,6 +147,7 @@ public final class KillAura extends Module {
 
     private final BooleanValue showTargets = new BooleanValue("Targets", this, false);
     public final BooleanValue player = new BooleanValue("Player", this, false, () -> !showTargets.getValue());
+    public final BooleanValue irc = new BooleanValue("irc", this, false, () -> !showTargets.getValue());
     public final BooleanValue invisibles = new BooleanValue("Invisibles", this, false, () -> !showTargets.getValue());
     public final BooleanValue animals = new BooleanValue("Animals", this, false, () -> !showTargets.getValue());
     public final BooleanValue mobs = new BooleanValue("Mobs", this, false, () -> !showTargets.getValue());
