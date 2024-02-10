@@ -28,7 +28,7 @@ public final class IRC extends Command {
                 ChatUtil.displayNoPrefix("§bUsername§r -> " + Fucker.name);
                 ChatUtil.displayNoPrefix("§bRank§r -> " + (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName()));
                 ChatUtil.displayNoPrefix("§bTime§r -> " + (Fucker.time == -1 ? "Infinite" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Fucker.time))));
-                ChatUtil.displayNoPrefix("§bMute§r -> " + (System.currentTimeMillis() < Fucker.mute || Fucker.mute == -1 ? "禁言中，来自" + Fucker.muteUser + "，原因:" + Fucker.muteReason + "，时长:" + (Fucker.mute == -1 ? "无限时长" : new SimpleDateFormat("yyyy年MM月dd天 HH小时mm分钟").format(new Date(Fucker.mute))) : "无"));
+                ChatUtil.displayNoPrefix("§bMute§r -> " + (System.currentTimeMillis() < Fucker.mute || Fucker.mute == -1 ? "禁言中，来自" + Fucker.muteUser + "，原因:" + Fucker.muteReason + "，时长:" + (Fucker.mute == -1 ? "无限时长" : new SimpleDateFormat("yyyy年MM月dd天 HH小时mm分钟").format(new Date(Fucker.mute - System.currentTimeMillis()))) : "无"));
                 ChatUtil.displayNoPrefix("·===================·");
             } else if ((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute")) && args.length > 2) {
                 if (args[1].equalsIgnoreCase("mute")) {
