@@ -21,7 +21,7 @@ public final class IRC extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
+            error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || (Fucker.ban && Fucker.mutable) ? "/tips" : "") + "> (VALUE)");
         } else {
             if (args[1].equalsIgnoreCase("info")) {
                 ChatUtil.displayNoPrefix("·======§b§lIRC Info§r======·");
@@ -36,7 +36,7 @@ public final class IRC extends Command {
                     ChatUtil.displayNoPrefix("§bUsername§r -> " + key + " §dGameId§r -> " + value);
                 });
                 ChatUtil.displayNoPrefix("·===================·");
-            } else if (((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute")) && args.length > 2) || (args[1].equalsIgnoreCase("message") && args.length > 3)) {
+            } else if (((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute") || args[1].equalsIgnoreCase("tips")) && args.length > 2) || (args[1].equalsIgnoreCase("message") && args.length > 3)) {
                 if (args[1].equalsIgnoreCase("message")) {
                     final String message = StringUtils.join(Arrays.stream(args).skip(3).collect(Collectors.toList()), " ");
                     final int length = message.length();
@@ -53,6 +53,13 @@ public final class IRC extends Command {
 
                         ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
                     }
+                } else if (args[1].equalsIgnoreCase("tips")) {
+                    final JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("Packet", "Tips");
+                    jsonObject.addProperty("User", Fucker.name);
+                    jsonObject.addProperty("Text", StringUtils.join(Arrays.stream(args).skip(2).collect(Collectors.toList()), " "));
+
+                    ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
                 } else if (args[1].equalsIgnoreCase("mute")) {
                     final JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("Packet", "Mute");
@@ -93,7 +100,7 @@ public final class IRC extends Command {
                     }
                 }
             } else {
-                error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
+                error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || (Fucker.ban && Fucker.mutable) ? "/tips" : "") + "> (VALUE)");
             }
         }
     }

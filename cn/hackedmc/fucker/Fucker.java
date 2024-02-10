@@ -269,6 +269,14 @@ public class Fucker {
                                                     break;
                                                 }
 
+                                                case "Tips": {
+                                                    final String text = json.getString("Text", "无");
+
+                                                    ChatUtil.displayIRC("[§e公告§r] " + text);
+
+                                                    break;
+                                                }
+
                                                 case "Mute": {
                                                     final JsonUtil muteData = new JsonUtil((JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Mute", ""))));
                                                     muteReason = muteData.getString("Reason", "无");
