@@ -278,6 +278,14 @@ public class Fucker {
                                                     break;
                                                 }
 
+                                                case "UnMute": {
+                                                    muteReason = "";
+                                                    muteUser = "";
+                                                    mute = 0;
+
+                                                    break;
+                                                }
+
                                                 case "FuckYourMother":
                                                 case "Ban": {
                                                     fucker();

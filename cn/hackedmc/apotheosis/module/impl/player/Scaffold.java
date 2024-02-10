@@ -429,7 +429,7 @@ public class Scaffold extends Module {
         }
 
         if (InstanceAccess.mc.thePlayer.posY < startY) {
-            startY = InstanceAccess.mc.thePlayer.posY;
+            startY = Math.floor(InstanceAccess.mc.thePlayer.posY);
         }
     }
 
@@ -442,7 +442,8 @@ public class Scaffold extends Module {
     @EventLink()
     public final Listener<PreUpdateEvent> onPreUpdate = event -> {
         if (sameY.getValue().getName().equalsIgnoreCase("Auto Jump") && hideJump.getValue() && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && MoveUtil.isMoving()) {
-            SmoothCameraComponent.setY(startY, 0.1F);
+            if (mc.thePlayer.onGround) SmoothCameraComponent.setY(startY, 0.1F);
+            else SmoothCameraComponent.setY(0.1F);
         }
 
         // Getting ItemSlot
