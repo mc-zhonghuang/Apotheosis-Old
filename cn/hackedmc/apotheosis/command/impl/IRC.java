@@ -33,7 +33,7 @@ public final class IRC extends Command {
             } else if (args[1].equalsIgnoreCase("Online")) {
                 ChatUtil.displayNoPrefix("·======§b§lIRC Online§r======·");
                 Fucker.usernames.forEach((key, value) -> {
-                    ChatUtil.displayNoPrefix("§bUsername§r -> " + key + " §dGameId§br -> " + value);
+                    ChatUtil.displayNoPrefix("§bUsername§r -> " + key + " §dGameId§r -> " + value);
                 });
                 ChatUtil.displayNoPrefix("·===================·");
             } else if ((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute")) && args.length > 2) {
