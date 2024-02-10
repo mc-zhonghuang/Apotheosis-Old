@@ -260,8 +260,7 @@ public class Fucker {
                                                 case "Jumping": {
                                                     if (InstanceAccess.mc.theWorld != null) {
                                                         final JsonObject userData = (JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Users", "")));
-                                                        userData.entrySet().forEach(entry -> usernames.put(entry.getValue().getAsString(), entry.getKey()));
-
+                                                        usernames.clear();
                                                         userData.entrySet()
                                                                 .stream().sorted(Comparator.comparingInt(entry -> entry.getValue().getAsString().length()))
                                                                 .forEachOrdered(x -> usernames.put(x.getValue().getAsString(), x.getKey()));
