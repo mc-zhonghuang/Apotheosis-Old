@@ -48,9 +48,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.net.InetAddress;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedHashMap;
 
 public class Fucker {

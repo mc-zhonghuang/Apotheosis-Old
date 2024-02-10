@@ -43,6 +43,7 @@ public final class IRC extends Command {
                 } else if (args[1].equalsIgnoreCase("unmute")) {
                     final JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("Packet", "UnMute");
+                    jsonObject.addProperty("User", Fucker.name);
                     jsonObject.addProperty("MuteName", args[2]);
 
                     ByteUtil.send(Fucker.channel, CryptUtil.DES.encrypt(jsonObject.toString(), Fucker.username, Fucker.password));
