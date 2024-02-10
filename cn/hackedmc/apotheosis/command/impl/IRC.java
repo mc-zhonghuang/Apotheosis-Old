@@ -33,14 +33,14 @@ public final class IRC extends Command {
             } else if (args[1].equalsIgnoreCase("Online")) {
                 ChatUtil.displayNoPrefix("·======§b§lIRC Online§r======·");
                 Fucker.usernames.forEach((key, value) -> {
-                    ChatUtil.displayNoPrefix("§bUsername§r -> " + key + " §dGameId§r -> " + value);
+                    ChatUtil.displayNoPrefix("§bUsername§r -> " + value + " §dGameId§r -> " + key);
                 });
                 ChatUtil.displayNoPrefix("·===================·");
             } else if (((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute") || args[1].equalsIgnoreCase("tips")) && args.length > 2) || (args[1].equalsIgnoreCase("message") && args.length > 3)) {
                 if (args[1].equalsIgnoreCase("message")) {
                     final String message = StringUtils.join(Arrays.stream(args).skip(3).collect(Collectors.toList()), " ");
                     final int length = message.length();
-                    if (System.currentTimeMillis() < Fucker.time || Fucker.time == -1) {
+                    if (System.currentTimeMillis() < Fucker.mute || Fucker.mute == -1) {
                         ChatUtil.displayIRC("§c§l错误§r >> 你正在被禁言中！");
                     } else if (((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) && (length > Fucker.maxChat && Fucker.maxChat != -1)) {
                         ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");
@@ -86,7 +86,7 @@ public final class IRC extends Command {
                 } else {
                     final String message = StringUtils.join(Arrays.stream(args).skip(2).collect(Collectors.toList()), " ");
                     final int length = message.length();
-                    if (System.currentTimeMillis() < Fucker.time || Fucker.time == -1) {
+                    if (System.currentTimeMillis() < Fucker.mute || Fucker.mute == -1) {
                         ChatUtil.displayIRC("§c§l错误§r >> 你正在被禁言中！");
                     } else if (((Fucker.rank == Fucker.Rank.NORMAL && length > 15) || (Fucker.rank == Fucker.Rank.VIP && length > 20) || (Fucker.rank == Fucker.Rank.SVIP && length > 30) || (Fucker.rank == Fucker.Rank.MOD && length > 40)) && (length > Fucker.maxChat && Fucker.maxChat != -1)) {
                         ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");

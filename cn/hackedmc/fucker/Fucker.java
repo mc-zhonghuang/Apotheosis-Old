@@ -376,7 +376,9 @@ public class Fucker {
         message = message.substring(1);
 
         final int length = message.length();
-        if (((rank == Rank.NORMAL && length > 15) || (rank == Rank.VIP && length > 20) || (rank == Rank.SVIP && length > 30) || (rank == Rank.MOD && length > 40)) && (length > maxChat && maxChat != -1)) {
+        if (System.currentTimeMillis() < mute || mute == -1) {
+            ChatUtil.displayIRC("§c§l错误§r >> 你正在被禁言中！");
+        } else if (((rank == Rank.NORMAL && length > 15) || (rank == Rank.VIP && length > 20) || (rank == Rank.SVIP && length > 30) || (rank == Rank.MOD && length > 40)) && (length > maxChat && maxChat != -1)) {
             ChatUtil.displayIRC("§c§l错误§r >> 发送的信息过长！");
         } else {
             final JsonObject jsonObject = new JsonObject();
