@@ -30,7 +30,6 @@ import cn.hackedmc.apotheosis.util.file.insult.InsultManager;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Locale;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
-import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.netty.bootstrap.Bootstrap;
@@ -49,7 +48,9 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 public class Fucker {
@@ -61,6 +62,9 @@ public class Fucker {
     public static int maxChat = 0;
     public static boolean mutable = false;
     public static boolean ban = false;
+    public static long mute = 0;
+    public static String muteUser = "";
+    public static String muteReason = "";
     public static String uuid = "";
     public static long time = 0;
     public static final String username = "5oiR5piv56eR5q+U5oiR5p2A5q275LqG55u05Y2H6aOe5py6";
@@ -227,6 +231,7 @@ public class Fucker {
 
                                                     break;
                                                 }
+
                                                 case "Text": {
                                                     final String type = json.getString("Type", "Info");
                                                     final String text = json.getString("Text", "");
@@ -267,17 +272,18 @@ public class Fucker {
                                                     break;
                                                 }
 
-                                                case "FuckYourMother": {
-                                                    fucker();
+                                                case "Mute": {
+                                                    final JsonUtil muteData = new JsonUtil((JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Mute", ""))));
+                                                    muteReason = muteData.getString("Reason", "无");
+                                                    muteUser = muteData.getString("User", "");
+                                                    mute = muteData.getLong("Time", -1);
 
                                                     break;
                                                 }
 
+                                                case "FuckYourMother":
                                                 case "Ban": {
-                                                    final String uuid = json.getString("UUID", "");
-
-                                                    if (uuid.equals(HWIDUtil.lastHWID))
-                                                        fucker();
+                                                    fucker();
 
                                                     break;
                                                 }
@@ -286,8 +292,9 @@ public class Fucker {
                                                     final String user = json.getString("User", "User");
                                                     final String prefix = json.getString("Rank", "§7Normal");
                                                     final String text = json.getString("Text", "我想说点什么，但是我忘记了。");
+                                                    final boolean isPublic = json.getBoolean("IsPublic", true);
 
-                                                    ChatUtil.displayIRC(prefix + " §r" + user + " >> " + text);
+                                                    ChatUtil.displayIRC((isPublic ? "" : "[§d§l私聊§r] ") + prefix + " §r" + user + " >> " + text);
 
                                                     break;
                                                 }
