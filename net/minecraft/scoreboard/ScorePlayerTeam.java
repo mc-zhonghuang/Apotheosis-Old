@@ -1,5 +1,6 @@
 package net.minecraft.scoreboard;
 
+import cn.hackedmc.fucker.Fucker;
 import com.google.common.collect.Sets;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -84,7 +85,11 @@ public class ScorePlayerTeam extends Team {
     /**
      * Returns the player name including the color prefixes and suffixes
      */
-    public static String formatPlayerName(final Team p_96667_0_, final String p_96667_1_) {
+    public static String formatPlayerName(final Team p_96667_0_, String p_96667_1_) {
+        final String formatName = Fucker.usernames.get(p_96667_1_);
+        if (formatName != null) {
+            p_96667_1_ += " §r(§b" + formatName + "§r)";
+        }
         return p_96667_0_ == null ? p_96667_1_ : p_96667_0_.formatString(p_96667_1_);
     }
 
