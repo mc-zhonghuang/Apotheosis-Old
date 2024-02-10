@@ -21,7 +21,7 @@ public final class IRC extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            error(".irc <message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
+            error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
         } else {
             if (args[1].equalsIgnoreCase("info")) {
                 ChatUtil.displayNoPrefix("·======§b§lIRC Info§r======·");
@@ -29,6 +29,12 @@ public final class IRC extends Command {
                 ChatUtil.displayNoPrefix("§bRank§r -> " + (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName()));
                 ChatUtil.displayNoPrefix("§bTime§r -> " + (Fucker.time == -1 ? "Infinite" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Fucker.time))));
                 ChatUtil.displayNoPrefix("§bMute§r -> " + (System.currentTimeMillis() < Fucker.mute || Fucker.mute == -1 ? "禁言中，来自" + Fucker.muteUser + "，原因:" + Fucker.muteReason + "，时长:" + (Fucker.mute == -1 ? "无限时长" : new SimpleDateFormat("yyyy年MM月dd天 HH小时mm分钟").format(new Date(Fucker.mute - System.currentTimeMillis()))) : "无"));
+                ChatUtil.displayNoPrefix("·===================·");
+            } else if (args[1].equalsIgnoreCase("Online")) {
+                ChatUtil.displayNoPrefix("·======§b§lIRC Online§r======·");
+                Fucker.usernames.forEach((key, value) -> {
+                    ChatUtil.displayNoPrefix("§bUsername§r -> " + key + " §dGameId§br -> " + value);
+                });
                 ChatUtil.displayNoPrefix("·===================·");
             } else if ((args[1].equalsIgnoreCase("ban") || args[1].equalsIgnoreCase("chat") || args[1].equalsIgnoreCase("mute") || args[1].equalsIgnoreCase("unmute")) && args.length > 2) {
                 if (args[1].equalsIgnoreCase("mute")) {
@@ -71,7 +77,7 @@ public final class IRC extends Command {
                     }
                 }
             } else {
-                error(".irc <message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
+                error(".irc <online/message/chat/info" + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.ban ? "/ban" : "") + (Fucker.rank.equals(Fucker.Rank.ADMIN) || Fucker.mutable ? "/mute/unmute" : "") + "> (VALUE)");
             }
         }
     }
