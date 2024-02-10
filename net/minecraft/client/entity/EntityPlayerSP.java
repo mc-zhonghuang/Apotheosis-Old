@@ -297,6 +297,10 @@ public class EntityPlayerSP extends AbstractClientPlayer implements InstanceAcce
         this.sendQueue.addToSendQueue(new C01PacketChatMessage(event.getMessage()));
     }
 
+    public void sendChatMessageNoEvent(final String message) {
+        this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+    }
+
     /**
      * Swings the item the player is holding.
      */
