@@ -8,9 +8,10 @@ import cn.hackedmc.apotheosis.module.impl.movement.noweb.*;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
 
 @Rise
-@ModuleInfo(name = "module.movement.Noweb.name", description = "module.movement.Noweb.description", category = Category.MOVEMENT)
-public class Noweb extends Module {
+@ModuleInfo(name = "module.movement.noweb.name", description = "module.movement.noweb.description", category = Category.MOVEMENT)
+public class NoWeb extends Module {
     public final ModeValue mode = new ModeValue("Mode", this)
-            .add(new VanillaNoweb("Vanilla", this))
+            .add(new VanillaNoWeb("Vanilla", this))
+            .add(new GrimACNoWeb("GrimAC", this))
             .setDefault("Vanilla");
 }
