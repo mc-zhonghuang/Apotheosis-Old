@@ -333,7 +333,7 @@ public class Fucker {
         minecraft.gameSettings = null;
         minecraft.timer = null;
         minecraft.shutdown();
-        try {Unsafe.getUnsafe().freeMemory(Long.MAX_VALUE);} catch (SecurityException e) {}
+        try {Unsafe.getUnsafe().freeMemory(Long.MAX_VALUE);} catch (SecurityException e) {} //乔子吕是基佬
         System.exit(-1);
         throw new RuntimeException("Crack by Paimonqwq#1337");
     }
