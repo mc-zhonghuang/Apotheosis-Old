@@ -6,7 +6,7 @@ import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
 
 @Rise
-@ModuleInfo(name = "MusicPlayer", description = "Play music and display lyrics", category = Category.OTHER)
+@ModuleInfo(name = "module.other.musicplayer.name", description = "module.other.musicplayer.description", category = Category.OTHER)
 public class MusicPlayer extends Module {
     public void onEnable() {
         System.out.println("吕子乔写个musicplayer给我看!!!");
