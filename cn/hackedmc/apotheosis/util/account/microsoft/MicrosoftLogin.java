@@ -161,8 +161,8 @@ public class MicrosoftLogin {
                     }
                 }
 
-                if (!ok) writeText(req, "Cannot authenticate.");
-                else writeText(req, "<html>You may now close this page.<script>close()</script></html>");
+                if (!ok) writeText(req, "登录失败");
+                else writeText(req, "<html>登录成功您关闭此页面<script>close()</script></html>");
             }
 
             stopServer();

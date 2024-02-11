@@ -25,10 +25,20 @@ public class AltDisplay extends MenuComponent {
     private final Animation selectedAnimation = new Animation(Easing.EASE_OUT_SINE, 500);
 
     private boolean selected;
+    private Color displayColor = Color.WHITE; // 默认颜色为白色
+    Color bgColor;
 
     public AltDisplay(double x, double y, double width, double height, Account account) {
         super(x, y, width, height);
         this.account = account;
+    }
+
+    /**
+     * 设置显示颜色的方法
+     * @param color 要设置的颜色
+     */
+    public void setDisplayColor(Color color) {
+        this.displayColor = color;
     }
 
     /**
@@ -44,7 +54,6 @@ public class AltDisplay extends MenuComponent {
         if (this.getY() + offset + this.getHeight() < 0 || this.getY() + offset > InstanceAccess.mc.displayHeight) {
             return false;
         }
-
 
         InstanceAccess.NORMAL_RENDER_RUNNABLES.add(() -> {
 
@@ -62,7 +71,13 @@ public class AltDisplay extends MenuComponent {
             final Color fontColor2 = ColorUtil.withAlpha(Color.GRAY, (int) (200 + this.hoverAnimation.getValue()));
 
             // Render background
-            RenderUtil.roundedRectangle(this.getX(), this.getY() + offset, this.getWidth(), this.getHeight(), 5, ColorUtil.withAlpha(Color.WHITE, 30 + (int) this.hoverAnimation.getValue() / 10));
+            if (displayColor != null) {
+                bgColor = ColorUtil.withAlpha(displayColor, 50);
+            } else {
+                // 默认颜色为半透明红色
+                bgColor = new Color(255, 0, 0, 150); // 100 表示透明度，取值范围为 0-255
+            }
+            RenderUtil.roundedRectangle(this.getX(), this.getY() + offset, this.getWidth(), this.getHeight(), 5, bgColor);
 
             // Renders if account is in use
             if (this.selectedAnimation.getValue() > 0.0) {
@@ -73,8 +88,8 @@ public class AltDisplay extends MenuComponent {
 
             // Renders information
             renderHead(this.getX() + 8, this.getY() + offset + 4, 24);
-            fontRenderer.drawStringWithShadow(this.account.getEmail(), this.getX() + 40, this.getY() + offset + this.getHeight() / 2.0F - 10, fontColor.getRGB());
-            fontRenderer.drawStringWithShadow(this.account.getPassword().equalsIgnoreCase("Offline") ? "Offline" : this.account.getPassword().replaceAll(".", "*"), this.getX() + 40, this.getY() + offset + this.getHeight() / 2.0F + 2, this.account.getPassword().equalsIgnoreCase("Offline") ? fontColor2.getRGB() : fontColor.getRGB());
+            fontRenderer.drawStringWithShadow(this.account.getEmail(), this.getX() + 40, this.getY() + offset + this.getHeight() / 2.0F - 10, displayColor.getRGB());
+            fontRenderer.drawStringWithShadow(this.account.getPassword().equalsIgnoreCase("Offline") ? "Offline" : this.account.getPassword().replaceAll(".", "*"), this.getX() + 40, this.getY() + offset + this.getHeight() / 2.0F + 2, this.account.getPassword().equalsIgnoreCase("Offline") ? Color.GRAY.getRGB() : displayColor.getRGB());
 
             // Renders delete button
             int size = 12;

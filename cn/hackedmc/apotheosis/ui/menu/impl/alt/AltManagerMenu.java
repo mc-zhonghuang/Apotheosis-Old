@@ -143,6 +143,7 @@ public final class AltManagerMenu extends Menu {
                     double deleteY = altDisplay.getY() + 4;
                     if (MouseUtil.isHovered(deleteX, deleteY + scrollUtil.scroll, 12, 12, mouseX, mouseY)) {
                         Account account = altDisplay.getAccount();
+                        System.out.println("Deleting account: " + account.getUsername()); // 添加打印语句
                         Client.INSTANCE.getAltManager().getAccounts().remove(account);
                         this.altDisplays.remove(altDisplay);
                         resetAltDisplays = true;
@@ -164,6 +165,9 @@ public final class AltManagerMenu extends Menu {
                                     account.setRefreshToken(loginData.newRefreshToken);
                                     for (AltDisplay d : altDisplays) if (d.isSelected()) d.setSelected(false);
                                     altDisplay.setSelected(true);
+                                } else {
+                                    altDisplay.setSelected(false);
+                                    altDisplay.setDisplayColor(Color.RED); // 登录失败，设置颜色为红色
                                 }
                             }).start();
                         }
@@ -173,11 +177,13 @@ public final class AltManagerMenu extends Menu {
             }
 
             if (resetAltDisplays) {
+                System.out.println("Reloading Alt Displays...");
                 Client.INSTANCE.getAltManager().set("alts");
                 this.loadAltDisplays();
             }
         }
     }
+
 
     @Override
     public void initGui() {
