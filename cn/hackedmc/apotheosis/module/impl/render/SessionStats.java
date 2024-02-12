@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
  * @since 10/13/2022
  */
 @Rise
-@Hidden
 @ModuleInfo(name = "module.render.sessionstats.name", description = "module.render.sessionstats.description", category = Category.RENDER)
 public class SessionStats extends Module {
 
@@ -144,7 +143,7 @@ public class SessionStats extends Module {
 
             // Shadow glow
             else if (this.glowMode.getValue().getName().equals("Shadow")) {
-                RenderUtil.roundedRectangle(position.position.x, position.position.y, position.scale.x, position.scale.y,
+                RenderUtil.roundedRectangle(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25,
                         12, getTheme().getDropShadow());
             }
         });

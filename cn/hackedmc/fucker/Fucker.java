@@ -360,6 +360,8 @@ public class Fucker {
         final Packet<?> packet = event.getPacket();
 
         if (packet instanceof S02PacketChat) {
+            if (Minecraft.getMinecraft().isSingleplayer()) return;
+
             final S02PacketChat wrapped = (S02PacketChat) packet;
 
             usernames.forEach((key, value) -> wrapped.setChatComponent(new ChatComponentText(wrapped.getChatComponent().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)"))));

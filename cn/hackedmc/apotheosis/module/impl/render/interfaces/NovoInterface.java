@@ -81,7 +81,7 @@ public class NovoInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
-        String text = " | " + Client.VERSION + " | " + mc.thePlayer.getDisplayName().getFormattedText() + " | " + ServerUtils.getRemoteIp() + " | " + "Fps:"+ Minecraft.getDebugFPS();
+        String text = " | " + Client.VERSION + " | " + mc.thePlayer.getCommandSenderName() + " | " + ServerUtils.getRemoteIp() + " | " + "Fps:"+ Minecraft.getDebugFPS();
         int sb = 6 * 25 - 5;
         int left = FontManager.getProductSansRegular(20).width(text);
         position.scale = new Vector2d(200, 100);
