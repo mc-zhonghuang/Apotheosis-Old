@@ -1,5 +1,6 @@
 package cn.hackedmc.apotheosis.module.impl.movement.speed;
 
+import cn.hackedmc.apotheosis.Client;
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.component.impl.player.rotationcomponent.MovementFix;
 import cn.hackedmc.apotheosis.module.impl.movement.Speed;
@@ -24,6 +25,7 @@ public class LegitSpeed extends Mode<Speed> {
 
     private ModeValue rotationExploit = new ModeValue("Rotation Exploit Mode", this)
             .add(new SubMode("Off"))
+            .add(new SubMode("1.9+ BoundingBox"))
             .add(new SubMode("Rotate (Fully Legit)"))
             .add(new SubMode("Speed Equivalent (Almost legit, Very hard to flag)"))
             .setDefault("Speed Equivalent (Almost legit, Very hard to flag)");
@@ -45,6 +47,16 @@ public class LegitSpeed extends Mode<Speed> {
 
             case "Speed Equivalent (Almost legit, Very hard to flag)":
                 MoveUtil.useDiagonalSpeed();
+                break;
+
+            case "1.9+ BoundingBox":
+                if (!Client.INSTANCE.getTargetManager().getTargets(1F).isEmpty()) {
+                    if (MoveUtil.speed() <= 5F) {
+                        mc.thePlayer.motionX *= 1.1;
+                        mc.thePlayer.motionZ *= 1.1;
+                    }
+                }
+
                 break;
         }
 
