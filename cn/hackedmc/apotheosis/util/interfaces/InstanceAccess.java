@@ -3,6 +3,7 @@ package cn.hackedmc.apotheosis.util.interfaces;
 import cn.hackedmc.apotheosis.component.impl.hud.DragComponent;
 import cn.hackedmc.apotheosis.ui.click.standard.RiseClickGUI;
 import cn.hackedmc.apotheosis.ui.ingame.GuiIngameCache;
+import cn.hackedmc.apotheosis.ui.music.MusicMenu;
 import cn.hackedmc.apotheosis.ui.theme.Themes;
 import cn.hackedmc.apotheosis.util.shader.RiseShaders;
 import cn.hackedmc.apotheosis.util.shader.base.ShaderRenderType;
@@ -34,7 +35,6 @@ public interface InstanceAccess {
     List<Runnable> UI_BLOOM_RUNNABLES = new ArrayList<>();
     List<Runnable> UI_POST_BLOOM_RUNNABLES = new ArrayList<>();
     List<Runnable> UI_RENDER_RUNNABLES = new ArrayList<>();
-    List<Runnable> UI_BLUR_RUNNABLES = new ArrayList<>();
 
     List<Runnable> NORMAL_PRE_RENDER_RUNNABLES = new ArrayList<>();
     List<Runnable> NORMAL_BLUR_RUNNABLES = new ArrayList<>();
@@ -78,6 +78,10 @@ public interface InstanceAccess {
 
     default RiseClickGUI getStandardClickGUI() {
         return instance.getStandardClickGUI();
+    }
+
+    default MusicMenu getMusicMenu() {
+        return instance.getMusicMenu();
     }
 
     default CloverClickGUI getCloverClickGUI() {

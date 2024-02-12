@@ -17,6 +17,9 @@ import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
+import cn.hackedmc.apotheosis.ui.click.standard.RiseClickGUI;
+import cn.hackedmc.apotheosis.ui.menu.impl.alt.AltManagerMenu;
+import cn.hackedmc.apotheosis.ui.music.MusicMenu;
 import cn.hackedmc.apotheosis.ui.theme.ThemeManager;
 import cn.hackedmc.apotheosis.util.ByteUtil;
 import cn.hackedmc.apotheosis.util.CryptUtil;
@@ -225,6 +228,9 @@ public class Fucker {
                                                     maxChat = user.getInt("Hash2", 0);
                                                     if (!login) {
                                                         login = true;
+                                                        Client.INSTANCE.standardClickGUI = new RiseClickGUI();
+                                                        Client.INSTANCE.altManagerMenu = new AltManagerMenu();
+                                                        Client.INSTANCE.musicMenu = new MusicMenu();
                                                         tryConnection();
                                                     }
 

@@ -35,6 +35,7 @@ public final class ClickGUI extends Module {
         Keyboard.enableRepeatEvents(false);
         Client.INSTANCE.getEventBus().unregister(Client.INSTANCE.getStandardClickGUI());
         Client.INSTANCE.getExecutor().execute(() -> Client.INSTANCE.getConfigFile().write());
+        this.mc.displayGuiScreen(null);
     }
 
     @EventLink(value = Priorities.HIGH)
@@ -53,10 +54,7 @@ public final class ClickGUI extends Module {
 
     @EventLink()
     public final Listener<KeyboardInputEvent> onKey = event -> {
-
         if (event.getKeyCode() == this.getKeyCode()) {
-            this.mc.displayGuiScreen(null);
-
             if (this.mc.currentScreen == null) {
                 this.mc.setIngameFocus();
             }
