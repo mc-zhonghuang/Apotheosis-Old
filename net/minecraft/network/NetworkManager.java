@@ -137,7 +137,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     protected void channelRead0(final ChannelHandlerContext p_channelRead0_1_, final Packet packet) throws Exception {
         if (this.channel.isOpen()) {
             try {
-                if (Disabler.INSTANCE != null && Disabler.mc.thePlayer != null && Disabler.mc.thePlayer.ticksExisted >= 10 && Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.grimAC.getValue() && Disabler.INSTANCE.grimACDisabler.post.getValue() && (
+                if (Disabler.INSTANCE != null && Disabler.mc.thePlayer != null && Disabler.mc.thePlayer.ticksExisted >= 10 && Disabler.mc.thePlayer.isEntityAlive() && Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.grimAC.getValue() && Disabler.INSTANCE.grimACDisabler.post.getValue() && (
                                 packet instanceof S32PacketConfirmTransaction ||
                                 packet instanceof S01PacketPong ||
                                 packet instanceof S18PacketEntityTeleport ||
