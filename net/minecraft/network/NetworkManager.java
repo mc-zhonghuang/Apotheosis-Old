@@ -138,9 +138,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         if (this.channel.isOpen()) {
             try {
                 if (Disabler.INSTANCE != null && Disabler.mc.thePlayer != null && Disabler.mc.thePlayer.ticksExisted >= 10 && Disabler.INSTANCE.isEnabled() && Disabler.INSTANCE.grimAC.getValue() && Disabler.INSTANCE.grimACDisabler.post.getValue() && (
-                                (packet instanceof S12PacketEntityVelocity && ((S12PacketEntityVelocity) packet).getEntityID() == InstanceAccess.mc.thePlayer.getEntityId()) ||
                                 packet instanceof S32PacketConfirmTransaction ||
                                 packet instanceof S01PacketPong ||
+                                packet instanceof S18PacketEntityTeleport ||
                                 packet instanceof S12PacketEntityVelocity ||
                                 packet instanceof S27PacketExplosion ||
                                 packet instanceof S08PacketPlayerPosLook ||
@@ -156,6 +156,15 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                                 packet instanceof S14PacketEntity ||
                                 packet instanceof S0FPacketSpawnMob ||
                                 packet instanceof S0CPacketSpawnPlayer ||
+                                packet instanceof S25PacketBlockBreakAnim ||
+                                packet instanceof S24PacketBlockAction ||
+                                packet instanceof S49PacketUpdateEntityNBT ||
+                                packet instanceof S47PacketPlayerListHeaderFooter ||
+                                packet instanceof S11PacketSpawnExperienceOrb ||
+                                packet instanceof S10PacketSpawnPainting ||
+                                packet instanceof S0DPacketCollectItem ||
+                                packet instanceof S1CPacketEntityMetadata ||
+                                packet instanceof S35PacketUpdateTileEntity ||
                                 packet instanceof S0EPacketSpawnObject ||
                                 packet instanceof S2CPacketSpawnGlobalEntity ||
                                 packet instanceof S13PacketDestroyEntities ||
