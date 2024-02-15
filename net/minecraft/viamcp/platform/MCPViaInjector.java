@@ -3,7 +3,7 @@ package net.minecraft.viamcp.platform;
 import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import net.minecraft.viamcp.ViaMCP;
-import net.minecraft.viamcp.handler.CommonTransformer;
+import net.minecraft.viamcp.netty.VLBPipeline;
 
 public class MCPViaInjector implements ViaInjector {
     @Override
@@ -23,12 +23,12 @@ public class MCPViaInjector implements ViaInjector {
 
     @Override
     public String getEncoderName() {
-        return CommonTransformer.HANDLER_ENCODER_NAME;
+        return VLBPipeline.VIA_ENCODER_HANDLER_NAME;
     }
 
     @Override
     public String getDecoderName() {
-        return CommonTransformer.HANDLER_DECODER_NAME;
+        return VLBPipeline.VIA_DECODER_HANDLER_NAME;
     }
 
     @Override
