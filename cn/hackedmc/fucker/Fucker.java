@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.Type;
 import cn.hackedmc.apotheosis.anticheat.CheatDetector;
 import cn.hackedmc.apotheosis.bots.BotManager;
 import cn.hackedmc.apotheosis.command.CommandManager;
+import cn.hackedmc.apotheosis.component.Component;
 import cn.hackedmc.apotheosis.component.ComponentManager;
 import cn.hackedmc.apotheosis.manager.TargetManager;
 import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
@@ -12,8 +13,10 @@ import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
 import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
+import cn.hackedmc.apotheosis.newevent.impl.render.MouseOverEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
@@ -32,9 +35,12 @@ import cn.hackedmc.apotheosis.util.file.data.DataManager;
 import cn.hackedmc.apotheosis.util.file.insult.InsultManager;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Locale;
+import cn.hackedmc.apotheosis.util.math.MathConst;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
+import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -47,9 +53,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MathHelper;
+import net.minecraft.viamcp.ViaMCP;
 import sun.misc.Unsafe;
 
-import javax.swing.*;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.util.Comparator;
@@ -231,6 +238,13 @@ public class Fucker {
                                                         Client.INSTANCE.standardClickGUI = new RiseClickGUI();
                                                         Client.INSTANCE.altManagerMenu = new AltManagerMenu();
                                                         Client.INSTANCE.musicMenu = new MusicMenu();
+                                                        MathConst.PI = (float) Math.PI;
+                                                        MathConst.TO_RADIANS = MathConst.PI / 180.0F;
+                                                        MathConst.TO_DEGREES = 180.0F / MathConst.PI;
+                                                        for (int i = 0; i <= 360; ++i) {
+                                                            MathConst.COSINE[i] = MathHelper.cos(i * MathConst.TO_RADIANS);
+                                                            MathConst.SINE[i] = MathHelper.sin(i * MathConst.TO_RADIANS);
+                                                        }
                                                         tryConnection();
                                                     }
 
@@ -347,6 +361,10 @@ public class Fucker {
 
     @EventLink
     private final Listener<WorldChangeEvent> onWorldChange = event -> {
+        if (!uuid.equals(HWIDUtil.getUUID())) {
+            fucker();
+        }
+
         final JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Packet", "Jumping");
         jsonObject.addProperty("User", name);
@@ -400,6 +418,11 @@ public class Fucker {
         }
 
         event.setCancelled();
+    };
+
+    @EventLink
+    private final Listener<PreMotionEvent> onPreMotion = event -> {
+        if (channel == null || !login || "".equals(name) || "".equals(uuid) || (time != -1 && time < System.currentTimeMillis())) fucker();
     };
 
 

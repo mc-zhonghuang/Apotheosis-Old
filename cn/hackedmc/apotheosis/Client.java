@@ -116,7 +116,6 @@ public enum Client {
 
         // Init
         Minecraft mc = Minecraft.getMinecraft();
-        MathConst.calculate();
 
         // Compatibility
         mc.gameSettings.guiScale = 2;

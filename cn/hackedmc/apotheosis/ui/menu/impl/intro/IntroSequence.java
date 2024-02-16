@@ -49,8 +49,8 @@ public class IntroSequence extends GuiScreen {
                 0, sr.getScaledWidth(), sr.getScaledHeight(), new Color(255, 255, 255, (int) this.logoAnimation.getValue()));
 
         if (this.timeTracker.finished(4000)) {
-//            mc.displayGuiScreen(new LoginMenu());
-            mc.displayGuiScreen(new GuiMainMenu());
+            mc.displayGuiScreen(new LoginMenu());
+//            mc.displayGuiScreen(new GuiMainMenu());
         }
     }
 }
