@@ -127,7 +127,7 @@ public class Manager extends Module {
 
             if (item instanceof ItemArmor) {
                 final ItemArmor armor = (ItemArmor) item;
-                final int reduction = this.armorReduction(stack);
+                final double reduction = this.armorReduction(stack);
 
                 switch (armor.armorType) {
                     case 0:
@@ -486,9 +486,9 @@ public class Manager extends Module {
         return 0;
     }
 
-    private int armorReduction(final ItemStack stack) {
+    private double armorReduction(final ItemStack stack) {
         final ItemArmor armor = (ItemArmor) stack.getItem();
-        return armor.damageReduceAmount + EnchantmentHelper.getEnchantmentModifierDamage(new ItemStack[]{stack}, DamageSource.generic);
+        return armor.damageReduceAmount + EnchantmentHelper.getEnchantmentModifierDamage(new ItemStack[]{stack}, DamageSource.generic) * 0.2;
     }
 
     private int slot(final int slot) {
