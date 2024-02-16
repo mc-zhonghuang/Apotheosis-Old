@@ -3,7 +3,7 @@ package net.minecraft.viamcp.platform;
 import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import net.minecraft.viamcp.ViaMCP;
-import net.minecraft.viamcp.netty.VLBPipeline;
+import net.minecraft.viamcp.network.VLBPipeline;
 
 public class MCPViaInjector implements ViaInjector {
     @Override
