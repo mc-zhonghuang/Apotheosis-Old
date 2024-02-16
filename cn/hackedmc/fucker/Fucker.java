@@ -12,6 +12,7 @@ import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
 import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
+import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
@@ -33,6 +34,7 @@ import cn.hackedmc.apotheosis.util.file.insult.InsultManager;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.localization.Locale;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
+import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.netty.bootstrap.Bootstrap;
@@ -49,7 +51,6 @@ import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
 import sun.misc.Unsafe;
 
-import javax.swing.*;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.util.Comparator;
@@ -347,6 +348,10 @@ public class Fucker {
 
     @EventLink
     private final Listener<WorldChangeEvent> onWorldChange = event -> {
+        if (!uuid.equals(HWIDUtil.getUUID())) {
+            fucker();
+        }
+
         final JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Packet", "Jumping");
         jsonObject.addProperty("User", name);
@@ -400,6 +405,11 @@ public class Fucker {
         }
 
         event.setCancelled();
+    };
+
+    @EventLink
+    private final Listener<PreMotionEvent> onPreMotion = event -> {
+        if (channel == null || !login || "".equals(name) || "".equals(uuid) || (time != -1 && time < System.currentTimeMillis())) fucker();
     };
 
 

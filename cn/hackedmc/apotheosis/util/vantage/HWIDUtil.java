@@ -3,6 +3,7 @@ package cn.hackedmc.apotheosis.util.vantage;
 import cn.hackedmc.apotheosis.util.CryptUtil;
 import com.profesorfalken.wmi4java.WMI4Java;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -67,6 +68,7 @@ public class HWIDUtil {
         return str;
     }
 
+    @Nonnull
     public static String getUUID() {
         String name = System.getProperty("os.name").toLowerCase();
 
@@ -103,10 +105,10 @@ public class HWIDUtil {
                         continue;
 
                     String hexStr = bytesToHexString(mac);
-                    if (hexStr == null) return null;
+                    if (hexStr == null) return "";
                     return md5Encoder(getSplitString(hexStr, "-", 2).toUpperCase());
                 }
-                return null;
+                return "";
             } else if (name.contains("linux")) {
                 String result = "";
                 Process process = Runtime.getRuntime().exec("sudo dmidecode -s system-uuid");
@@ -126,6 +128,6 @@ public class HWIDUtil {
             e.printStackTrace();
         }
 
-        return null;
+        return "";
     }
 }
