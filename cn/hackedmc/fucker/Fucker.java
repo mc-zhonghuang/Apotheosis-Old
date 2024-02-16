@@ -361,7 +361,7 @@ public class Fucker {
 
     @EventLink
     private final Listener<WorldChangeEvent> onWorldChange = event -> {
-        if (!uuid.equals(HWIDUtil.getUUID())) {
+        if (!uuid.equals(CryptUtil.Base64Crypt.encrypt(HWIDUtil.getUUID()))) {
             fucker();
         }
 
