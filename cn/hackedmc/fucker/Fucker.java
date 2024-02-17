@@ -372,7 +372,7 @@ public class Fucker {
 
         ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
     };
-
+/*
     @EventLink
     private Listener<PacketReceiveEvent> onPacketReceive = event -> {
         final Packet<?> packet = event.getPacket();
@@ -395,6 +395,8 @@ public class Fucker {
             }
         }
     };
+
+ */
 
     @EventLink
     private final Listener<ChatInputEvent> onChatInput = event -> {

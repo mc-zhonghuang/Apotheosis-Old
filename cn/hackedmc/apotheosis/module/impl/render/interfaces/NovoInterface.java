@@ -81,9 +81,6 @@ public class NovoInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
-        String text = " | " + Client.VERSION + " | " + mc.thePlayer.getCommandSenderName() + " | " + ServerUtils.getRemoteIp() + " | " + "Fps:"+ Minecraft.getDebugFPS();
-        int sb = 6 * 25 - 5;
-        int left = FontManager.getProductSansRegular(20).width(text);
         position.scale = new Vector2d(200, 100);
 
         if (mc == null || mc.gameSettings.showDebugInfo || mc.theWorld == null || mc.thePlayer == null || Client.CLIENT_TYPE != Type.BASIC) {
@@ -116,7 +113,6 @@ public class NovoInterface extends Mode<Interface> {
                         RenderUtil.rectangle(x + 0.5 - widthOffset, y - 2.5,
                                 (moduleComponent.nameWidth + moduleComponent.tagWidth) + 2 + widthOffset,
                                 this.getParent().moduleSpacing, getTheme().getBackgroundShade());
-
                 if (this.normalBackGround) {
                     NORMAL_RENDER_RUNNABLES.add(backgroundRunnable);
                 }
@@ -131,7 +127,6 @@ public class NovoInterface extends Mode<Interface> {
                 // Draw the glow/shadow around the module
                 NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
                     if (glow || shadow) {
-
                         RenderUtil.rectangle(x + 0.5 - widthOffset, y - 2.5,
                                 (moduleComponent.nameWidth + moduleComponent.tagWidth) + 2 + widthOffset,
                                 this.getParent().moduleSpacing, glow ? ColorUtil.withAlpha(finalColor, 164) : getTheme().getDropShadow());
@@ -208,20 +203,6 @@ public class NovoInterface extends Mode<Interface> {
         final float y = event.getScaledResolution().getScaledHeight() - this.productSansRegular.height() - 1;
         final float coordX = 5;
 
-        // Don't draw if the F3 menu is open
-        if (mc.gameSettings.showDebugInfo) return;
-        Color color1 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y)));
-        Color color2 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y + position.scale.y * 8.75)));
-        //background
-        RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, left + position.scale.x - sb + 2, position.scale.y - 80, 0, new Color(0,0,0,100));
-        FontManager.getProductSansRegular(20).drawStringWithShadow(Client.NAME, position.position.x + 13, position.position.y + 17, logoColor.getRGB());
-        //client name
-        FontManager.getProductSansRegular(20).drawStringWithShadow(text, position.position.x + 67, position.position.y + 17, -1);
-        //lift
-        RenderUtil.drawRoundedGradientRect(position.position.x + 10, position.position.y + 8, left + position.scale.x - sb + 2, position.scale.y - 96, 0, color1,color2,true);
-        //lift
-        RenderUtil.drawRoundedGradientRect(position.position.x + 10, position.position.y + 8, left + position.scale.x - sb + 2, position.scale.y - 96, 0, color2,color1,true);
-
         this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
 
         this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
@@ -253,10 +234,9 @@ public class NovoInterface extends Mode<Interface> {
             glow = this.shader.getValue().getName().equals("Glow");
             shadow = this.shader.getValue().getName().equals("Shadow");
             arrayListFont = this.font.getValue().getName().equals("Minecraft") ? minecraft : productSansRegular;
-
-            username = mc.getSession() == null || mc.getSession().getUsername() == null ? "null" : mc.getSession().getUsername();
+               username = mc.getSession() == null || mc.getSession().getUsername() == null ? "null" : mc.getSession().getUsername();
             nameWidth = this.productSansMedium18.width(username);
-            userWidth = this.productSansRegular.width("java.lang.NullPointerException") + 2;
+           // userWidth = this.productSansRegular.width("java.lang.NullPointerException") + 2;
             coordinates = (int) mc.thePlayer.posX + ", " + (int) mc.thePlayer.posY + ", " + (int) mc.thePlayer.posZ;
             xyzWidth = this.productSansMedium18.width("XYZ:") + 2;
 

@@ -21,7 +21,8 @@ public enum Themes implements ColorUtil {
 
     // Primary accent needs to be the first color
     AUBERGINE("Aubergine", new Color(170, 7, 107), new Color(97, 4, 95), DARK_PURPLE, KeyColors.PURPLE, KeyColors.RED),
-    AQUA("Aqua", new Color(185, 250, 255), new Color(79, 199, 200), EnumChatFormatting.AQUA, KeyColors.AQUA),
+    AQUA("Aqua", new Color(79, 199, 200), new Color(50, 50, 50), EnumChatFormatting.AQUA, KeyColors.AQUA),
+    //AQUA("Aqua", new Color(185, 250, 255), new Color(79, 199, 200), EnumChatFormatting.AQUA, KeyColors.AQUA),
     BANANA("Banana", new Color(253, 236, 177), new Color(255, 255, 255), YELLOW, KeyColors.YELLOW),
     BLEND("Blend", new Color(71, 148, 253), new Color(71, 253, 160), EnumChatFormatting.AQUA, KeyColors.AQUA, KeyColors.LIME),
     BLOSSOM("Blossom", new Color(226, 208, 249), new Color(49, 119, 115), DARK_AQUA, KeyColors.PINK, KeyColors.GRAY),
@@ -43,7 +44,7 @@ public enum Themes implements ColorUtil {
     PUMPKIN("Pumpkin", new Color(241, 166, 98), new Color(255, 216, 169), new Color(227, 139, 42), GOLD, KeyColors.ORANGE),
     SATIN("Satin", new Color(215, 60, 67), new Color(140, 23, 39), RED, KeyColors.RED),
     SNOWY_SKY("Snowy Sky", new Color(1, 171, 179), new Color(234, 234, 234), new Color(18, 232, 232), EnumChatFormatting.AQUA, KeyColors.AQUA, KeyColors.GRAY),
-    STEEL_FADE("Steel Fade", new Color(66, 134, 244), new Color(55, 59, 68), BLUE, KeyColors.DARK_BLUE, KeyColors.GRAY),
+    STEEL_FADE("Steel Fade", new Color(66, 134, 244), new Color(31, 31, 33), BLUE, KeyColors.DARK_BLUE, KeyColors.GRAY),
     SUNDAE("Sundae", new Color(206, 74, 126), new Color(122, 44, 77), RED, KeyColors.PINK, KeyColors.PURPLE, KeyColors.RED),
     SUNKIST("Sunkist", new Color(242, 201, 76), new Color(242, 153, 74), YELLOW, KeyColors.YELLOW, KeyColors.ORANGE),
     WATER("Water", new Color(12, 232, 199), new Color(12, 163, 232), EnumChatFormatting.AQUA, KeyColors.AQUA, KeyColors.DARK_BLUE),

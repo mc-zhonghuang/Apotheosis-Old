@@ -2,26 +2,28 @@ package cn.hackedmc.apotheosis.module.impl.combat.velocity;
 
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.module.impl.combat.KillAura;
+import cn.hackedmc.apotheosis.module.impl.combat.Velocity;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
-import cn.hackedmc.apotheosis.module.impl.combat.Velocity;
-import cn.hackedmc.apotheosis.util.RayCastUtil;
 import cn.hackedmc.apotheosis.util.player.MoveUtil;
 import cn.hackedmc.apotheosis.value.Mode;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
 import cn.hackedmc.apotheosis.value.impl.SubMode;
+import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
+import com.viaversion.viarewind.utils.PacketUtil;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Type;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.viamcp.ViaMCP;
 
 public class GrimACVelocity extends Mode<Velocity> {
@@ -33,9 +35,9 @@ public class GrimACVelocity extends Mode<Velocity> {
             .add(new SubMode("Attack Reduce"))
             .add(new SubMode("1.17+"))
             .setDefault("Block Spoof");
-    private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("Attack Reduce"));
-    private final BooleanValue rayCast = new BooleanValue("Ray cast", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("Attack Reduce"));
+    private final BooleanValue legitSprint = new BooleanValue("Legit Sprint", this, false, () -> !mode.getValue().getName().equalsIgnoreCase("attack reduce"));
     private int lastSprint = -1;
+
 
     @Override
     public void onDisable() {
@@ -47,17 +49,19 @@ public class GrimACVelocity extends Mode<Velocity> {
         if (mode.getValue().getName().equalsIgnoreCase("attack reduce") && legitSprint.getValue()) {
             if (lastSprint == 0) {
                 lastSprint--;
-                if (!mc.thePlayer.isSprinting())
+                if (!MoveUtil.canSprint(true))
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
             } else if (lastSprint > 0) {
                 lastSprint--;
-                if (mc.thePlayer.onGround && !mc.thePlayer.isSprinting()) {
+                if (mc.thePlayer.onGround && !MoveUtil.canSprint(true)) {
                     lastSprint = -1;
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
                 }
             }
         }
     };
+
+
 
     @EventLink
     public final Listener<PacketReceiveEvent> onPacketReceiveEvent = event -> {
@@ -70,7 +74,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                 switch (mode.getValue().getName().toLowerCase()) {
                     case "block spoof": {
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
-                        mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
                         mc.timer.lastSyncSysClock += 1;
                         event.setCancelled();
 
@@ -85,24 +89,19 @@ public class GrimACVelocity extends Mode<Velocity> {
                                 RotationComponent.rotations.y,
                                 mc.thePlayer.onGround
                         ));
-                        mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
+                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(mc.thePlayer), EnumFacing.UP));
                         event.setCancelled();
 
                         break;
                     }
                     case "attack reduce": {
-                        Entity entity = null;
+                        KillAura aura = getModule(KillAura.class);
+                        if (aura.target != null) {
 
-                        if (rayCast.getValue()) {
-                            final MovingObjectPosition position = RayCastUtil.rayCast(RotationComponent.rotations, KillAura.INSTANCE.range.getValue().doubleValue());
+                            if(mc.thePlayer.getDistanceToEntity(aura.target) > aura.range.getValue().doubleValue()){
+                                return;
+                            }
 
-                            if (position != null && position.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
-                                entity = position.entityHit;
-                        } else {
-                            entity = KillAura.INSTANCE.target;
-                        }
-
-                        if (entity != null) {
                             event.setCancelled();
 
                             if (!EntityPlayerSP.serverSprintState) {
@@ -115,10 +114,14 @@ public class GrimACVelocity extends Mode<Velocity> {
                             }
 
                             for (int i = 0;i < 8;i++) {
-                                if (ViaMCP.getInstance().getVersion() <= 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
-                                if (ViaMCP.getInstance().getVersion() > 47) mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(getModule(KillAura.class).target, C02PacketUseEntity.Action.ATTACK));
+                                if (ViaMCP.getInstance().getVersion() >= 47){
+                                    PacketWrapper c0A = PacketWrapper.create(26, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
+                                    c0A.write(Type.VAR_INT,0);
+                                    PacketUtil.sendToServer(c0A, Protocol1_8To1_9.class, true, true);
+                                }
                             }
+
 
                             double velocityX = wrapped.motionX / 8000.0;
                             double velocityZ = wrapped.motionZ / 8000.0;

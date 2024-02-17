@@ -60,6 +60,7 @@ public interface InstanceAccess {
     Font museoSmall = FontManager.getMuseo(16);
 
     Font nunitoLightNormal = FontManager.getNunitoLight(20);
+    Font sansRegular = FontManager.getProductSansRegular(20);
 
     Font robotoNormal = FontManager.getRobotoLight(20);
 

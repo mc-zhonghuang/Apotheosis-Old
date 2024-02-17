@@ -67,7 +67,9 @@ public class MoveUtil implements InstanceAccess {
     public boolean enoughMovementForSprinting() {
         return Math.abs(mc.thePlayer.moveForward) >= 0.8F || Math.abs(mc.thePlayer.moveStrafing) >= 0.8F;
     }
-
+    public static boolean isOnGround(double height) {
+        return !mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0, -height, 0)).isEmpty();
+    }
     /**
      * Checks if the player is allowed to sprint
      *

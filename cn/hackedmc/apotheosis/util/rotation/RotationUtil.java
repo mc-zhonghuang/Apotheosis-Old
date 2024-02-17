@@ -5,10 +5,13 @@ import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.math.MathConst;
 import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import cn.hackedmc.apotheosis.util.vector.Vector3d;
+import com.google.common.base.Predicates;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.*;
+
+import java.util.List;
 
 /**
  * @author Patrick
@@ -17,6 +20,66 @@ import net.minecraft.util.*;
 
 @UtilityClass
 public class RotationUtil implements InstanceAccess {
+    public static boolean canAimAtTarget(float yaw, float pitch, Entity target,float reach) {
+        final float range = reach; // 设置射程范围，根据需要进行调整
+        final float partialTicks = mc.timer.renderPartialTicks;
+        final Entity entity = mc.getRenderViewEntity();
+        MovingObjectPosition objectMouseOver;
+
+        if (entity != null && mc.theWorld != null) {
+            mc.mcProfiler.startSection("pick");
+            final double d0 = mc.playerController.getBlockReachDistance();
+            objectMouseOver = entity.rayTrace(d0, partialTicks);
+            double d1 = d0;
+            final Vec3 vec3 = entity.getPositionEyes(partialTicks);
+            final boolean flag = d0 > (double) range;
+
+            if (objectMouseOver != null) {
+                d1 = objectMouseOver.hitVec.distanceTo(vec3);
+            }
+
+            final Vec3 vec31 = mc.thePlayer.getVectorForRotation(pitch, yaw);
+            final Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+            Entity pointedEntity = null;
+            Vec3 vec33 = null;
+            final float f = 1.0F;
+            final List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand(f, f, f), Predicates.and(EntitySelectors.NOT_SPECTATING, Entity::canBeCollidedWith));
+            double d2 = d1;
+
+            for (final Entity entity1 : list) {
+                final float f1 = entity1.getCollisionBorderSize();
+                final AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expand(f1, f1, f1);
+                final MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+
+                if (axisalignedbb.isVecInside(vec3)) {
+                    if (d2 >= 0.0D) {
+                        pointedEntity = entity1;
+                        vec33 = movingobjectposition == null ? vec3 : movingobjectposition.hitVec;
+                        d2 = 0.0D;
+                    }
+                } else if (movingobjectposition != null) {
+                    final double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+
+                    if (d3 < d2 || d2 == 0.0D) {
+                        pointedEntity = entity1;
+                        vec33 = movingobjectposition.hitVec;
+                        d2 = d3;
+                    }
+                }
+            }
+
+            if (pointedEntity != null && flag && vec3.distanceTo(vec33) > (double) range) {
+                pointedEntity = null;
+                objectMouseOver = new MovingObjectPosition(MovingObjectPosition.MovingObjectType.MISS, vec33, null, new BlockPos(vec33));
+            }
+
+            mc.mcProfiler.endSection();
+
+            return pointedEntity == target;
+        }
+
+        return false;
+    }
 
     public Vector2f calculate(final Vector3d from, final Vector3d to) {
         final Vector3d diff = to.subtract(from);

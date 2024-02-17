@@ -20,7 +20,7 @@ public class KeyBinding implements Comparable<KeyBinding> {
     /**
      * Is the key held down?
      */
-    private boolean pressed;
+    public boolean pressed;
     private int pressTime;
 
     public static void onTick(final int keyCode) {

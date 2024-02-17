@@ -27,7 +27,6 @@ public class NoSlow extends Module {
             .add(new IntaveNoSlow("Intave", this))
             .add(new MatrixNoSlow("Matrix", this))
             .add(new OldIntaveNoSlow("Old Intave", this))
-            .add(new HuaYuTingNoSlow("HuaYuTing", this))
             .add(new GrimACNoSlow("GrimAC", this))
             .add(new VariableNoSlow("Variable", this))
             .add(new PredictionNoSlow("Prediction", this))

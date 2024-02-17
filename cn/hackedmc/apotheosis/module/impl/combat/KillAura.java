@@ -164,9 +164,11 @@ public final class KillAura extends Module {
     public static List<Entity> targets;
     public static List<Entity> pastTargets = new ArrayList<>();
     public Entity target;
-
+    public static Vector2f aurarotation;
     public StopWatch subTicksStopWatch = new StopWatch();
     public StopWatch switchChangeTicks = new StopWatch();
+
+
     private int attack, hitTicks, expandRange;
 
 
@@ -365,6 +367,7 @@ public final class KillAura extends Module {
                 if (RayCastUtil.rayCast(targetRotations, range.getValue().doubleValue()).typeOfHit != MovingObjectPosition.MovingObjectType.ENTITY) {
                     randomYaw = randomPitch = 0;
                 }
+                aurarotation = targetRotations;
 
                 if (rotationSpeed != 0) {
                     RotationComponent.setRotations(targetRotations, rotationSpeed,
@@ -776,7 +779,6 @@ public final class KillAura extends Module {
                     PacketUtil.send(new C09PacketHeldItemChange(SlotComponent.getItemIndex()));
                     this.blocking = false;
                 }
-
                 break;
 
             case "Old Intave":
@@ -789,7 +791,6 @@ public final class KillAura extends Module {
 
             case "GrimAC":
                 this.unblock(true);
-
                 break;
 
             case "Watchdog 1.9+":

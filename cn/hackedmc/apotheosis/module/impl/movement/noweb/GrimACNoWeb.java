@@ -21,7 +21,6 @@ public class GrimACNoWeb extends Mode<NoWeb> {
 
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new SubMode("Normal"))
-            .add(new SubMode("Expand"))
             .setDefault("Normal");
 
     @EventLink
@@ -41,26 +40,6 @@ public class GrimACNoWeb extends Mode<NoWeb> {
                     }
 
                     mc.thePlayer.isInWeb = false;
-                }
-
-                break;
-            }
-
-            case "expand": {
-                for (int i = -3;i < 3;i++) {
-                    for (int i2 = -6;i2 < 6;i2++) {
-                        final BlockPos playerPos = new BlockPos(mc.thePlayer);
-                        BlockPos[] blockPoses = new BlockPos[]{playerPos.add(i2, i, 7), playerPos.add(i2, i, -7), playerPos.add(7, i, i2), playerPos.add(-7, i, i2)};
-                        for (BlockPos blockPos : blockPoses) {
-                            final IBlockState blockState = mc.theWorld.getBlockState(blockPos);
-                            final Block block = blockState.getBlock();
-
-                            if (block instanceof BlockWeb) {
-                                mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, blockPos, EnumFacing.DOWN));
-                                mc.theWorld.setBlockToAir(blockPos);
-                            }
-                        }
-                    }
                 }
 
                 break;
