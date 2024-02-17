@@ -127,7 +127,7 @@ public class Stealer extends Module {
                 this.chest = (TileEntityChest) entity;
 
                 if (blockPos != null) {
-                    this.guiChest = (GuiChest) mc.currentScreen;
+                //    this.guiChest = (GuiChest) mc.currentScreen;
 
                     if (chest.getPos().equals(blockPos)) {
                         final int length = chest.getSizeInventory() / 9;

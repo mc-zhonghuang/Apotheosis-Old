@@ -3,7 +3,6 @@ package cn.hackedmc.apotheosis.module.impl.player.antivoid;
 import cn.hackedmc.apotheosis.component.impl.player.BlinkComponent;
 import cn.hackedmc.apotheosis.component.impl.player.FallDistanceComponent;
 import cn.hackedmc.apotheosis.module.impl.movement.LongJump;
-import cn.hackedmc.apotheosis.module.impl.other.Test;
 import cn.hackedmc.apotheosis.module.impl.player.AntiVoid;
 import cn.hackedmc.apotheosis.module.impl.player.Scaffold;
 import cn.hackedmc.apotheosis.newevent.Listener;
@@ -29,7 +28,6 @@ public class BlinkAntiVoid extends Mode<AntiVoid> {
     private int overVoidTicks;
     private Scaffold scaffold;
     private LongJump longJump;
-    private Test test;
 
     public BlinkAntiVoid(String name, AntiVoid parent) {
         super(name, parent);
@@ -53,11 +51,7 @@ public class BlinkAntiVoid extends Mode<AntiVoid> {
             longJump = getModule(LongJump.class);
         }
 
-        if (test == null) {
-            test = getModule(Test.class);
-        }
-
-        if (scaffold.isEnabled() || longJump.isEnabled() || test.isEnabled()) {
+        if (scaffold.isEnabled() || longJump.isEnabled()) {
             return;
         }
 

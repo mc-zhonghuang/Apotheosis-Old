@@ -43,14 +43,14 @@ public final class Interface extends Module {
         add(new ModernInterface("Modern", (Interface) this.getParent()));
         add(new NovoInterface("Novo", (Interface) this.getParent()));
         add(new WurstInterface("Wurst", (Interface) this.getParent()));
-        setDefault("Modern");
+        setDefault("Novo");
     }};
 
     private final ModeValue modulesToShow = new ModeValue("Modules to Show", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
         add(new SubMode("All"));
         add(new SubMode("Exclude render"));
         add(new SubMode("Only bound"));
-        setDefault("Exclude render");
+        setDefault("All");
     }};
 
     public final BooleanValue irc = new BooleanValue("Show IRC Message", this, true);
@@ -59,7 +59,7 @@ public final class Interface extends Module {
 
     public BooleanValue suffix = new BooleanValue("Suffix", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
     public BooleanValue lowercase = new BooleanValue("Lowercase", this, false, () -> Client.CLIENT_TYPE != Type.BASIC);
-    public BooleanValue removeSpaces = new BooleanValue("Remove Spaces", this, false, () -> Client.CLIENT_TYPE != Type.BASIC);
+    public BooleanValue removeSpaces = new BooleanValue("Remove Spaces", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
 
     public BooleanValue shaders = new BooleanValue("Shaders", this, true);
     private ArrayList<ModuleComponent> allModuleComponents = new ArrayList<>(),
@@ -70,12 +70,14 @@ public final class Interface extends Module {
     private final StopWatch updateTags = new StopWatch();
     private final Font productSansMedium18 = FontManager.getProductSansMedium(18);
 
+    public Font font = FontManager.getProductSansMedium(21);
+    public Font font2 = FontManager.getProductSansMedium(20);
+
     public Font widthComparator = nunitoNormal;
     public float moduleSpacing = 12, edgeOffset;
 
     public Interface() {
         createArrayList();
-
         INSTANCE = this;
     }
 

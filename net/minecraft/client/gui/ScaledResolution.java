@@ -3,6 +3,8 @@ package net.minecraft.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.MathHelper;
 
+import static cn.hackedmc.apotheosis.util.interfaces.InstanceAccess.mc;
+
 public class ScaledResolution {
     private final double scaledWidthD;
     private final double scaledHeightD;
@@ -37,6 +39,31 @@ public class ScaledResolution {
 
     public int getScaledWidth() {
         return this.scaledWidth;
+    }
+    public int getScaledWidthStatic(Minecraft minecraft) {
+        switch (mc.gameSettings.guiScale) {
+            case 0:
+                return getScaledWidth() * 2;
+            case 1:
+                return (int) (getScaledWidth() * 0.5);
+            case 3:
+                return (int) (getScaledWidth() * 1.5);
+            default:
+                return getScaledWidth();
+        }
+    }
+
+    public int getScaledHeightStatic(Minecraft minecraft) {
+        switch (mc.gameSettings.guiScale) {
+            case 0:
+                return getScaledHeight() * 2;
+            case 1:
+                return (int) (getScaledHeight() * 0.5);
+            case 3:
+                return (int) (getScaledHeight() * 1.5);
+            default:
+                return getScaledHeight();
+        }
     }
 
     public int getScaledHeight() {

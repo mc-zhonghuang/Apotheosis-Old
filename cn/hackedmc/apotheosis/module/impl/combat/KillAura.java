@@ -5,6 +5,7 @@ import cn.hackedmc.apotheosis.component.impl.player.BadPacketsComponent;
 import cn.hackedmc.apotheosis.component.impl.player.GUIDetectionComponent;
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.module.impl.player.ChestAura;
 import cn.hackedmc.apotheosis.util.RandomUtil;
 import cn.hackedmc.apotheosis.util.RayCastUtil;
 import cn.hackedmc.apotheosis.Client;
@@ -152,7 +153,7 @@ public final class KillAura extends Module {
     public final BooleanValue animals = new BooleanValue("Animals", this, false, () -> !showTargets.getValue());
     public final BooleanValue mobs = new BooleanValue("Mobs", this, false, () -> !showTargets.getValue());
     public final BooleanValue teams = new BooleanValue("Teams", this, false, () -> !showTargets.getValue());
-
+    private final BooleanValue noChest = new BooleanValue("NoChestAura",this, false);
 
     private final StopWatch attackStopWatch = new StopWatch();
     private final StopWatch clickStopWatch = new StopWatch();
@@ -184,6 +185,7 @@ public final class KillAura extends Module {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
+        ChestAura.disabler = noChest.getValue();
         this.hitTicks++;
 
         if (GUIDetectionComponent.inGUI()) {
@@ -367,8 +369,6 @@ public final class KillAura extends Module {
                 if (RayCastUtil.rayCast(targetRotations, range.getValue().doubleValue()).typeOfHit != MovingObjectPosition.MovingObjectType.ENTITY) {
                     randomYaw = randomPitch = 0;
                 }
-                aurarotation = targetRotations;
-
                 if (rotationSpeed != 0) {
                     RotationComponent.setRotations(targetRotations, rotationSpeed,
                             movementCorrection.getValue() == MovementFix.OFF || shouldRun() ? MovementFix.OFF : movementCorrection.getValue());
