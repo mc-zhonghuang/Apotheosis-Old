@@ -18,32 +18,21 @@ public class GrimACNoWeb extends Mode<NoWeb> {
     public GrimACNoWeb(String name, NoWeb parent) {
         super(name, parent);
     }
-
-    private final ModeValue mode = new ModeValue("Mode", this)
-            .add(new SubMode("Normal"))
-            .setDefault("Normal");
-
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {
-        switch (mode.getValue().getName().toLowerCase()) {
-            case "normal": {
-                if (mc.thePlayer.isInWeb) {
-                    for (int i = -1;i <= 1;i++) {
-                        for (int i2 = -2;i2 <= 2;i2++) {
-                            for (int i3 = -1;i3 <= 1;i3++) {
-                                final BlockPos bp = new BlockPos(mc.thePlayer).add(i, i2, i3);
-                                final Block block = mc.theWorld.getBlockState(bp).getBlock();
-                                if (block instanceof BlockWeb)
-                                    mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, bp, EnumFacing.UP));
-                            }
-                        }
+        if (mc.thePlayer.isInWeb) {
+            for (int i = -1;i <= 1;i++) {
+                for (int i2 = -2;i2 <= 2;i2++) {
+                    for (int i3 = -1;i3 <= 1;i3++) {
+                        final BlockPos bp = new BlockPos(mc.thePlayer).add(i, i2, i3);
+                        final Block block = mc.theWorld.getBlockState(bp).getBlock();
+                        if (block instanceof BlockWeb)
+                            mc.getNetHandler().addToSendQueueUnregistered(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, bp, EnumFacing.UP));
                     }
-
-                    mc.thePlayer.isInWeb = false;
                 }
-
-                break;
             }
+
+            mc.thePlayer.isInWeb = false;
         }
     };
 }
