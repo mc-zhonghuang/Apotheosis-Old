@@ -53,6 +53,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.viamcp.ViaMCP;
 import sun.misc.Unsafe;
@@ -372,7 +373,7 @@ public class Fucker {
 
         ByteUtil.send(channel, CryptUtil.DES.encrypt(jsonObject.toString(), username, password));
     };
-/*
+
     @EventLink
     private Listener<PacketReceiveEvent> onPacketReceive = event -> {
         final Packet<?> packet = event.getPacket();
@@ -382,7 +383,14 @@ public class Fucker {
 
             final S02PacketChat wrapped = (S02PacketChat) packet;
 
-            usernames.forEach((key, value) -> wrapped.setChatComponent(new ChatComponentText(wrapped.getChatComponent().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)"))));
+            // wrapped.setChatComponent(new ChatComponentText(wrapped.getChatComponent().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)")))
+            usernames.forEach((key, value) -> {
+                for (IChatComponent component : wrapped.getChatComponent().getSiblings()) {
+                   if (component instanceof ChatComponentText) {
+                       ((ChatComponentText) component).text = ((ChatComponentText) component).text.replaceAll(key, key + " §r(§b" + value + "§r)");
+                   }
+                }
+            });
         }
 
         if (packet instanceof S38PacketPlayerListItem) {
@@ -390,13 +398,17 @@ public class Fucker {
 
             if (wrapped.func_179768_b() == S38PacketPlayerListItem.Action.UPDATE_DISPLAY_NAME && wrapped.func_179768_b() == S38PacketPlayerListItem.Action.ADD_PLAYER) {
                 for (final S38PacketPlayerListItem.AddPlayerData s38packetplayerlistitem$addplayerdata : wrapped.func_179767_a()) {
-                    usernames.forEach((key, value) -> s38packetplayerlistitem$addplayerdata.setDisplayName(new ChatComponentText(s38packetplayerlistitem$addplayerdata.getDisplayName().getFormattedText().replaceAll(key, key + " §r(§b" + value + "§r)"))));
+                    usernames.forEach((key, value) -> {
+                        for (IChatComponent component : s38packetplayerlistitem$addplayerdata.getDisplayName().getSiblings()) {
+                            if (component instanceof ChatComponentText) {
+                                ((ChatComponentText) component).text = ((ChatComponentText) component).text.replaceAll(key, key + " §r(§b" + value + "§r)");
+                            }
+                        }
+                    });
                 }
             }
         }
     };
-
- */
 
     @EventLink
     private final Listener<ChatInputEvent> onChatInput = event -> {
