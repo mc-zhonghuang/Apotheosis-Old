@@ -6,6 +6,7 @@ import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
 import cn.hackedmc.apotheosis.module.impl.render.targetinfo.ModernTargetInfo;
+import cn.hackedmc.apotheosis.module.impl.render.targetinfo.ShineTargetInfo;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
@@ -33,8 +34,8 @@ public final class TargetInfo extends Module {
 
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new ModernTargetInfo("Modern", this))
-            .setDefault("Modern");
-
+            .add(new ShineTargetInfo("Shine", this))
+            .setDefault("Shine");
     public final DragValue positionValue = new DragValue("Position", this, new Vector2d(200, 200));
     public final BooleanValue followPlayer = new BooleanValue("Follow Player", this, false);
 

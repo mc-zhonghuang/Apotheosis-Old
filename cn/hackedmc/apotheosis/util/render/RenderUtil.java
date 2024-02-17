@@ -4,6 +4,7 @@ import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.apotheosis.util.shader.RiseShaders;
 import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import lombok.experimental.UtilityClass;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,8 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.*;
 
 @UtilityClass
 public final class RenderUtil implements InstanceAccess {
@@ -30,7 +30,14 @@ public final class RenderUtil implements InstanceAccess {
     private static final Frustum FRUSTUM = new Frustum();
     private static final RenderManager RENDER_MANAGER = mc.getRenderManager();
     public static final int GENERIC_SCALE = 22;
-
+    public static void resetColor() {
+        GlStateManager.color(1, 1, 1, 1);
+    }
+    // This will set the alpha limit to a specified value ranging from 0-1
+    public static void setAlphaLimit(float limit) {
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(GL_GREATER, (float) (limit * .01));
+    }
     public Vector3d getCameraVector() {
         return new Vector3d(
                 -RENDER_MANAGER.renderPosX,
@@ -38,7 +45,12 @@ public final class RenderUtil implements InstanceAccess {
                 -RENDER_MANAGER.renderPosZ
         );
     }
-
+    public void renderPlayer2D(float x, float y, float width, float height, AbstractClientPlayer player) {
+        GLUtil.startBlend();
+        mc.getTextureManager().bindTexture(player.getLocationSkin());
+        Gui.drawScaledCustomSizeModalRect(x, y, (float) 8.0, (float) 8.0, 8, 8, width, height, 64.0F, 64.0F);
+        GLUtil.endBlend();
+    }
     /**
      * Better to use gl state manager to avoid bugs
      */
