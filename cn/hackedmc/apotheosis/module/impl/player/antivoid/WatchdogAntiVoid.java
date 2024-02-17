@@ -2,7 +2,6 @@ package cn.hackedmc.apotheosis.module.impl.player.antivoid;
 
 import cn.hackedmc.apotheosis.module.impl.movement.Flight;
 import cn.hackedmc.apotheosis.module.impl.movement.LongJump;
-import cn.hackedmc.apotheosis.module.impl.other.Test;
 import cn.hackedmc.apotheosis.module.impl.player.AntiVoid;
 import cn.hackedmc.apotheosis.module.impl.player.Scaffold;
 import cn.hackedmc.apotheosis.newevent.Listener;
@@ -30,7 +29,6 @@ public class WatchdogAntiVoid extends Mode<AntiVoid> {
     private Scaffold scaffold;
     private LongJump longJump;
     private Flight fly;
-    private Test test;
 
     public WatchdogAntiVoid(String name, AntiVoid parent) {
         super(name, parent);
@@ -52,11 +50,7 @@ public class WatchdogAntiVoid extends Mode<AntiVoid> {
             longJump = getModule(LongJump.class);
         }
 
-        if (test == null) {
-            test = getModule(Test.class);
-        }
-
-        if (scaffold.isEnabled() || longJump.isEnabled() || test.isEnabled() || fly.isEnabled()) {
+        if (scaffold.isEnabled() || longJump.isEnabled()  || fly.isEnabled()) {
             return;
         }
 

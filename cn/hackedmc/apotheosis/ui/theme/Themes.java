@@ -134,7 +134,7 @@ public enum Themes implements ColorUtil {
 
     @Deprecated
     public Color getBackgroundShade() {
-        return new Color(0, 0, 0, 100);
+        return new Color(0, 0, 0, 50);
     }
 
     @Getter

@@ -18,19 +18,17 @@ import cn.hackedmc.apotheosis.util.render.particle.Particle;
 import cn.hackedmc.apotheosis.util.vector.Vector2d;
 import cn.hackedmc.apotheosis.util.vector.Vector2f;
 import cn.hackedmc.apotheosis.value.Mode;
-import cn.hackedmc.apotheosis.value.impl.BooleanValue;
-import cn.hackedmc.apotheosis.value.impl.DragValue;
-import cn.hackedmc.apotheosis.value.impl.ModeValue;
-import cn.hackedmc.apotheosis.value.impl.SubMode;
+import cn.hackedmc.apotheosis.value.impl.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.ScaledResolution;
 import util.time.StopWatch;
 
 import java.awt.*;
 
 public class NovoInterface extends Mode<Interface> {
 
-    private final Font productSansRegular = FontManager.getProductSansRegular(18);
+    private final Font productSansRegular = FontManager.getProductSansRegular(20);
     private final Font minecraft = FontManager.getMinecraft();
 
     private Font arrayListFont = productSansRegular;
@@ -56,8 +54,7 @@ public class NovoInterface extends Mode<Interface> {
         add(new SubMode("None"));
         setDefault("Shadow");
     }};
-
-    private final BooleanValue dropShadow = new BooleanValue("Drop Shadow", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
+    private final BooleanValue dropShadow = new BooleanValue("Drop Shadow", this, false, () -> Client.CLIENT_TYPE != Type.BASIC);
     private final BooleanValue sidebar = new BooleanValue("Sidebar", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
     private final BooleanValue particles = new BooleanValue("Particles on Kill", this, true, () -> Client.CLIENT_TYPE != Type.BASIC);
     private final ModeValue background = new ModeValue("BackGround", this, () -> Client.CLIENT_TYPE != Type.BASIC) {{
@@ -66,14 +63,14 @@ public class NovoInterface extends Mode<Interface> {
         add(new SubMode("Blur"));
         setDefault("Normal");
     }};
-    private final DragValue position = new DragValue("", this.getParent(), new Vector2d(200, 200), true);
-
 
     private boolean glow, shadow;
     private boolean normalBackGround, blurBackGround;
-    private String username, coordinates;
-    private float nameWidth, userWidth, xyzWidth;
+    private String username, coordinates,fps,speed;
+    private float nameWidth, fpsWidth,speedWidth, xyzWidth;
     private Color logoColor;
+
+    public ScaledResolution resolution = new ScaledResolution(mc);
 
     public NovoInterface(String name, Interface parent) {
         super(name, parent);
@@ -81,7 +78,6 @@ public class NovoInterface extends Mode<Interface> {
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
-        position.scale = new Vector2d(200, 100);
 
         if (mc == null || mc.gameSettings.showDebugInfo || mc.theWorld == null || mc.thePlayer == null || Client.CLIENT_TYPE != Type.BASIC) {
             return;
@@ -102,8 +98,8 @@ public class NovoInterface extends Mode<Interface> {
             String tag = (this.getParent().lowercase.getValue() ? moduleComponent.getTag().toLowerCase() : moduleComponent.getTag())
                     .replace(getParent().getRemoveSpaces().getValue() ? " " : "", "");
 
-            final double x = moduleComponent.getPosition().getX();
-            final double y = moduleComponent.getPosition().getY();
+            final double x = moduleComponent.getPosition().getX() + 4.0F;
+            final double y = moduleComponent.getPosition().getY() - 4.0F;
             final Color finalColor = moduleComponent.getColor();
 
             final double widthOffset = arrayListFont == minecraft ? 3.5 : 2;
@@ -177,7 +173,7 @@ public class NovoInterface extends Mode<Interface> {
             }
         }
 
-        if (coordinates == null || username == null) return;
+        if (coordinates == null || fps == null ||username == null) return;
 
         NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
             if (glow || shadow) {
@@ -189,8 +185,15 @@ public class NovoInterface extends Mode<Interface> {
 
                 // coordinates of user in the bottom left corner of the screen
                 final float coordX = 5;
-                this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
-                this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
+                this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0),logoColor.getRGB());
+                this.productSansRegular.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
+
+                this.productSansRegular.drawStringWithShadow("FPS:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 24, logoColor.getRGB());
+                this.productSansRegular.drawStringWithShadow(fps, coordX + fpsWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 24, new Color(-1).getRGB());
+
+                this.productSansRegular.drawStringWithShadow("Speed:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 12, logoColor.getRGB());
+                this.productSansRegular.drawStringWithShadow(speed, coordX + speedWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 12, new Color(-1).getRGB());
+
             }
 
             if (!stopWatch.finished(2000)) {
@@ -203,10 +206,14 @@ public class NovoInterface extends Mode<Interface> {
         final float y = event.getScaledResolution().getScaledHeight() - this.productSansRegular.height() - 1;
         final float coordX = 5;
 
-        this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
+        this.productSansRegular.drawStringWithShadow("XYZ:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0),logoColor.getRGB());
+        this.productSansRegular.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), new Color(-1).getRGB());
 
-        this.productSansMedium18.drawStringWithShadow(coordinates, coordX + xyzWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0), 0xFFCCCCCC);
+        this.productSansRegular.drawStringWithShadow("FPS:", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 22, logoColor.getRGB());
+        this.productSansRegular.drawStringWithShadow(fps, coordX + fpsWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 22, new Color(-1).getRGB());
 
+        this.productSansRegular.drawStringWithShadow("Speed: ", coordX, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 12, logoColor.getRGB());
+        this.productSansRegular.drawStringWithShadow(speed, coordX + speedWidth, y - (mc.currentScreen instanceof GuiChat ? 13 : 0) - 12, new Color(-1).getRGB());
         if (mc.thePlayer.ticksExisted % 150 == 0) {
             stopWatch.reset();
         }
@@ -238,7 +245,11 @@ public class NovoInterface extends Mode<Interface> {
             nameWidth = this.productSansMedium18.width(username);
            // userWidth = this.productSansRegular.width("java.lang.NullPointerException") + 2;
             coordinates = (int) mc.thePlayer.posX + ", " + (int) mc.thePlayer.posY + ", " + (int) mc.thePlayer.posZ;
-            xyzWidth = this.productSansMedium18.width("XYZ:") + 2;
+            fps = String.valueOf(Minecraft.getDebugFPS());
+            speed = String.valueOf(calculateBPS());
+            xyzWidth = this.productSansMedium18.width("XYZ: ") + 2;
+            fpsWidth = this.productSansMedium18.width("FPS: ") + 3;
+            speedWidth = this.productSansMedium18.width("Speed:  ") + 3;
 
             logoColor = this.getTheme().getFirstColor();
 
@@ -278,4 +289,8 @@ public class NovoInterface extends Mode<Interface> {
             }
         });
     };
+    private double calculateBPS() {
+        double bps = (Math.hypot(mc.thePlayer.posX - mc.thePlayer.prevPosX, mc.thePlayer.posZ - mc.thePlayer.prevPosZ) * mc.timer.timerSpeed) * 20;
+        return Math.round(bps * 100.0) / 100.0;
+    }
 }

@@ -1,5 +1,6 @@
 package cn.hackedmc.apotheosis.module.impl.player;
 
+import cn.hackedmc.apotheosis.Client;
 import cn.hackedmc.apotheosis.component.impl.player.BlinkComponent;
 import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
 import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
@@ -7,6 +8,7 @@ import cn.hackedmc.apotheosis.component.impl.player.rotationcomponent.MovementFi
 import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
+import cn.hackedmc.apotheosis.module.impl.combat.KillAura;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
@@ -33,7 +35,7 @@ import java.util.List;
 
 @ModuleInfo(name = "module.player.chestaura.name", description = "module.player.chestaura.description", category = Category.PLAYER)
 public class ChestAura extends Module {
-    private final NumberValue range = new NumberValue("Range", this, 4, 1, 6, 0.1);
+    private final NumberValue range = new NumberValue("Range", this, 3, 1, 6, 0.1);
     private final BooleanValue rotation = new BooleanValue("Rotation", this, false);
     private final BoundsNumberValue rotationSpeed = new BoundsNumberValue("Rotation Speed", this, 5, 10, 1, 10, 1, () -> !rotation.getValue());
     private final ListValue<MovementFix> movementCorrection = new ListValue<>("Movement Correction", this, () -> !rotation.getValue());
@@ -41,6 +43,8 @@ public class ChestAura extends Module {
     private final StopWatch stopWatch = new StopWatch();
     private long nextWait = 0;
     private final List<BlockPos> found = new ArrayList<>();
+
+    public static boolean disabler = false;
 
     public ChestAura() {
         for (MovementFix movementFix : MovementFix.values()) {
@@ -64,9 +68,14 @@ public class ChestAura extends Module {
 
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {
+        if (disabler){
+            this.toggle();
+        }
         if (!stopWatch.finished(nextWait) || mc.currentScreen != null || BlinkComponent.blinking) return;
         int reach = range.getValue().intValue();
-
+        if (KillAura.INSTANCE.range.getValue().floatValue() > 3){
+            Client.INSTANCE.getModuleManager().get(ChestAura.class).onDisable();
+        }
         for (int x = -reach;x <= reach; x++) {
             for (int y = -reach;y <= reach; y++) {
                 for (int z = -reach;z <= reach; z++) {

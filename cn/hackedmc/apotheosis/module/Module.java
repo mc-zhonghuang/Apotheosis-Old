@@ -31,7 +31,6 @@ public abstract class Module implements InstanceAccess {
     private boolean hidden;
     private boolean enabled;
     private int keyCode;
-
     public Module() {
         if (this.getClass().isAnnotationPresent(ModuleInfo.class)) {
             this.moduleInfo = this.getClass().getAnnotation(ModuleInfo.class);
