@@ -95,10 +95,9 @@ public class GrimACVelocity extends Mode<Velocity> {
                         break;
                     }
                     case "attack reduce": {
-                        KillAura aura = getModule(KillAura.class);
-                        if (aura.target != null) {
+                        if (KillAura.INSTANCE.target != null) {
 
-                            if(mc.thePlayer.getDistanceToEntity(aura.target) > aura.range.getValue().doubleValue()){
+                            if(mc.thePlayer.getDistanceToEntity(KillAura.INSTANCE.target) > KillAura.INSTANCE.range.getValue().doubleValue()){
                                 return;
                             }
 
@@ -115,11 +114,7 @@ public class GrimACVelocity extends Mode<Velocity> {
 
                             for (int i = 0;i < 8;i++) {
                                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(getModule(KillAura.class).target, C02PacketUseEntity.Action.ATTACK));
-                                if (ViaMCP.getInstance().getVersion() >= 47){
-                                    PacketWrapper c0A = PacketWrapper.create(26, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
-                                    c0A.write(Type.VAR_INT,0);
-                                    PacketUtil.sendToServer(c0A, Protocol1_8To1_9.class, true, true);
-                                }
+                                mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 
 

@@ -63,7 +63,8 @@ public class Manager extends Module {
 
     private final StopWatch stopwatch = new StopWatch();
     private int chestTicks, attackTicks, placeTicks;
-    private boolean moved, open;
+    private boolean moved;
+    public boolean open;
     private long nextClick;
 
     @EventLink()

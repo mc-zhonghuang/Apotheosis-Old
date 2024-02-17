@@ -44,8 +44,6 @@ public class ChestAura extends Module {
     private long nextWait = 0;
     private final List<BlockPos> found = new ArrayList<>();
 
-    public static boolean disabler = false;
-
     public ChestAura() {
         for (MovementFix movementFix : MovementFix.values()) {
             movementCorrection.add(movementFix);
@@ -68,9 +66,6 @@ public class ChestAura extends Module {
 
     @EventLink
     private final Listener<PreMotionEvent> onPreMotion = event -> {
-        if (disabler){
-            this.toggle();
-        }
         if (!stopWatch.finished(nextWait) || mc.currentScreen != null || BlinkComponent.blinking) return;
         int reach = range.getValue().intValue();
         if (KillAura.INSTANCE.range.getValue().floatValue() > 3){

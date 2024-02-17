@@ -1,11 +1,9 @@
 package cn.hackedmc.apotheosis.module.impl.combat;
 
 import cn.hackedmc.apotheosis.api.Rise;
-import cn.hackedmc.apotheosis.component.impl.player.BadPacketsComponent;
-import cn.hackedmc.apotheosis.component.impl.player.GUIDetectionComponent;
-import cn.hackedmc.apotheosis.component.impl.player.RotationComponent;
-import cn.hackedmc.apotheosis.component.impl.player.SlotComponent;
+import cn.hackedmc.apotheosis.component.impl.player.*;
 import cn.hackedmc.apotheosis.module.impl.player.ChestAura;
+import cn.hackedmc.apotheosis.module.impl.player.Manager;
 import cn.hackedmc.apotheosis.util.RandomUtil;
 import cn.hackedmc.apotheosis.util.RayCastUtil;
 import cn.hackedmc.apotheosis.Client;
@@ -46,6 +44,8 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.network.Packet;
@@ -142,6 +142,8 @@ public final class KillAura extends Module {
             .add(new SubMode("Autistic AntiCheat"))
             .setDefault("Legit/Normal");
     private final BooleanValue attackWhilstScaffolding = new BooleanValue("Attack whilst Scaffolding", this, false, () -> !advanced.getValue());
+    private final BooleanValue noChest = new BooleanValue("No Inventory",this, false, () -> !advanced.getValue());
+    private final BooleanValue noBlink = new BooleanValue("No Blink", this, false, () -> !advanced.getValue());
     private final BooleanValue noSwing = new BooleanValue("No swing", this, false, () -> !advanced.getValue());
     private final BooleanValue autoDisable = new BooleanValue("Auto disable", this, false, () -> !advanced.getValue());
     private final BooleanValue grimFalse = new BooleanValue("Prevent Grim false positives", this, false, () -> !advanced.getValue());
@@ -153,8 +155,6 @@ public final class KillAura extends Module {
     public final BooleanValue animals = new BooleanValue("Animals", this, false, () -> !showTargets.getValue());
     public final BooleanValue mobs = new BooleanValue("Mobs", this, false, () -> !showTargets.getValue());
     public final BooleanValue teams = new BooleanValue("Teams", this, false, () -> !showTargets.getValue());
-    private final BooleanValue noChest = new BooleanValue("NoChestAura",this, false);
-
     private final StopWatch attackStopWatch = new StopWatch();
     private final StopWatch clickStopWatch = new StopWatch();
 
@@ -185,7 +185,6 @@ public final class KillAura extends Module {
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
-        ChestAura.disabler = noChest.getValue();
         this.hitTicks++;
 
         if (GUIDetectionComponent.inGUI()) {
@@ -326,8 +325,10 @@ public final class KillAura extends Module {
                         break;
                 }
                 break;
-
         }
+
+        if ((noChest.getValue() && (mc.currentScreen instanceof GuiChest || mc.currentScreen instanceof GuiInventory || getModule(Manager.class).open)) || (noBlink.getValue() && BlinkComponent.blinking))
+            return;
 
         if (this.canBlock()) {
             this.preBlock();

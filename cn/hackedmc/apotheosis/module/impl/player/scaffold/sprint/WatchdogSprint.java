@@ -1,5 +1,6 @@
 package cn.hackedmc.apotheosis.module.impl.player.scaffold.sprint;
 
+import cn.hackedmc.apotheosis.component.impl.player.BlinkComponent;
 import cn.hackedmc.apotheosis.module.impl.player.Scaffold;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
@@ -16,26 +17,20 @@ public class WatchdogSprint extends Mode<Scaffold> {
 
     @Override
     public void onEnable() {
+        BlinkComponent.blinking = true;
         mc.gameSettings.keyBindSprint.setPressed(true);
     }
 
     @EventLink
     public final Listener<PreMotionEvent> onPreMotion = event -> {
         mc.gameSettings.keyBindSprint.setPressed(true);
+        if (mc.thePlayer.ticksExisted % 3 == 0)
+            BlinkComponent.dispatch();
     };
 
-    @EventLink
-    public final Listener<PacketSendEvent> onPacket = event -> {
-        final Packet<?> packet = event.getPacket();
-
-        if (packet instanceof C03PacketPlayer) {
-            final C03PacketPlayer wrapper = (C03PacketPlayer) packet;
-
-            if (mc.thePlayer.onGround && wrapper.moving && !mc.isSingleplayer()) {
-                wrapper.y += 0.000625;
-                wrapper.onGround = false;
-            }
-        }
-
-    };
+    @Override
+    public void onDisable() {
+        BlinkComponent.dispatch();
+        BlinkComponent.blinking = false;
+    }
 }
