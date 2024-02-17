@@ -68,7 +68,7 @@ public final class Interface extends Module {
 
     private final StopWatch stopwatch = new StopWatch();
     private final StopWatch updateTags = new StopWatch();
-    private final Font productSansMedium18 = FontManager.getProductSansMedium(18);
+    private final Font productSansMedium18 = FontManager.getProductSansRegular(18);
 
     public Font font = FontManager.getProductSansMedium(21);
     public Font font2 = FontManager.getProductSansMedium(20);
@@ -113,12 +113,23 @@ public final class Interface extends Module {
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
+        Color logoColor = this.getTheme().getFirstColor();
+        /*
         final String name = "Username:" + Fucker.name;
         final String rank = "Rank:" + (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName());
         final String online = "Online:" + Fucker.usernames.size();
-        this.productSansMedium18.drawStringWithShadow(name, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 3 - 2, 0xFFCCCCCC);
-        this.productSansMedium18.drawStringWithShadow(rank, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(rank) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, 0xFFCCCCCC);
-        this.productSansMedium18.drawStringWithShadow(online, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(online) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() - 2, 0xFFCCCCCC);
+
+         */
+        final String name =  Fucker.name;
+        final String rank =  (Fucker.rank == Fucker.Rank.CUSTOM ? Fucker.customTag : Fucker.rank.getDisplayName());
+        final String online = String.valueOf(Fucker.usernames.size());
+        this.productSansMedium18.drawStringWithShadow(name, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(name) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 3 - 2, new Color(-1).getRGB());
+        this.productSansMedium18.drawStringWithShadow(rank, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(rank) + 4, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, new Color(-1).getRGB());
+        this.productSansMedium18.drawStringWithShadow(online, event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(online) - 2, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() - 2, new Color(-1).getRGB());
+
+        this.productSansMedium18.drawStringWithShadow( "Username:", event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(name) - 2 * 24, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 3 - 2, logoColor.getRGB());
+        this.productSansMedium18.drawStringWithShadow("Rank:", event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(rank) -  2 * 10, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() * 2 - 2, logoColor.getRGB());
+        this.productSansMedium18.drawStringWithShadow("Online:", event.getScaledResolution().getScaledWidth() - this.productSansMedium18.width(online) -  2 * 16, event.getScaledResolution().getScaledHeight() - this.productSansMedium18.height() - 2, logoColor.getRGB());
 
         for (final ModuleComponent moduleComponent : allModuleComponents) {
             if (moduleComponent.getModule().isEnabled()) {

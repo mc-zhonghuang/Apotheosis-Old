@@ -34,8 +34,8 @@ public final class TargetInfo extends Module {
 
     private final ModeValue mode = new ModeValue("Mode", this)
             .add(new ModernTargetInfo("Modern", this))
-            .add(new ShineTargetInfo("Astolfo", this))
-            .setDefault("Modern");
+            .add(new ShineTargetInfo("Shine", this))
+            .setDefault("Shine");
     public final DragValue positionValue = new DragValue("Position", this, new Vector2d(200, 200));
     public final BooleanValue followPlayer = new BooleanValue("Follow Player", this, false);
 
