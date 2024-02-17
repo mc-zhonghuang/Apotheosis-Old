@@ -129,8 +129,8 @@ public class GrimACVelocity extends Mode<Velocity> {
                             if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
                                 mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
                             } else {
-                                mc.thePlayer.motionX = velocityX * 0.15;
-                                mc.thePlayer.motionZ = velocityZ * 0.15;
+                                mc.thePlayer.motionX = velocityX * 0.07;
+                                mc.thePlayer.motionZ = velocityZ * 0.07;
                             }
 
                             mc.thePlayer.motionY = wrapped.motionY / 8000.0;

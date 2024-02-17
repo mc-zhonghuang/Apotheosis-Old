@@ -205,6 +205,9 @@ public abstract class EntityPlayer extends EntityLivingBase implements java.io.S
         return this.itemInUse;
     }
 
+    public String getName() {
+        return this.gameProfile.getName();
+    }
     /**
      * Returns the item in use count
      */
