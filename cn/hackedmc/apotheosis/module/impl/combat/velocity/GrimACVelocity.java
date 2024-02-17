@@ -113,7 +113,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                             }
 
                             for (int i = 0;i < 8;i++) {
-                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(getModule(KillAura.class).target, C02PacketUseEntity.Action.ATTACK));
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(KillAura.INSTANCE.target, C02PacketUseEntity.Action.ATTACK));
                                 mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             }
 
@@ -121,7 +121,7 @@ public class GrimACVelocity extends Mode<Velocity> {
                             double velocityX = wrapped.motionX / 8000.0;
                             double velocityZ = wrapped.motionZ / 8000.0;
 
-                            if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 5F) {
+                            if (MathHelper.sqrt_double(velocityX * velocityX * velocityZ * velocityZ) <= 3F) {
                                 mc.thePlayer.motionX = mc.thePlayer.motionZ = 0;
                             } else {
                                 mc.thePlayer.motionX = velocityX * 0.07;
