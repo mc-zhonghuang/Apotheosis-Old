@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import cn.hackedmc.apotheosis.Client;
 import net.minecraft.client.LoadingScreenRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -1508,13 +1509,13 @@ public class Config {
                 }
             }
 
-            if (!Minecraft.isRunningOnMac && getDefaultResourcePack() != null) {
+            if (!Minecraft.isRunningOnMac && getResourceManager() != null) {
                 InputStream inputstream = null;
                 InputStream inputstream1 = null;
 
                 try {
-                    inputstream = getDefaultResourcePack().getInputStreamAssets(new ResourceLocation("icons/icon_16x16.png"));
-                    inputstream1 = getDefaultResourcePack().getInputStreamAssets(new ResourceLocation("icons/icon_32x32.png"));
+                    inputstream = getResourceManager().getResource(new ResourceLocation(Client.NAME.toLowerCase() + "/icons/icons_16x16.png")).getInputStream();
+                    inputstream1 = getResourceManager().getResource(new ResourceLocation(Client.NAME.toLowerCase() + "/icons/icons_16x16.png")).getInputStream();
 
                     if (inputstream != null && inputstream1 != null) {
                         Display.setIcon(new ByteBuffer[]{readIconImage(inputstream), readIconImage(inputstream1)});
