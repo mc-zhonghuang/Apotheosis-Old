@@ -63,12 +63,12 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback, Instanc
     /**
      * The width of the screen object.
      */
-    public int width;
+    public static int width;
 
     /**
      * The height of the screen object.
      */
-    public int height;
+    public static int height;
     protected List<GuiButton> buttonList = Lists.newArrayList();
     protected List<GuiLabel> labelList = Lists.newArrayList();
     public boolean allowUserInput;

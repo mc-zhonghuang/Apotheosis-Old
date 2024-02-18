@@ -19,9 +19,21 @@ import java.util.List;
 public class GaussianBlurShader extends RiseShader {
 
     private final RiseShaderProgram blurProgram = new RiseShaderProgram("blur.frag", "vertex.vsh");
-    private Framebuffer inputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
-    private Framebuffer outputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+    private Framebuffer inputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
+    private Framebuffer outputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
     private GaussianKernel gaussianKernel = new GaussianKernel(0);
+
+    private int radius;
+    private float compression;
+
+    public GaussianBlurShader(){
+        this(8);
+    }
+
+    public GaussianBlurShader(int radius){
+        this.radius = radius;
+        this.compression = 2.0f;
+    }
 
     @Override
     public void run(final ShaderRenderType type, final float partialTicks, List<Runnable> runnable) {
@@ -38,7 +50,7 @@ public class GaussianBlurShader extends RiseShader {
                 if (this.isActive()) {
                     this.inputFramebuffer.bindFramebuffer(true);
                     runnable.forEach(Runnable::run);
-                    InstanceAccess.mc.getFramebuffer().bindFramebuffer(true);
+                    mc.getFramebuffer().bindFramebuffer(true);
                 }
                 break;
             }
@@ -50,9 +62,6 @@ public class GaussianBlurShader extends RiseShader {
                     runnable.forEach(Runnable::run);
 
 
-                    // TODO: make radius and other things as a setting
-                    final int radius = 8;
-                    final float compression = 2.0F;
                     final int programId = this.blurProgram.getProgramId();
 
                     this.outputFramebuffer.bindFramebuffer(true);
@@ -72,16 +81,16 @@ public class GaussianBlurShader extends RiseShader {
                         ShaderUniforms.uniform1i(programId, "u_other_sampler", 20);
                     }
 
-                    ShaderUniforms.uniform2f(programId, "u_texel_size", 1.0F / InstanceAccess.mc.displayWidth, 1.0F / InstanceAccess.mc.displayHeight);
+                    ShaderUniforms.uniform2f(programId, "u_texel_size", 1.0F / mc.displayWidth, 1.0F / mc.displayHeight);
                     ShaderUniforms.uniform2f(programId, "u_direction", compression, 0.0F);
 
                     GlStateManager.enableBlend();
                     GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
                     GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-                    InstanceAccess.mc.getFramebuffer().bindFramebufferTexture();
+                    mc.getFramebuffer().bindFramebufferTexture();
                     RiseShaderProgram.drawQuad();
 
-                    InstanceAccess.mc.getFramebuffer().bindFramebuffer(true);
+                    mc.getFramebuffer().bindFramebuffer(true);
                     ShaderUniforms.uniform2f(programId, "u_direction", 0.0F, compression);
                     outputFramebuffer.bindFramebufferTexture();
                     GL13.glActiveTexture(GL13.GL_TEXTURE20);
@@ -102,12 +111,12 @@ public class GaussianBlurShader extends RiseShader {
     public void update() {
         this.setActive(false);
 
-        if (InstanceAccess.mc.displayWidth != inputFramebuffer.framebufferWidth || InstanceAccess.mc.displayHeight != inputFramebuffer.framebufferHeight) {
+        if (mc.displayWidth != inputFramebuffer.framebufferWidth || mc.displayHeight != inputFramebuffer.framebufferHeight) {
             inputFramebuffer.deleteFramebuffer();
-            inputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+            inputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
 
             outputFramebuffer.deleteFramebuffer();
-            outputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+            outputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
         } else {
             inputFramebuffer.framebufferClear();
             outputFramebuffer.framebufferClear();

@@ -23,9 +23,21 @@ import java.util.List;
 public class BloomShader extends RiseShader {
 
     private final RiseShaderProgram bloomProgram = new RiseShaderProgram("bloom.frag", "vertex.vsh");
-    private Framebuffer inputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
-    private Framebuffer outputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+    private Framebuffer inputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
+    private Framebuffer outputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
     private GaussianKernel gaussianKernel = new GaussianKernel(0);
+
+    private int radius;
+    private float compression;
+    public BloomShader(){
+        this(6);
+    }
+
+    public BloomShader(int radius){
+        this.radius = radius;
+        this.compression = 2.0f;
+    }
+
 
     @Override
     public void run(final ShaderRenderType type, final float partialTicks, List<Runnable> runnable) {
@@ -48,13 +60,13 @@ public class BloomShader extends RiseShader {
                         Runnable runnable1 = runnable.get(i);
                         runnable1.run();
                     }
-                    InstanceAccess.mc.getFramebuffer().bindFramebuffer(true);
+                    mc.getFramebuffer().bindFramebuffer(true);
 
                     RendererLivingEntity.NAME_TAG_RANGE = 64;
                     RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32;
 
                     RenderHelper.disableStandardItemLighting();
-                    InstanceAccess.mc.entityRenderer.disableLightmap();
+                    mc.entityRenderer.disableLightmap();
                 }
                 break;
             }
@@ -70,8 +82,7 @@ public class BloomShader extends RiseShader {
                     }
 
                     // TODO: make radius and other things as a setting
-                    final int radius = 6;
-                    final float compression = 2.0F;
+
                     final int programId = this.bloomProgram.getProgramId();
 
                     this.outputFramebuffer.bindFramebuffer(true);
@@ -91,7 +102,7 @@ public class BloomShader extends RiseShader {
                         ShaderUniforms.uniform1i(programId, "u_other_sampler", 20);
                     }
 
-                    ShaderUniforms.uniform2f(programId, "u_texel_size", 1.0F / InstanceAccess.mc.displayWidth, 1.0F / InstanceAccess.mc.displayHeight);
+                    ShaderUniforms.uniform2f(programId, "u_texel_size", 1.0F / mc.displayWidth, 1.0F / mc.displayHeight);
                     ShaderUniforms.uniform2f(programId, "u_direction", compression, 0.0F);
 
                     GlStateManager.enableBlend();
@@ -100,7 +111,7 @@ public class BloomShader extends RiseShader {
                     inputFramebuffer.bindFramebufferTexture();
                     RiseShaderProgram.drawQuad();
 
-                    InstanceAccess.mc.getFramebuffer().bindFramebuffer(true);
+                    mc.getFramebuffer().bindFramebuffer(true);
                     GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                     ShaderUniforms.uniform2f(programId, "u_direction", 0.0F, compression);
                     outputFramebuffer.bindFramebufferTexture();
@@ -120,12 +131,12 @@ public class BloomShader extends RiseShader {
 
     @Override
     public void update() {
-        if (InstanceAccess.mc.displayWidth != inputFramebuffer.framebufferWidth || InstanceAccess.mc.displayHeight != inputFramebuffer.framebufferHeight) {
+        if (mc.displayWidth != inputFramebuffer.framebufferWidth || mc.displayHeight != inputFramebuffer.framebufferHeight) {
             inputFramebuffer.deleteFramebuffer();
-            inputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+            inputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
 
             outputFramebuffer.deleteFramebuffer();
-            outputFramebuffer = new Framebuffer(InstanceAccess.mc.displayWidth, InstanceAccess.mc.displayHeight, true);
+            outputFramebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, true);
         } else {
             inputFramebuffer.framebufferClear();
             outputFramebuffer.framebufferClear();
