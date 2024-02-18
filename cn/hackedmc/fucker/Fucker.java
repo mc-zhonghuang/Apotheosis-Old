@@ -340,6 +340,10 @@ public class Fucker {
 
                                                 case "Jumping": {
                                                     if (InstanceAccess.mc.theWorld != null) {
+                                                        final String version = json.getString("Version", Client.VERSION);
+                                                        if (!version.equals(Client.VERSION)) {
+                                                            ChatUtil.display("§7§lUpdate Check§r >> 客户端有新版本，请及时下载");
+                                                        }
                                                         final JsonObject userData = (JsonObject) JsonParser.parseString(CryptUtil.Base64Crypt.decrypt(json.getString("Users", "")));
                                                         usernames.clear();
                                                         userData.entrySet()
