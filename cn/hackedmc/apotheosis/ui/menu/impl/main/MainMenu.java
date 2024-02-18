@@ -67,7 +67,7 @@ public final class MainMenu extends Menu {
         ScaledResolution sr = new ScaledResolution(mc);
         y-= sr.getScaledHeight() / 101f;
         x+= sr.getScaledWidth() / 427f;
-        drawCustomImage(new ResourceLocation("apotheosis/images/Rain.png"), 0, 0, sr.getScaledWidth(), sr.getScaledHeight());
+        drawCustomImage(new ResourceLocation("apotheosis/images/rain.png"), 0, 0, sr.getScaledWidth(), sr.getScaledHeight());
     }
 
     public void drawCustomImage(final ResourceLocation imageLocation, final float x, final float y, final float width, final float heigh) {
@@ -112,7 +112,7 @@ public final class MainMenu extends Menu {
         rightColor = this.getTheme().getSecondColor();
         //背景
         ScaledResolution sr = new ScaledResolution(mc);
-        RenderUtil.image(new ResourceLocation("apotheosis/images/MainMenu.jpg"), 0,
+        RenderUtil.image(new ResourceLocation("apotheosis/images/mainmenu.jpg"), 0,
                 0, sr.getScaledWidth(), sr.getScaledHeight(), new Color(255, 255, 255, 255));
         //下雨
         drawRain();
