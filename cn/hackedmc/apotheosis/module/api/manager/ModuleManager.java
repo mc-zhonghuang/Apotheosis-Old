@@ -11,6 +11,7 @@ import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.newevent.impl.input.KeyboardInputEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,15 @@ public final class ModuleManager extends ArrayList<Module> {
                 .filter(module -> module.getKeyCode() == event.getKeyCode())
                 .forEach(Module::toggle);
     };
+
+    @SafeVarargs
+    public final void addAll(Class<? extends Module>... modules) {
+        Arrays.asList(modules).forEach(clazz -> {
+            try {
+                add(clazz.newInstance());
+            } catch (Exception ignored) {}
+        });
+    }
 
     @Override
     public boolean add(final Module module) {

@@ -33,6 +33,15 @@ public final class CommandManager extends ArrayList<Command> {
         Client.INSTANCE.getEventBus().register(this);
     }
 
+    @SafeVarargs
+    public final void addAll(Class<? extends Command>... commands) {
+        Arrays.asList(commands).forEach(clazz -> {
+            try {
+                this.add(clazz.newInstance());
+            } catch (Exception ignored) {}
+        });
+    }
+
     public <T extends Command> T get(final String name) {
         // noinspection unchecked
         return (T) this.stream()

@@ -156,7 +156,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     /**
      * Set to 'this' in Minecraft constructor; used by some settings get methods
      */
-    private static Minecraft theMinecraft;
+    public static Minecraft theMinecraft;
     public PlayerControllerMP playerController;
     private boolean fullscreen;
     private boolean enableGLErrorChecking = Client.DEVELOPMENT_SWITCH;

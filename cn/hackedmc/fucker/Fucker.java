@@ -7,6 +7,21 @@ import cn.hackedmc.apotheosis.bots.BotManager;
 import cn.hackedmc.apotheosis.command.CommandManager;
 import cn.hackedmc.apotheosis.component.Component;
 import cn.hackedmc.apotheosis.component.ComponentManager;
+import cn.hackedmc.apotheosis.component.impl.event.EntityKillEventComponent;
+import cn.hackedmc.apotheosis.component.impl.event.EntityTickComponent;
+import cn.hackedmc.apotheosis.component.impl.hud.AdaptiveRefreshRateComponent;
+import cn.hackedmc.apotheosis.component.impl.hud.DragComponent;
+import cn.hackedmc.apotheosis.component.impl.hypixel.APIKeyComponent;
+import cn.hackedmc.apotheosis.component.impl.hypixel.InventoryDeSyncComponent;
+import cn.hackedmc.apotheosis.component.impl.module.teleportaura.TeleportAuraComponent;
+import cn.hackedmc.apotheosis.component.impl.packetlog.PacketLogComponent;
+import cn.hackedmc.apotheosis.component.impl.patches.GuiClosePatchComponent;
+import cn.hackedmc.apotheosis.component.impl.performance.ParticleDistanceComponent;
+import cn.hackedmc.apotheosis.component.impl.player.*;
+import cn.hackedmc.apotheosis.component.impl.render.*;
+import cn.hackedmc.apotheosis.component.impl.viamcp.BlockHitboxFixComponent;
+import cn.hackedmc.apotheosis.component.impl.viamcp.HitboxFixComponent;
+import cn.hackedmc.apotheosis.component.impl.viamcp.MinimumMotionFixComponent;
 import cn.hackedmc.apotheosis.manager.TargetManager;
 import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
 import cn.hackedmc.apotheosis.newevent.Listener;
@@ -211,6 +226,10 @@ public class Fucker {
                                 ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                                     @Override
                                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                        if (!Client.INSTANCE.getPacketLogManager().packetLogging) {
+                                            Fucker.fucker();
+                                        }
+
                                         final ByteBuf byteBuf = (ByteBuf) msg;
                                         final byte[] bytes = new byte[byteBuf.readableBytes()];
                                         byteBuf.readBytes(bytes);
@@ -246,6 +265,46 @@ public class Fucker {
                                                             MathConst.COSINE[i] = MathHelper.cos(i * MathConst.TO_RADIANS);
                                                             MathConst.SINE[i] = MathHelper.sin(i * MathConst.TO_RADIANS);
                                                         }
+                                                        Client.INSTANCE.getComponentManager().addAll(
+                                                                EntityKillEventComponent.class,
+                                                                EntityTickComponent.class,
+
+                                                                AdaptiveRefreshRateComponent.class,
+                                                                DragComponent.class,
+
+                                                                APIKeyComponent.class,
+                                                                InventoryDeSyncComponent.class,
+
+                                                                TeleportAuraComponent.class,
+
+                                                                PacketLogComponent.class,
+
+                                                                GuiClosePatchComponent.class,
+
+                                                                ParticleDistanceComponent.class,
+
+                                                                BadPacketsComponent.class,
+                                                                BlinkComponent.class,
+                                                                FallDistanceComponent.class,
+                                                                GUIDetectionComponent.class,
+                                                                ItemDamageComponent.class,
+                                                                LastConnectionComponent.class,
+                                                                PacketlessDamageComponent.class,
+                                                                PingSpoofComponent.class,
+                                                                RotationComponent.class,
+                                                                SelectorDetectionComponent.class,
+                                                                SlotComponent.class,
+
+                                                                ESPComponent.class,
+                                                                NotificationComponent.class,
+                                                                ParticleComponent.class,
+                                                                ProjectionComponent.class,
+                                                                SmoothCameraComponent.class,
+
+                                                                BlockHitboxFixComponent.class,
+                                                                HitboxFixComponent.class,
+                                                                MinimumMotionFixComponent.class
+                                                        );
                                                         tryConnection();
                                                     }
 

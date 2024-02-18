@@ -3,6 +3,7 @@ package cn.hackedmc.apotheosis.component;
 import cn.hackedmc.apotheosis.Client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Alan
@@ -28,6 +29,15 @@ public final class ComponentManager extends ArrayList<Component> {
 
         //Registers all components to the eventbus
         this.registerToEventBus();
+    }
+
+    @SafeVarargs
+    public final void addAll(Class<? extends Component>... components) {
+        Arrays.asList(components).forEach(clazz -> {
+            try {
+                this.add(clazz.newInstance());
+            } catch (Exception ignored) {}
+        });
     }
 
     public void registerToEventBus() {

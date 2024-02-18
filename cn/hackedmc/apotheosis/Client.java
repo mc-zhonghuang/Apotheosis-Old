@@ -2,19 +2,24 @@ package cn.hackedmc.apotheosis;
 
 import by.radioegor146.nativeobfuscator.Native;
 import cn.hackedmc.apotheosis.anticheat.CheatDetector;
-import cn.hackedmc.apotheosis.api.Hidden;
 import cn.hackedmc.apotheosis.bots.BotManager;
-import cn.hackedmc.apotheosis.command.Command;
 import cn.hackedmc.apotheosis.command.CommandManager;
-import cn.hackedmc.apotheosis.component.Component;
+import cn.hackedmc.apotheosis.command.impl.*;
 import cn.hackedmc.apotheosis.component.ComponentManager;
 import cn.hackedmc.apotheosis.creative.RiseTab;
 import cn.hackedmc.apotheosis.manager.TargetManager;
-import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
+import cn.hackedmc.apotheosis.module.impl.combat.*;
+import cn.hackedmc.apotheosis.module.impl.exploit.*;
+import cn.hackedmc.apotheosis.module.impl.ghost.*;
+import cn.hackedmc.apotheosis.module.impl.movement.*;
+import cn.hackedmc.apotheosis.module.impl.other.Insults;
+import cn.hackedmc.apotheosis.module.impl.other.*;
+import cn.hackedmc.apotheosis.module.impl.player.*;
+import cn.hackedmc.apotheosis.module.impl.render.*;
 import cn.hackedmc.apotheosis.newevent.bus.impl.EventBus;
-import cn.hackedmc.apotheosis.packetlog.Check;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
+import cn.hackedmc.apotheosis.packetlog.impl.FlyingCheck;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
 import cn.hackedmc.apotheosis.ui.click.clover.CloverClickGUI;
@@ -22,7 +27,6 @@ import cn.hackedmc.apotheosis.ui.click.standard.RiseClickGUI;
 import cn.hackedmc.apotheosis.ui.menu.impl.alt.AltManagerMenu;
 import cn.hackedmc.apotheosis.ui.music.MusicMenu;
 import cn.hackedmc.apotheosis.ui.theme.ThemeManager;
-import cn.hackedmc.apotheosis.util.ReflectionUtil;
 import cn.hackedmc.apotheosis.util.file.FileManager;
 import cn.hackedmc.apotheosis.util.file.FileType;
 import cn.hackedmc.apotheosis.util.file.alt.AltManager;
@@ -32,17 +36,14 @@ import cn.hackedmc.apotheosis.util.file.data.DataManager;
 import cn.hackedmc.apotheosis.util.file.insult.InsultFile;
 import cn.hackedmc.apotheosis.util.file.insult.InsultManager;
 import cn.hackedmc.apotheosis.util.localization.Locale;
-import cn.hackedmc.apotheosis.util.math.MathConst;
 import cn.hackedmc.apotheosis.util.value.ConstantManager;
 import cn.hackedmc.fucker.Fucker;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.viamcp.ViaMCP;
-import org.lwjgl.opengl.Display;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -130,37 +131,196 @@ public enum Client {
         Fucker.fuckClass(this.getClass(), this);
 
         // Register
-        String[] paths = {
-                "cn.hackedmc.apotheosis.",
-                "hackclient."
-        };
+//        String[] paths = {
+//                "cn.hackedmc.apotheosis.",
+//                "hackclient."
+//        };
+//
+//        for (String path : paths) {
+//            if (!ReflectionUtil.dirExist(path)) {
+//                continue;
+//            }
+//
+//            Class<?>[] classes = ReflectionUtil.getClassesInPackage(path);
+//
+//            for (Class<?> clazz : classes) {
+//                try {
+//                    if (clazz.isAnnotationPresent(Hidden.class)) continue;
+//
+//                    if (Component.class.isAssignableFrom(clazz) && clazz != Component.class) {
+//                        this.componentManager.add((Component) clazz.getConstructor().newInstance());
+//                    } else if (Module.class.isAssignableFrom(clazz) && clazz != Module.class) {
+//                        this.moduleManager.add((Module) clazz.getConstructor().newInstance());
+//                    } else if (Command.class.isAssignableFrom(clazz) && clazz != Command.class) {
+//                        this.commandManager.add((Command) clazz.getConstructor().newInstance());
+//                    } else if (Check.class.isAssignableFrom(clazz) && clazz != Check.class) {
+//                        this.packetLogManager.add((Check) clazz.getConstructor().newInstance());
+//                    }
+//                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+//                         NoSuchMethodException ignored) {}
+//            }
+//
+//            break;
+//        }
+        this.moduleManager.addAll(
+                // Combat
+                AntiBot.class,
+                ComboOneHit.class,
+                Criticals.class,
+                KillAura.class,
+                NewTeleportAura.class,
+                Regen.class,
+                TeleportAura.class,
+                Velocity.class,
 
-        for (String path : paths) {
-            if (!ReflectionUtil.dirExist(path)) {
-                continue;
-            }
+                // Exploit
+                ConsoleSpammer.class,
+                Crasher.class,
+                Disabler.class,
+                GodMode.class,
+                KeepContainer.class,
+                LightningTracker.class,
+                NoRotate.class,
+                PingSpoof.class,
+                StaffDetector.class,
 
-            Class<?>[] classes = ReflectionUtil.getClassesInPackage(path);
+                // Ghost
+                AimAssist.class,
+                AimBacktrack.class,
+                AutoClicker.class,
+                AutoPlace.class,
+                Backtrack.class,
+                ClickAssist.class,
+                Eagle.class,
+                FastPlace.class,
+                GuiClicker.class,
+                HitBox.class,
+                KeepSprint.class,
+                NoClickDelay.class,
+                Reach.class,
+                SafeWalk.class,
+                WTap.class,
 
-            for (Class<?> clazz : classes) {
-                try {
-                    if (clazz.isAnnotationPresent(Hidden.class)) continue;
+                // Movement
+                Flight.class,
+                InventoryMove.class,
+                Jesus.class,
+                LongJump.class,
+                NoClip.class,
+                NoSlow.class,
+                Phase.class,
+                PotionExtender.class,
+                Sneak.class,
+                Speed.class,
+                Sprint.class,
+                Step.class,
+                Strafe.class,
+                TargetStrafe.class,
+                Teleport.class,
+                WallClimb.class,
 
-                    if (Component.class.isAssignableFrom(clazz) && clazz != Component.class) {
-                        this.componentManager.add((Component) clazz.getConstructor().newInstance());
-                    } else if (Module.class.isAssignableFrom(clazz) && clazz != Module.class) {
-                        this.moduleManager.add((Module) clazz.getConstructor().newInstance());
-                    } else if (Command.class.isAssignableFrom(clazz) && clazz != Command.class) {
-                        this.commandManager.add((Command) clazz.getConstructor().newInstance());
-                    } else if (Check.class.isAssignableFrom(clazz) && clazz != Check.class) {
-                        this.packetLogManager.add((Check) clazz.getConstructor().newInstance());
-                    }
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException ignored) {}
-            }
+                // Other
+                AntiAFK.class,
+                AntiExploit.class,
+                AutoGG.class,
+                AutoGroomer.class,
+                cn.hackedmc.apotheosis.module.impl.other.CheatDetector.class,
+                ClickSounds.class,
+                ClientSpoofer.class,
+                Debugger.class,
+                DiscordPresence.class,
+                HypixelAutoPlay.class,
+                Insults.class,
+                MurderMystery.class,
+                NoGuiClose.class,
+                NoPitchLimit.class,
+                Nuker.class,
+                PlayerNotifier.class,
+                ServerProtocol.class,
+                Spammer.class,
+                Spotify.class,
+                Timer.class,
+                Translator.class,
 
-            break;
-        }
+                // Player
+                AntiSuffocate.class,
+                AntiVoid.class,
+                AutoHead.class,
+                AutoPot.class,
+                AutoSoup.class,
+                AutoTool.class,
+                Blink.class,
+                Breaker.class,
+                ChestAura.class,
+                FastBreak.class,
+                FastUse.class,
+                FlagDetector.class,
+                InventorySync.class,
+                Manager.class,
+                NoFall.class,
+                Scaffold.class,
+                Stealer.class,
+                Twerk.class,
+
+                // Render
+                Ambience.class,
+                Animations.class,
+                AppleSkin.class,
+                BPSCounter.class,
+                ChestESP.class,
+                ClickGUI.class,
+                CPSCounter.class,
+                ESP.class,
+                Footprint.class,
+                FPSCounter.class,
+                FreeCam.class,
+                FreeLook.class,
+                FullBright.class,
+                Glint.class,
+                HotBar.class,
+                HurtCamera.class,
+                HurtColor.class,
+                Interface.class,
+                ItemPhysics.class,
+                KeyStrokes.class,
+                KillEffect.class,
+//                MusicPlayer.class,
+                NameTags.class,
+                NoCameraClip.class,
+                OffscreenESP.class,
+                Particles.class,
+                ProjectionESP.class,
+                Radar.class,
+                ScoreBoard.class,
+                SessionStats.class,
+                SniperOverlay.class,
+                Streamer.class,
+                TargetInfo.class,
+                Tracers.class,
+                UnlimitedChat.class,
+                ViewBobbing.class
+        );
+
+        this.commandManager.addAll(
+                Bind.class,
+                Clip.class,
+                Config.class,
+                DeveloperReload.class,
+                Friend.class,
+                Help.class,
+                cn.hackedmc.apotheosis.command.impl.Insults.class,
+                IRC.class,
+                Name.class,
+                Panic.class,
+                Say.class,
+                Script.class,
+                Stuck.class,
+                Toggle.class
+        );
+
+        this.packetLogManager.addAll(
+            FlyingCheck.class
+        );
 
         // Init Managers
         this.targetManager.init();
