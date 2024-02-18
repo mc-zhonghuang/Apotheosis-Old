@@ -1514,8 +1514,8 @@ public class Config {
                 InputStream inputstream1 = null;
 
                 try {
-                    inputstream = getResourceManager().getResource(new ResourceLocation(Client.NAME.toLowerCase() + "/icons/icons_16x16.png")).getInputStream();
-                    inputstream1 = getResourceManager().getResource(new ResourceLocation(Client.NAME.toLowerCase() + "/icons/icons_16x16.png")).getInputStream();
+                    inputstream = Config.class.getResourceAsStream("assets/minecraft/apotheosis/icons/icons_16x16.png");
+                    inputstream1 = Config.class.getResourceAsStream("assets/minecraft/apotheosis/icons/icons_32x32.png");
 
                     if (inputstream != null && inputstream1 != null) {
                         Display.setIcon(new ByteBuffer[]{readIconImage(inputstream), readIconImage(inputstream1)});

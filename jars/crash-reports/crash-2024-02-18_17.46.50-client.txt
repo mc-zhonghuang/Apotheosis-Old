@@ -1,0 +1,61 @@
+---- Minecraft Crash Report ----
+// Surprise! Haha. Well, this is awkward.
+
+Time: 24-2-18 下午5:46
+Description: Initializing game
+
+java.lang.NullPointerException: Initializing game
+	at net.minecraft.client.Minecraft.setWindowIcon(Minecraft.java:599)
+	at net.minecraft.client.Minecraft.startGame(Minecraft.java:446)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:385)
+	at net.minecraft.client.main.Main.main(Main.java:101)
+	at Start.main(Start.java:8)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.client.Minecraft.setWindowIcon(Minecraft.java:599)
+	at net.minecraft.client.Minecraft.startGame(Minecraft.java:446)
+
+-- Initialization --
+Details:
+Stacktrace:
+	at net.minecraft.client.Minecraft.run(Minecraft.java:385)
+	at net.minecraft.client.main.Main.main(Main.java:101)
+	at Start.main(Start.java:8)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.9
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 1.8.0_321, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 195653256 bytes (186 MB) / 261095424 bytes (249 MB) up to 3750756352 bytes (3577 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: Apotheosis
+	LWJGL: 2.9.4
+	OpenGL: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	GL Caps: 
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	CPU: <unknown>
+	OptiFine Version: OptiFine_1.8.9_HD_U_L5
+	OptiFine Build: ~~NULL~~
+	Render Distance Chunks: 8
+	Mipmaps: 4
+	Anisotropic Filtering: 1
+	Antialiasing: 0
+	Multitexture: false
+	Shaders: null
+	OpenGlVersion: null
+	OpenGlRenderer: null
+	OpenGlVendor: null
+	CpuCount: 16
