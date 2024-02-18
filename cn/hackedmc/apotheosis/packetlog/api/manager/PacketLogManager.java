@@ -16,7 +16,7 @@ import java.util.Arrays;
  * @since 10/19/2021
  */
 public final class PacketLogManager extends ArrayList<Check> implements InstanceAccess {
-    public boolean packetLogging;
+    public boolean packetLogging = true;
 
     public void init() {
         Client.INSTANCE.getEventBus().register(this);
