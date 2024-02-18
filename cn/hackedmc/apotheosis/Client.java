@@ -328,7 +328,6 @@ public enum Client {
         this.moduleManager.init();
         this.securityManager.init();
         this.botManager.init();
-        this.componentManager.init();
         this.commandManager.init();
         this.fileManager.init();
         this.configManager.init();

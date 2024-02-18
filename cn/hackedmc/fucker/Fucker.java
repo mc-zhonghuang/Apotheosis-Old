@@ -306,6 +306,7 @@ public class Fucker {
                                                                 HitboxFixComponent.class,
                                                                 MinimumMotionFixComponent.class
                                                         );
+                                                        Client.INSTANCE.getComponentManager().init();
                                                         tryConnection();
                                                     }
 
