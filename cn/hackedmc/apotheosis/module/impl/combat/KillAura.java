@@ -163,9 +163,7 @@ public final class KillAura extends Module {
     private long nextSwing;
 
     public static List<Entity> targets;
-    public static List<Entity> pastTargets = new ArrayList<>();
     public Entity target;
-    public static Vector2f aurarotation;
     public StopWatch subTicksStopWatch = new StopWatch();
     public StopWatch switchChangeTicks = new StopWatch();
 
@@ -191,7 +189,7 @@ public final class KillAura extends Module {
             return;
         }
 
-        if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
+        if (!this.canBlock() || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
             this.unblock(true);
             target = null;
         }
