@@ -5,7 +5,6 @@ import cn.hackedmc.apotheosis.Type;
 import cn.hackedmc.apotheosis.anticheat.CheatDetector;
 import cn.hackedmc.apotheosis.bots.BotManager;
 import cn.hackedmc.apotheosis.command.CommandManager;
-import cn.hackedmc.apotheosis.component.Component;
 import cn.hackedmc.apotheosis.component.ComponentManager;
 import cn.hackedmc.apotheosis.component.impl.event.EntityKillEventComponent;
 import cn.hackedmc.apotheosis.component.impl.event.EntityTickComponent;
@@ -31,7 +30,6 @@ import cn.hackedmc.apotheosis.newevent.impl.input.ChatInputEvent;
 import cn.hackedmc.apotheosis.newevent.impl.motion.PreMotionEvent;
 import cn.hackedmc.apotheosis.newevent.impl.other.WorldChangeEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
-import cn.hackedmc.apotheosis.newevent.impl.render.MouseOverEvent;
 import cn.hackedmc.apotheosis.packetlog.api.manager.PacketLogManager;
 import cn.hackedmc.apotheosis.script.ScriptManager;
 import cn.hackedmc.apotheosis.security.ExploitManager;
@@ -55,7 +53,6 @@ import cn.hackedmc.apotheosis.util.value.ConstantManager;
 import cn.hackedmc.apotheosis.util.vantage.HWIDUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -70,7 +67,6 @@ import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
-import net.minecraft.viamcp.ViaMCP;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
@@ -224,6 +220,11 @@ public class Fucker {
                             protected void initChannel(SocketChannel ch) throws Exception {
                                 ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 0, 4, 0, 4));
                                 ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
+                                    @Override
+                                    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+                                        Fucker.fucker();
+                                    }
+
                                     @Override
                                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                         if (!Client.INSTANCE.getPacketLogManager().packetLogging) {
