@@ -14,9 +14,9 @@ import java.util.Objects;
 @ModuleInfo(name = "module.combat.teams.name", description = "module.combat.teams.description", category = Category.COMBAT)
 public final class Teams extends Module {
     public static Teams INSTANCE;
-    private final BooleanValue armorValue = new BooleanValue("ArmorColor", this,true);
+    private final BooleanValue armorValue = new BooleanValue("Armor Color", this,true);
     private final BooleanValue colorValue = new BooleanValue("Color",this, true);
-    private final BooleanValue scoreboardValue = new BooleanValue("ScoreboardTeam",this, true);
+    private final BooleanValue scoreboardValue = new BooleanValue("Scoreboard Team",this, true);
     public Teams(){
         INSTANCE = this;
     }
