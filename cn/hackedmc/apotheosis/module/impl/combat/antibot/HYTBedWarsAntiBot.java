@@ -4,6 +4,7 @@ import cn.hackedmc.apotheosis.Client;
 import cn.hackedmc.apotheosis.module.impl.combat.AntiBot;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
+import cn.hackedmc.apotheosis.newevent.impl.motion.PreUpdateEvent;
 import cn.hackedmc.apotheosis.newevent.impl.packet.PacketReceiveEvent;
 import cn.hackedmc.apotheosis.value.Mode;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
@@ -13,7 +14,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S14PacketEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class HYTBedWarsAntiBot extends Mode<AntiBot> {
+    private final List<EntityPlayer> ticksExistedEntities = new ArrayList<>();
     public HYTBedWarsAntiBot(String name, AntiBot parent){
         super(name,parent);
     }
@@ -36,5 +41,20 @@ public final class HYTBedWarsAntiBot extends Mode<AntiBot> {
                 }
             }
         }
+
+    };
+    @EventLink
+    @SuppressWarnings("all")
+    public final Listener<PreUpdateEvent> onPreUpdateEvent = event -> {
+        mc.theWorld.playerEntities.forEach(player -> {
+        if (player.ticksExisted < 100) {
+            if (!ticksExistedEntities.contains(player)) {
+                ticksExistedEntities.add(player);
+                if (!Client.INSTANCE.getBotManager().contains(player)) Client.INSTANCE.getBotManager().add(player);
+            }
+        } else {
+            ticksExistedEntities.remove(player);
+        }
+        });
     };
 }
