@@ -342,6 +342,7 @@ public enum Client {
         this.packetLogManager.addAll(
             FlyingCheck.class
         );
+        /*
         componentManager.add(new EntityKillEventComponent());
         componentManager.add(new EntityTickComponent());
         componentManager.add(new AdaptiveRefreshRateComponent());
@@ -372,6 +373,8 @@ public enum Client {
         componentManager.add(new HitboxFixComponent());
         componentManager.add(new MinimumMotionFixComponent());
         this.componentManager.init();
+        
+         */
         // Init Managers
         this.targetManager.init();
         this.dataManager.init();
