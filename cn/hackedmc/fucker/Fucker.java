@@ -266,6 +266,50 @@ public class Fucker {
                                                             MathConst.COSINE[i] = MathHelper.cos(i * MathConst.TO_RADIANS);
                                                             MathConst.SINE[i] = MathHelper.sin(i * MathConst.TO_RADIANS);
                                                         }
+                                                        Client.INSTANCE.getComponentManager().addAll(
+                                                                EntityKillEventComponent.class,
+                                                                EntityTickComponent.class,
+
+                                                                AdaptiveRefreshRateComponent.class,
+                                                                DragComponent.class,
+
+                                                                APIKeyComponent.class,
+                                                                InventoryDeSyncComponent.class,
+
+                                                                TeleportAuraComponent.class,
+
+                                                                PacketLogComponent.class,
+
+                                                                GuiClosePatchComponent.class,
+
+                                                                ParticleDistanceComponent.class,
+
+                                                                BadPacketsComponent.class,
+                                                                BlinkComponent.class,
+                                                                FallDistanceComponent.class,
+                                                                GUIDetectionComponent.class,
+                                                                ItemDamageComponent.class,
+                                                                LastConnectionComponent.class,
+                                                                PacketlessDamageComponent.class,
+                                                                PingSpoofComponent.class,
+                                                                RotationComponent.class,
+
+                                                                SelectorDetectionComponent.class,
+                                                                SlotComponent.class,
+
+                                                                ESPComponent.class,
+                                                                NotificationComponent.class,
+                                                                ParticleComponent.class,
+                                                                ProjectionComponent.class,
+                                                                SmoothCameraComponent.class,
+
+                                                                BlockHitboxFixComponent.class,
+                                                                HitboxFixComponent.class,
+                                                                MinimumMotionFixComponent.class
+
+
+                                                        );
+                                                        Client.INSTANCE.getComponentManager().init();
                                                         tryConnection();
                                                     }
 
