@@ -72,6 +72,7 @@ public class NovoInterface extends Mode<Interface> {
 
     public ScaledResolution resolution = new ScaledResolution(mc);
 
+
     public NovoInterface(String name, Interface parent) {
         super(name, parent);
     }

@@ -8,6 +8,7 @@ import cn.hackedmc.apotheosis.util.vector.Vector3d;
 import com.google.common.base.Predicates;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.*;
 
@@ -80,7 +81,20 @@ public class RotationUtil implements InstanceAccess {
 
         return false;
     }
+    public static Vector2f getRotations(double posX, double posY, double posZ) {
+        EntityPlayerSP entityplayersp = mc.thePlayer;
+        double d0 = posX - entityplayersp.posX;
+        double d1 = posY - (entityplayersp.posY + (double)entityplayersp.getEyeHeight());
+        double d2 = posZ - entityplayersp.posZ;
+        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        float f = (float)(Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
+        float f1 = (float)(-(Math.atan2(d1, d3) * 180.0D / Math.PI));
+        return new Vector2f(f, f1);
+    }
 
+    public static Vector2f getRotationsNonLivingEntity(Entity entity) {
+        return getRotations(entity.posX, entity.posY + (entity.getEntityBoundingBox().maxY - entity.getEntityBoundingBox().minY) * 0.5D, entity.posZ);
+    }
     public Vector2f calculate(final Vector3d from, final Vector3d to) {
         final Vector3d diff = to.subtract(from);
         final double distance = Math.hypot(diff.getX(), diff.getZ());

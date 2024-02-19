@@ -1,13 +1,14 @@
 package cn.hackedmc.apotheosis.manager;
 
 import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.combat.AntiBot;
 import cn.hackedmc.apotheosis.module.impl.combat.KillAura;
+import cn.hackedmc.apotheosis.module.impl.combat.Teams;
 import cn.hackedmc.apotheosis.newevent.Listener;
 import cn.hackedmc.apotheosis.newevent.annotations.EventLink;
 import cn.hackedmc.apotheosis.newevent.impl.other.TickEvent;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
 import cn.hackedmc.fucker.Fucker;
-import cn.hackedmc.apotheosis.util.chat.ChatUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -68,8 +69,7 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
             invisibles = killAura.invisibles.getValue();
             animals = killAura.animals.getValue();
             mobs = killAura.mobs.getValue();
-            teams = killAura.teams.getValue();
-
+            teams = Teams.isSameTeam(killAura.target);
             this.clear();
             mc.theWorld.loadedEntityList.stream()
                     .filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || !(entity instanceof EntityLivingBase) || mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) && (ircs || Fucker.usernames.get(entity.getCommandSenderName()) == null))

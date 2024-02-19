@@ -26,7 +26,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 
 public class LoginMenu extends Menu {
     private final Font fontRenderer = FontManager.getProductSansBold(24);
@@ -59,7 +59,40 @@ public class LoginMenu extends Menu {
         UI_BLOOM_RUNNABLES.forEach(Runnable::run);
         UI_BLOOM_RUNNABLES.clear();
 
-        if (Fucker.login) mc.displayGuiScreen(new MainMenu());
+
+        if (Fucker.login) start();
+
+
+    }
+
+    public static String readUsername() {
+        StringBuilder content = new StringBuilder();
+        try {
+            FileReader reader = new FileReader("example.txt");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return content.toString().trim();
+    }
+
+    private static void start(){
+        try {
+            FileWriter writer = new FileWriter("example.txt");
+            writer.write(Fucker.name);
+            writer.close();
+            System.out.println();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        mc.displayGuiScreen(new MainMenu());
     }
 
     @Override
@@ -96,7 +129,7 @@ public class LoginMenu extends Menu {
         Display.setTitle("Waiting for login");
 
         InstanceAccess.clearRunnables();
-
+        String username = readUsername();
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int buttonWidth = 180;

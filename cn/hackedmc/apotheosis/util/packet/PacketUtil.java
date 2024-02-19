@@ -1,10 +1,14 @@
 package cn.hackedmc.apotheosis.util.packet;
 
+import cn.hackedmc.apotheosis.Client;
+import cn.hackedmc.apotheosis.module.impl.exploit.Disabler;
 import cn.hackedmc.apotheosis.util.interfaces.InstanceAccess;
+import cn.hackedmc.apotheosis.util.math.MathUtil;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import lombok.experimental.UtilityClass;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 
 @UtilityClass
 public final class PacketUtil implements InstanceAccess {
@@ -23,6 +27,23 @@ public final class PacketUtil implements InstanceAccess {
         } else {
             mc.getNetHandler().addToSendQueue(packet);
         }
+    }
+    public static void sendPacketC0F() {
+        if (!Disabler.INSTANCE.grimACDisabler.post.getValue()) {
+            send(new C0FPacketConfirmTransaction(MathUtil.getRandom2(102, 1000024123), (short)MathUtil.getRandom2(102, 1000024123), true));
+        }
+
+    }
+
+    public static void sendPacketC0F(boolean noEvent) {
+        if (!Disabler.INSTANCE.grimACDisabler.post.getValue()) {
+            if (!noEvent) {
+                send(new C0FPacketConfirmTransaction(MathUtil.getRandom2(102, 1000024123), (short)MathUtil.getRandom2(102, 1000024123), true));
+            } else {
+                sendNoEvent(new C0FPacketConfirmTransaction(MathUtil.getRandom2(102, 1000024123), (short)MathUtil.getRandom2(102, 1000024123), true));
+            }
+        }
+
     }
     public static void sendToServer(PacketWrapper packet, Class<? extends Protocol> packetProtocol) {
         sendToServer(packet, packetProtocol);

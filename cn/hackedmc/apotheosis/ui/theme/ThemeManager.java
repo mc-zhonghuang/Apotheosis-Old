@@ -6,5 +6,5 @@ import lombok.Setter;
 @Setter
 @Getter
 public final class ThemeManager {
-    private Themes theme = Themes.WATER;
+    private Themes theme = Themes.AUBERGINE;
 }

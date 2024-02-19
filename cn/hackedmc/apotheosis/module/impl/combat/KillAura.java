@@ -2,7 +2,6 @@ package cn.hackedmc.apotheosis.module.impl.combat;
 
 import cn.hackedmc.apotheosis.api.Rise;
 import cn.hackedmc.apotheosis.component.impl.player.*;
-import cn.hackedmc.apotheosis.module.impl.player.ChestAura;
 import cn.hackedmc.apotheosis.module.impl.player.Manager;
 import cn.hackedmc.apotheosis.util.RandomUtil;
 import cn.hackedmc.apotheosis.util.RayCastUtil;
@@ -144,6 +143,7 @@ public final class KillAura extends Module {
     private final BooleanValue attackWhilstScaffolding = new BooleanValue("Attack whilst Scaffolding", this, false, () -> !advanced.getValue());
     private final BooleanValue noChest = new BooleanValue("No Inventory",this, false, () -> !advanced.getValue());
     private final BooleanValue noBlink = new BooleanValue("No Blink", this, false, () -> !advanced.getValue());
+
     private final BooleanValue noSwing = new BooleanValue("No swing", this, false, () -> !advanced.getValue());
     private final BooleanValue autoDisable = new BooleanValue("Auto disable", this, false, () -> !advanced.getValue());
     private final BooleanValue grimFalse = new BooleanValue("Prevent Grim false positives", this, false, () -> !advanced.getValue());
@@ -163,7 +163,9 @@ public final class KillAura extends Module {
     private long nextSwing;
 
     public static List<Entity> targets;
+    public static List<Entity> pastTargets = new ArrayList<>();
     public Entity target;
+    public static Vector2f aurarotation;
     public StopWatch subTicksStopWatch = new StopWatch();
     public StopWatch switchChangeTicks = new StopWatch();
 
@@ -189,7 +191,7 @@ public final class KillAura extends Module {
             return;
         }
 
-        if (!this.canBlock() || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
+        if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
             this.unblock(true);
             target = null;
         }
@@ -199,7 +201,7 @@ public final class KillAura extends Module {
     protected void onEnable() {
         this.attack = 0;
         this.switchChangeTicks.reset();
-       // this.blockingTick = 0;
+        // this.blockingTick = 0;
     }
 
     @Override
@@ -257,20 +259,20 @@ public final class KillAura extends Module {
         if (mode.getValue().getName().equalsIgnoreCase("Single"))
             target = targets.get(0);
         else
-            if (this.switchChangeTicks.finished(RandomUtil.nextInt(switchTicks.getMin().intValue(), switchTicks.getMax().intValue())) && targets.size() > 1) {
-                Client.INSTANCE.getTargetManager().updateTargets();
-                if (targets.contains(target)) {
-                    targets.remove(target);
-                    Entity oldTarget = target;
-                    target = targets.get(0);
-                    targets.add(oldTarget);
-                } else {
-                    target = targets.get(0);
-                }
-                this.switchChangeTicks.reset();
-            } else if (targets.size() == 1) {
+        if (this.switchChangeTicks.finished(RandomUtil.nextInt(switchTicks.getMin().intValue(), switchTicks.getMax().intValue())) && targets.size() > 1) {
+            Client.INSTANCE.getTargetManager().updateTargets();
+            if (targets.contains(target)) {
+                targets.remove(target);
+                Entity oldTarget = target;
+                target = targets.get(0);
+                targets.add(oldTarget);
+            } else {
                 target = targets.get(0);
             }
+            this.switchChangeTicks.reset();
+        } else if (targets.size() == 1) {
+            target = targets.get(0);
+        }
 
 //        while (target == null || pastTargets.contains(target) || mc.thePlayer.getDistance(target.posX, target.posY, target.posZ) > range.getValue().doubleValue()) {
 //            target = targets.get(0);
@@ -323,10 +325,11 @@ public final class KillAura extends Module {
                         break;
                 }
                 break;
-        }
 
+        }
         if ((noChest.getValue() && (mc.currentScreen instanceof GuiChest || mc.currentScreen instanceof GuiInventory || getModule(Manager.class).open)) || (noBlink.getValue() && BlinkComponent.blinking))
             return;
+
 
         if (this.canBlock()) {
             this.preBlock();
@@ -368,6 +371,8 @@ public final class KillAura extends Module {
                 if (RayCastUtil.rayCast(targetRotations, range.getValue().doubleValue()).typeOfHit != MovingObjectPosition.MovingObjectType.ENTITY) {
                     randomYaw = randomPitch = 0;
                 }
+                aurarotation = targetRotations;
+
                 if (rotationSpeed != 0) {
                     RotationComponent.setRotations(targetRotations, rotationSpeed,
                             movementCorrection.getValue() == MovementFix.OFF || shouldRun() ? MovementFix.OFF : movementCorrection.getValue());

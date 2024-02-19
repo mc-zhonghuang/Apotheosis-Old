@@ -38,6 +38,7 @@ import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import util.time.StopWatch;
 
@@ -66,7 +67,9 @@ public class Manager extends Module {
     private boolean moved;
     public boolean open;
     private long nextClick;
-
+    public Manager(){
+        this.setKeyCode(Keyboard.KEY_X);
+    }
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
 

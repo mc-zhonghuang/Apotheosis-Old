@@ -25,7 +25,6 @@ public final class MiddleClickBot extends Mode<AntiBot>  {
         if (Mouse.isButtonDown(2)) {
             if (down) return;
             down = true;
-
             if (mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                 BotManager botManager = Client.INSTANCE.getBotManager();
                 Entity entity = mc.objectMouseOver.entityHit;

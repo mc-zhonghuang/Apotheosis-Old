@@ -28,6 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
+import org.lwjgl.input.Keyboard;
 import util.time.StopWatch;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class ChestAura extends Module {
         }
 
         movementCorrection.setDefault(MovementFix.OFF);
+        this.setKeyCode(Keyboard.KEY_X);
     }
 
     @Override
@@ -68,9 +70,13 @@ public class ChestAura extends Module {
     private final Listener<PreMotionEvent> onPreMotion = event -> {
         if (!stopWatch.finished(nextWait) || mc.currentScreen != null || BlinkComponent.blinking) return;
         int reach = range.getValue().intValue();
+        /*
         if (KillAura.INSTANCE.range.getValue().floatValue() > 3){
             Client.INSTANCE.getModuleManager().get(ChestAura.class).onDisable();
         }
+
+         */
+
         for (int x = -reach;x <= reach; x++) {
             for (int y = -reach;y <= reach; y++) {
                 for (int z = -reach;z <= reach; z++) {

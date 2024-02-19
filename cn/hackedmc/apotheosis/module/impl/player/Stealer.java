@@ -43,6 +43,7 @@ import net.minecraft.network.play.client.C0DPacketCloseWindow;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import util.time.StopWatch;
 
@@ -433,5 +434,6 @@ public class Stealer extends Module {
 
     public Stealer() {
         INSTANCE = this;
+        this.setKeyCode(Keyboard.KEY_X);
     }
 }

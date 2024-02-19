@@ -10,6 +10,8 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 
 import java.util.ArrayList;
@@ -48,6 +50,31 @@ public class PlayerUtil implements InstanceAccess {
      */
     public Block block(final double x, final double y, final double z) {
         return mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+    }
+    public static boolean colorTeam(EntityPlayer sb) {
+        String s = sb.getDisplayName().getFormattedText().replace("\u00a7r", "");
+        String s1 = mc.thePlayer.getDisplayName().getFormattedText().replace("\u00a7r", "");
+        return s.startsWith("\u00a7" + s1.charAt(1));
+    }
+
+    public static boolean armorTeam(EntityPlayer entityPlayer) {
+        if (mc.thePlayer.inventory.armorInventory[3] != null && entityPlayer.inventory.armorInventory[3] != null) {
+            ItemStack itemstack = mc.thePlayer.inventory.armorInventory[3];
+            ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+            ItemStack itemstack1 = entityPlayer.inventory.armorInventory[3];
+            ItemArmor itemarmor1 = (ItemArmor)itemstack1.getItem();
+            if (String.valueOf(itemarmor1.getColor(itemstack1)).equals("10511680")) {
+                return true;
+            } else {
+                return itemarmor.getColor(itemstack) == itemarmor1.getColor(itemstack1);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean scoreTeam(EntityPlayer entityPlayer) {
+        return mc.thePlayer.isOnSameTeam(entityPlayer);
     }
 
     /**

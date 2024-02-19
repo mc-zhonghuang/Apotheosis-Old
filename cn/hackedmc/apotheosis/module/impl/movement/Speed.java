@@ -11,6 +11,7 @@ import cn.hackedmc.apotheosis.newevent.impl.other.TeleportEvent;
 import cn.hackedmc.apotheosis.util.player.MoveUtil;
 import cn.hackedmc.apotheosis.value.impl.BooleanValue;
 import cn.hackedmc.apotheosis.value.impl.ModeValue;
+import org.lwjgl.input.Keyboard;
 
 /**
  * @author Patrick (implementation)
@@ -37,7 +38,9 @@ public class Speed extends Module {
 
     private final BooleanValue disableOnTeleport = new BooleanValue("Disable on Teleport", this, false);
     private final BooleanValue stopOnDisable = new BooleanValue("Stop on Disable", this, false);
-
+    public Speed () {
+        this.setKeyCode(Keyboard.KEY_V);
+    }
     @Override
     protected void onDisable() {
         mc.timer.timerSpeed = 1.0F;

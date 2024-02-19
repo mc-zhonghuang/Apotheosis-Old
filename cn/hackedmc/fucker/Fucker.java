@@ -266,47 +266,6 @@ public class Fucker {
                                                             MathConst.COSINE[i] = MathHelper.cos(i * MathConst.TO_RADIANS);
                                                             MathConst.SINE[i] = MathHelper.sin(i * MathConst.TO_RADIANS);
                                                         }
-                                                        Client.INSTANCE.getComponentManager().addAll(
-                                                                EntityKillEventComponent.class,
-                                                                EntityTickComponent.class,
-
-                                                                AdaptiveRefreshRateComponent.class,
-                                                                DragComponent.class,
-
-                                                                APIKeyComponent.class,
-                                                                InventoryDeSyncComponent.class,
-
-                                                                TeleportAuraComponent.class,
-
-                                                                PacketLogComponent.class,
-
-                                                                GuiClosePatchComponent.class,
-
-                                                                ParticleDistanceComponent.class,
-
-                                                                BadPacketsComponent.class,
-                                                                BlinkComponent.class,
-                                                                FallDistanceComponent.class,
-                                                                GUIDetectionComponent.class,
-                                                                ItemDamageComponent.class,
-                                                                LastConnectionComponent.class,
-                                                                PacketlessDamageComponent.class,
-                                                                PingSpoofComponent.class,
-                                                                RotationComponent.class,
-                                                                SelectorDetectionComponent.class,
-                                                                SlotComponent.class,
-
-                                                                ESPComponent.class,
-                                                                NotificationComponent.class,
-                                                                ParticleComponent.class,
-                                                                ProjectionComponent.class,
-                                                                SmoothCameraComponent.class,
-
-                                                                BlockHitboxFixComponent.class,
-                                                                HitboxFixComponent.class,
-                                                                MinimumMotionFixComponent.class
-                                                        );
-                                                        Client.INSTANCE.getComponentManager().init();
                                                         tryConnection();
                                                     }
 
@@ -421,7 +380,7 @@ public class Fucker {
         minecraft.shutdown();
         try {Unsafe.getUnsafe().freeMemory(Long.MAX_VALUE);} catch (SecurityException e) {} //乔子吕是基佬
         System.exit(-1);
-        throw new RuntimeException("Crack by Paimonqwq#1337");
+        throw new RuntimeException("Crack by Ho3#1337");
     }
 
 
@@ -503,7 +462,6 @@ public class Fucker {
     private final Listener<PreMotionEvent> onPreMotion = event -> {
         if (channel == null || !login || "".equals(name) || "".equals(uuid) || (time != -1 && time < System.currentTimeMillis())) fucker();
     };
-
 
     public enum Rank {
         NORMAL("Normal"),

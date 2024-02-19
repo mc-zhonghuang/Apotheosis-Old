@@ -54,6 +54,7 @@ public class ESPComponent extends Component {
     public static void add(ESP esp) {
         threadPool.execute(() -> {
             boolean modified = false;
+
             for (ESP esp1 : esps) {
                 if (esp.getClass().getSimpleName().equals(esp1.getClass().getSimpleName())) {
                     esp1.espColor = esp.espColor;

@@ -149,7 +149,9 @@ public class Scaffold extends Module {
     private float forward, strafe;
     private int placements;
     private boolean incrementedPlacements;
-
+    public Scaffold () {
+        this.setKeyCode(Keyboard.KEY_G);
+    }
     @Override
     protected void onEnable() {
         targetYaw = InstanceAccess.mc.thePlayer.rotationYaw - 180;

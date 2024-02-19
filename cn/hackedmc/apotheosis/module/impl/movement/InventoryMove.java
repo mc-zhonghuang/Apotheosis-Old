@@ -1,10 +1,7 @@
 package cn.hackedmc.apotheosis.module.impl.movement;
 
 import cn.hackedmc.apotheosis.api.Rise;
-import cn.hackedmc.apotheosis.module.impl.movement.inventorymove.BufferAbuseInventoryMove;
-import cn.hackedmc.apotheosis.module.impl.movement.inventorymove.CancelInventoryMove;
-import cn.hackedmc.apotheosis.module.impl.movement.inventorymove.NormalInventoryMove;
-import cn.hackedmc.apotheosis.module.impl.movement.inventorymove.WatchdogInventoryMove;
+import cn.hackedmc.apotheosis.module.impl.movement.inventorymove.*;
 import cn.hackedmc.apotheosis.module.Module;
 import cn.hackedmc.apotheosis.module.api.Category;
 import cn.hackedmc.apotheosis.module.api.ModuleInfo;
@@ -21,10 +18,11 @@ public class InventoryMove extends Module {
     public static InventoryMove INSTANCE;
     private final ModeValue bypassMode = new ModeValue("Bypass Mode", this)
             .add(new NormalInventoryMove("Normal", this))
+            .add(new GrimACInventoryMove("GrimAC", this))
             .add(new BufferAbuseInventoryMove("Buffer Abuse", this))
             .add(new CancelInventoryMove("Cancel", this))
             .add(new WatchdogInventoryMove("Watchdog", this))
-            .setDefault("Normal");
+            .setDefault("GrimAC");
 
     public InventoryMove() {
         INSTANCE = this;

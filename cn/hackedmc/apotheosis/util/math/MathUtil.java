@@ -5,6 +5,7 @@ import net.minecraft.util.MathHelper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -13,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @UtilityClass
 public class MathUtil {
+    public static Random random = new Random();
 
     /**
      * Method which returns a double between two input numbers
@@ -36,6 +38,9 @@ public class MathUtil {
         final BigDecimal bigDecimal = BigDecimal.valueOf(value);
 
         return bigDecimal.setScale(places, RoundingMode.HALF_UP).doubleValue();
+    }
+    public static int getRandom2(int min, int max) {
+        return max < min ? 0 : min + random.nextInt(max - min + 1);
     }
 
     public double round(final double value, final int scale, final double inc) {

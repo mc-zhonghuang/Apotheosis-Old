@@ -1081,7 +1081,18 @@ public abstract class Entity implements ICommandSender {
 
         return this.inWater;
     }
+    public String getName() {
+        if (this.hasCustomName()) {
+            return this.getCustomNameTag();
+        } else {
+            String s = EntityList.getEntityString(this);
+            if (s == null) {
+                s = "generic";
+            }
 
+            return StatCollector.translateToLocal("entity." + s + ".name");
+        }
+    }
     /**
      * sets the players height back to normal after doing things like sleeping and dieing
      */

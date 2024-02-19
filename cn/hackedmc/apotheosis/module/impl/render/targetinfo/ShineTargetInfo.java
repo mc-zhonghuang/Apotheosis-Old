@@ -137,10 +137,10 @@ public class ShineTargetInfo extends Mode<TargetInfo> {
 
             // Health background
             RenderUtil.roundedRectangle(x + EDGE_OFFSET + faceScale + PADDING - 3, y + EDGE_OFFSET + faceScale - INDENT - 12, healthBarWidth,
-                    12, 0, getTheme().getBackgroundShade());
+                    12, 0.2, getTheme().getBackgroundShade());
 
             RenderUtil.drawRoundedGradientRect(x + EDGE_OFFSET + faceScale + PADDING - 3, y + EDGE_OFFSET + faceScale - INDENT - 12,
-                    healthRemainingWidth, 12, 0, accent2, accent1, true);
+                    healthRemainingWidth, 12, 0.2, accent2, accent1, true);
 
             GlStateManager.popMatrix();
         });
@@ -155,7 +155,7 @@ public class ShineTargetInfo extends Mode<TargetInfo> {
                     faceScale - hurtTime, faceScale - hurtTime, this.getTheme().getRound() * 2,
                     ColorUtil.withAlpha(Color.RED, (int) (hurtTime / 9 * 255)));
             // 血条
-            RenderUtil.drawRoundedGradientRect(x + EDGE_OFFSET + faceScale + PADDING - 3, y + EDGE_OFFSET + faceScale - INDENT - 12, healthRemainingWidth, 12, 0, getTheme().getFirstColor(), getTheme().getSecondColor(), true);
+            RenderUtil.drawRoundedGradientRect(x + EDGE_OFFSET + faceScale + PADDING - 3, y + EDGE_OFFSET + faceScale - INDENT - 12, healthRemainingWidth, 12, 0.2, getTheme().getFirstColor(), getTheme().getSecondColor(), true);
 
             GlStateManager.popMatrix();
         });
@@ -164,7 +164,7 @@ public class ShineTargetInfo extends Mode<TargetInfo> {
             GlStateManager.pushMatrix();
             GlStateManager.translate((x + width / 2) * (1 - scale), (y + height / 2) * (1 - scale), 0);
             GlStateManager.scale(scale, scale, 0);
-            RenderUtil.roundedRectangle(x + 4, y, width - 30, height - 5, 0, Color.BLACK);
+            RenderUtil.roundedRectangle(x + 4, y, width - 30, height - 5, 0.2, Color.BLACK);
             GlStateManager.popMatrix();
         });
 
@@ -176,7 +176,7 @@ public class ShineTargetInfo extends Mode<TargetInfo> {
             final boolean glow = false;
             final Color outlineColor1 = glow ? this.getTheme().getFirstColor() : new Color(0, 0, 0, 128);
             final Color outlineColor2 = glow ? this.getTheme().getSecondColor() : new Color(0, 0, 0, 128);
-            RenderUtil.drawRoundedGradientRect(x + 4, y, width - 30, height - 5, 0, outlineColor1, outlineColor2, true);
+            RenderUtil.drawRoundedGradientRect(x + 4, y, width - 30, height - 5, 0.2, outlineColor1, outlineColor2, true);
 
             GlStateManager.popMatrix();
         });

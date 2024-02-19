@@ -31,6 +31,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public final class MainMenu extends Menu {
@@ -135,7 +137,6 @@ public final class MainMenu extends Menu {
             RenderUtil.roundedRectangle(width / 2 - rectWidth / 2, height / 2 - rectHeight / 2,
                     rectWidth, rectHeight,2, Color.BLACK);
         });
-
         bloomShader.update();
         bloomShader.run(ShaderRenderType.OVERLAY, partialTicks, InstanceAccess.NORMAL_POST_BLOOM_RUNNABLES);
         //一些按钮
@@ -170,6 +171,10 @@ public final class MainMenu extends Menu {
 
     @Override
     public void initGui() {
+        long totalMilliSeconds = System.currentTimeMillis();
+        Date nowTime = new Date(totalMilliSeconds);
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
+        String retStrFormatNowDate = sdf3.format(nowTime);
         //Reset
         InstanceAccess.clearRunnables();
         int centerX = this.width / 2;
@@ -187,5 +192,6 @@ public final class MainMenu extends Menu {
         this.animation = new Animation(Easing.EASE_OUT_QUINT, 600);
         this.menuButtons = new MenuButton[]{this.singlePlayerButton, this.multiPlayerButton, this.altManagerButton,this.settingButton,this.exitButton};
         time = System.currentTimeMillis();
+        Display.setTitle(Client.NAME + " " + Client.VERSION + " | " + "User: " + Fucker.name + " | " + retStrFormatNowDate);
     }
 }

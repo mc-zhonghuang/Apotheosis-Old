@@ -35,7 +35,7 @@ public class Inventory extends Mode<Gui> {
 
         Color logoColor = this.getTheme().getFirstColor();
 
-        RenderUtil.roundedRectangle(guiModule.position.x + 2F, guiModule.position.y + startY + 10,   170F, 62F,0f , new Color(0,0,0,50));
+        //RenderUtil.roundedRectangle(guiModule.position.x + 2F, guiModule.position.y + startY + 10,   170F, 62F,0f , new Color(0,0,0,50));
         FontManager.getProductSansRegular(17).drawString("Inventory", 16f, (startY +  20.0F ) -11,logoColor.getRGB());
 
         GlStateManager.resetColor();

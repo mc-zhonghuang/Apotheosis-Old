@@ -6,6 +6,21 @@ import cn.hackedmc.apotheosis.bots.BotManager;
 import cn.hackedmc.apotheosis.command.CommandManager;
 import cn.hackedmc.apotheosis.command.impl.*;
 import cn.hackedmc.apotheosis.component.ComponentManager;
+import cn.hackedmc.apotheosis.component.impl.event.EntityKillEventComponent;
+import cn.hackedmc.apotheosis.component.impl.event.EntityTickComponent;
+import cn.hackedmc.apotheosis.component.impl.hud.AdaptiveRefreshRateComponent;
+import cn.hackedmc.apotheosis.component.impl.hud.DragComponent;
+import cn.hackedmc.apotheosis.component.impl.hypixel.APIKeyComponent;
+import cn.hackedmc.apotheosis.component.impl.hypixel.InventoryDeSyncComponent;
+import cn.hackedmc.apotheosis.component.impl.module.teleportaura.TeleportAuraComponent;
+import cn.hackedmc.apotheosis.component.impl.packetlog.PacketLogComponent;
+import cn.hackedmc.apotheosis.component.impl.patches.GuiClosePatchComponent;
+import cn.hackedmc.apotheosis.component.impl.performance.ParticleDistanceComponent;
+import cn.hackedmc.apotheosis.component.impl.player.*;
+import cn.hackedmc.apotheosis.component.impl.render.*;
+import cn.hackedmc.apotheosis.component.impl.viamcp.BlockHitboxFixComponent;
+import cn.hackedmc.apotheosis.component.impl.viamcp.HitboxFixComponent;
+import cn.hackedmc.apotheosis.component.impl.viamcp.MinimumMotionFixComponent;
 import cn.hackedmc.apotheosis.creative.RiseTab;
 import cn.hackedmc.apotheosis.manager.TargetManager;
 import cn.hackedmc.apotheosis.module.api.manager.ModuleManager;
@@ -162,6 +177,7 @@ public enum Client {
 //
 //            break;
 //        }
+
         this.moduleManager.addAll(
                 // Combat
                 AntiBot.class,
@@ -172,7 +188,7 @@ public enum Client {
                 Regen.class,
                 TeleportAura.class,
                 Velocity.class,
-
+                Teams.class,
                 // Exploit
                 ConsoleSpammer.class,
                 Crasher.class,
@@ -207,6 +223,7 @@ public enum Client {
                 Jesus.class,
                 LongJump.class,
                 NoClip.class,
+                NoWeb.class,
                 NoSlow.class,
                 Phase.class,
                 PotionExtender.class,
@@ -254,6 +271,7 @@ public enum Client {
                 ChestAura.class,
                 FastBreak.class,
                 FastUse.class,
+                AntiFireBall.class,
                 FlagDetector.class,
                 InventorySync.class,
                 Manager.class,
@@ -277,6 +295,9 @@ public enum Client {
                 FreeLook.class,
                 FullBright.class,
                 Glint.class,
+                Gui.class,
+                InventoryHUD.class,
+                KeyBinds.class,
                 HotBar.class,
                 HurtCamera.class,
                 HurtColor.class,
@@ -321,7 +342,36 @@ public enum Client {
         this.packetLogManager.addAll(
             FlyingCheck.class
         );
-
+        componentManager.add(new EntityKillEventComponent());
+        componentManager.add(new EntityTickComponent());
+        componentManager.add(new AdaptiveRefreshRateComponent());
+        componentManager.add(new DragComponent());
+        componentManager.add(new APIKeyComponent());
+        componentManager.add(new InventoryDeSyncComponent());
+        componentManager.add(new TeleportAuraComponent());
+        componentManager.add(new PacketLogComponent());
+        componentManager.add(new GuiClosePatchComponent());
+        componentManager.add(new ParticleDistanceComponent());
+        componentManager.add(new BadPacketsComponent());
+        componentManager.add(new BlinkComponent());
+        componentManager.add(new FallDistanceComponent());
+        componentManager.add(new GUIDetectionComponent());
+        componentManager.add(new ItemDamageComponent());
+        componentManager.add(new LastConnectionComponent());
+        componentManager.add(new PacketlessDamageComponent());
+        componentManager.add(new PingSpoofComponent());
+        componentManager.add(new RotationComponent());
+        componentManager.add(new SelectorDetectionComponent());
+        componentManager.add(new SlotComponent());
+        componentManager.add(new ESPComponent());
+        componentManager.add(new NotificationComponent());
+        componentManager.add(new ParticleComponent());
+        componentManager.add(new ProjectionComponent());
+        componentManager.add(new SmoothCameraComponent());
+        componentManager.add(new BlockHitboxFixComponent());
+        componentManager.add(new HitboxFixComponent());
+        componentManager.add(new MinimumMotionFixComponent());
+        this.componentManager.init();
         // Init Managers
         this.targetManager.init();
         this.dataManager.init();

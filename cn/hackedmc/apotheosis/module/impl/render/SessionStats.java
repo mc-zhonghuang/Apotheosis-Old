@@ -42,12 +42,9 @@ public class SessionStats extends Module {
         setDefault("Colored");
     }};
 
-    private final BooleanValue fade = new BooleanValue("Fade", this, true);
-    private final NumberValue opacity = new NumberValue("Background Opacity", this, 100, 64, 128, 1);
     private final DragValue position = new DragValue("", this, new Vector2d(200, 200), true);
-
     private Session session = new Session(0, 0, 0, 0, 0, 0);
-    private String time = "0 seconds";
+    private String time = "0 秒";
 
     @EventLink()
     public final Listener<PreMotionEvent> onPreMotionEvent = event -> {
@@ -78,88 +75,49 @@ public class SessionStats extends Module {
             long seconds = TimeUnit.MILLISECONDS.toSeconds(elapsed) % 60;
 
             String base = "";
-            if (hours > 0) base += hours + (hours == 1 ? Localization.get("ui.sessionstats.hour") : Localization.get("ui.sessionstats.hours")) + ((minutes == 0 ? "" : ", "));
+            if (hours > 0) base += hours + (hours == 1 ? "小时" : "小时") + ((minutes == 0 ? "" : ", "));
             if (minutes > 0)
-                base += minutes + (minutes == 1 ? Localization.get("ui.sessionstats.minute") : Localization.get("ui.sessionstats.minutes")) + (seconds == 0 || hours > 0 ? "" : ", ");
-            if (seconds > 0 && hours == 0) base += seconds + (seconds == 1 ? Localization.get("ui.sessionstats.second") : Localization.get("ui.sessionstats.seconds"));
+                base += minutes + (minutes == 1 ? "分钟" :"分钟") + (seconds == 0 || hours > 0 ? "" : ", ");
+            if (seconds > 0 && hours == 0) base += seconds + (seconds == 1 ? "秒" : "秒");
             this.time = base;
         }
     };
 
     @EventLink()
     public final Listener<Render2DEvent> onRender2D = event -> {
-
         double padding = 15;
         position.scale = new Vector2d(200, 100);
-
         // Don't draw if the F3 menu is open
         if (mc.gameSettings.showDebugInfo) return;
-
-        // Draw the background
-        // Draw background with animated fade
-        if (this.fade.getValue()) {
-            NORMAL_POST_RENDER_RUNNABLES.add(() -> {
-                Color color1 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y)));
-                Color color2 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y + position.scale.y * 5)));
-
-                RenderUtil.drawRoundedGradientRect(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25,
-                        11, ColorUtil.withAlpha(color1, opacity.getValue().intValue()),
-                        ColorUtil.withAlpha(color2, opacity.getValue().intValue()), true);
-
-                RenderUtil.circle(position.position.x + 110, position.position.y + 7, 60, 360, false, new Color(0, 0, 0, 100));
-                RenderUtil.circle(position.position.x + 110, position.position.y + 7, 60, 360, true, new Color(0, 0, 0, 40));
-                RenderUtil.circle(position.position.x + 110, position.position.y + 7, 60, (System.currentTimeMillis() - this.session.startTime) * 0.0001, false,  Color.white);
-            });
-        }
-
-        // Draw static gradient background
-        else {
-            NORMAL_POST_RENDER_RUNNABLES.add(() -> {
-                RenderUtil.drawRoundedGradientRect(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25,
-                        11, ColorUtil.withAlpha(getTheme().getFirstColor(), opacity.getValue().intValue()),
-                        ColorUtil.withAlpha(getTheme().getSecondColor(), opacity.getValue().intValue()), true);
-            });
-        }
-
+        RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, position.scale.x - 48, position.scale.y - 48, 0, new Color(0,0,0,100));
+        // white
+        //    RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, position.scale.x - 25, position.scale.y - 10, 0, new Color(255,255,255,20));
         // Blur the area behind the background
         NORMAL_BLUR_RUNNABLES.add(() -> {
-            RenderUtil.roundedRectangle(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25, 11, Color.BLACK);
+            RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, position.scale.x - 48, position.scale.y - 48, 0, new Color(0,0,0,100));
+
         });
 
         // Draw the glow
         NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
-
-            // Colored glow
-            if (this.glowMode.getValue().getName().equals("Colored")) {
-
-                Color color1 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y)));
-                Color color2 = ColorUtil.mixColors(getTheme().getFirstColor(), getTheme().getSecondColor(), getTheme().getBlendFactor(new Vector2d(0, position.position.y + position.scale.y * 5)));
-                boolean fade = this.fade.getValue();
-
-                RenderUtil.drawRoundedGradientRect(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25,
-                        12, ColorUtil.withAlpha(fade ? color1 : getTheme().getFirstColor(), opacity.getValue().intValue() + 100),
-                        ColorUtil.withAlpha(fade ? color2 : getTheme().getSecondColor(), opacity.getValue().intValue() + 100), true);
-            }
-
             // Shadow glow
-            else if (this.glowMode.getValue().getName().equals("Shadow")) {
-                RenderUtil.roundedRectangle(position.position.x, position.position.y, position.scale.x - 25, position.scale.y - 25,
-                        12, getTheme().getDropShadow());
+            if (this.glowMode.getValue().getName().equals("Shadow")) {
+                RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, position.scale.x - 48, position.scale.y - 48, 0, getTheme().getDropShadow());
+                RenderUtil.roundedRectangle(position.position.x + 10, position.position.y + 10, position.scale.x - 38, position.scale.y - 38, 0, getTheme().getDropShadow());
+
             }
         });
-
         // Draw all the text itself
         NORMAL_POST_RENDER_RUNNABLES.add(() -> {
-
             // Format the walking/flying distance in meters/km
+            FontManager.getProductSansRegular(24).drawStringWithShadow("信息框", position.position.x + padding, position.position.y + padding, -1);
 
-            FontManager.getProductSansBold(24).drawStringWithShadow(Localization.get("ui.sessionstats.name"), position.position.x + padding, position.position.y + padding, -1);
-            FontManager.getProductSansBold(18).drawStringWithShadow(time, position.position.x + padding,
+            FontManager.getProductSansRegular(18).drawStringWithShadow(time, position.position.x + padding,
                     position.position.y + padding + 15, new Color(255, 255, 255, 200).getRGB());
 
-            FontManager.getProductSansMedium(18).drawStringWithShadow(Localization.get("ui.sessionstats.kills") + " " + session.kills, position.position.x + padding,
-                    position.position.y + padding + 35, new Color(255, 255, 255, 200).getRGB());
-            FontManager.getProductSansMedium(18).drawStringWithShadow(Localization.get("ui.sessionstats.wins") + " " + session.wins, position.position.x + padding + 40,
+            FontManager.getProductSansRegular(18).drawStringWithShadow("杀死:" + " " + session.kills, position.position.x + padding,
+                    position.position.y + padding + 25, new Color(255, 255, 255, 200).getRGB());
+            FontManager.getProductSansRegular(18).drawStringWithShadow("胜利:" + " " + session.wins, position.position.x + padding,
                     position.position.y + padding + 35, new Color(255, 255, 255, 200).getRGB());
         });
 
@@ -167,8 +125,8 @@ public class SessionStats extends Module {
 //        if (true) return;
         // Add the glow for the "Session Stats" text and the elapsed time
         NORMAL_POST_BLOOM_RUNNABLES.add(() -> {
-            FontManager.getProductSansBold(24).drawStringWithShadow(Localization.get("ui.sessionstats.name"), position.position.x + padding, position.position.y + padding, 0xFFFFFFFF);
-            FontManager.getProductSansBold(18).drawStringWithShadow(time, position.position.x + padding, position.position.y + padding + 15, 0xFFFFFFFF);
+            FontManager.getProductSansRegular(24).drawStringWithShadow("信息框", position.position.x + padding, position.position.y + padding, 0xFFFFFFFF);
+            FontManager.getProductSansRegular(18).drawStringWithShadow(time, position.position.x + padding, position.position.y + padding + 15, 0xFFFFFFFF);
         });
     };
 
