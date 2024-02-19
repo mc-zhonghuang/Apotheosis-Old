@@ -154,7 +154,6 @@ public final class KillAura extends Module {
     public final BooleanValue invisibles = new BooleanValue("Invisibles", this, false, () -> !showTargets.getValue());
     public final BooleanValue animals = new BooleanValue("Animals", this, false, () -> !showTargets.getValue());
     public final BooleanValue mobs = new BooleanValue("Mobs", this, false, () -> !showTargets.getValue());
-    public final BooleanValue teams = new BooleanValue("Teams", this, false, () -> !showTargets.getValue());
     private final StopWatch attackStopWatch = new StopWatch();
     private final StopWatch clickStopWatch = new StopWatch();
 
@@ -194,6 +193,10 @@ public final class KillAura extends Module {
         if (target == null || mc.thePlayer.isDead || this.getModule(Scaffold.class).isEnabled()) {
             this.unblock(true);
             target = null;
+        }
+
+        if (target != null && !this.canBlock()) {
+            this.unblock(true);
         }
     };
 

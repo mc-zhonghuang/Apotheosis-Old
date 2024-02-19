@@ -69,10 +69,10 @@ public class TargetManager extends ConcurrentLinkedQueue<Entity> implements Inst
             invisibles = killAura.invisibles.getValue();
             animals = killAura.animals.getValue();
             mobs = killAura.mobs.getValue();
-            teams = Teams.isSameTeam(killAura.target);
+            teams = Teams.INSTANCE.isEnabled();
             this.clear();
             mc.theWorld.loadedEntityList.stream()
-                    .filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || !(entity instanceof EntityLivingBase) || mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) && (ircs || Fucker.usernames.get(entity.getCommandSenderName()) == null))
+                    .filter(entity -> entity != mc.thePlayer && checker(entity) && (invisibles || !entity.isInvisible()) && (!(entity instanceof EntityLivingBase) || ((EntityLivingBase) entity).getHealth() > 0) && (!teams || Teams.isSameTeam(entity)) && (!ircs || Fucker.usernames.get(entity.getCommandSenderName()) == null))
                     .forEach(this::add);
         } catch (Exception e) {
             // Don't give crackers clues...

@@ -20,9 +20,9 @@ public final class AntiBot extends Module {
     private final BooleanValue funcraftAntiBot = new BooleanValue("Funcraft Check", this, false,
             new FuncraftAntiBot("", this));
 
-    private final BooleanValue hytAntiBot = new BooleanValue("BedWars Check", this, false,
+    private final BooleanValue hytAntiBot = new BooleanValue("HYT BedWars Check", this, false,
             new HYTBedWarsAntiBot("", this));
-    private final BooleanValue ab = new BooleanValue("Ground Check", this, false,
+    private final BooleanValue ab = new BooleanValue("HYT Ground Check", this, false,
             new HytGroundAntiBot("", this));
     private final BooleanValue ncps = new BooleanValue("NPC Detection Check", this, false,
             new NPCAntiBot("", this));
