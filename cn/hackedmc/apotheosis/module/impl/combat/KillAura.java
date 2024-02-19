@@ -195,6 +195,10 @@ public final class KillAura extends Module {
             this.unblock(true);
             target = null;
         }
+
+        if (target != null && !this.canBlock()) {
+            this.unblock(true);
+        }
     };
 
     @Override
