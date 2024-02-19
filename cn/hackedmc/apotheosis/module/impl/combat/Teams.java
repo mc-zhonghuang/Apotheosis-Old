@@ -23,10 +23,10 @@ public final class Teams extends Module {
     public static boolean isSameTeam(Entity entity) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer)entity;
-            if (!Objects.requireNonNull(Client.INSTANCE.getModuleManager().get(Teams.class).isEnabled())) {
+            if (!Teams.INSTANCE.isEnabled()) {
                 return false;
             } else {
-                return Teams.INSTANCE.armorValue.getValue() && PlayerUtil.armorTeam(entityplayer) || Teams.INSTANCE.colorValue.getValue() && PlayerUtil.colorTeam(entityplayer) || Teams.INSTANCE.scoreboardValue.getValue() && PlayerUtil.scoreTeam(entityplayer);
+                return (Teams.INSTANCE.armorValue.getValue() && PlayerUtil.armorTeam(entityplayer)) || (Teams.INSTANCE.colorValue.getValue() && PlayerUtil.colorTeam(entityplayer)) || (Teams.INSTANCE.scoreboardValue.getValue() && PlayerUtil.scoreTeam(entityplayer));
             }
         } else {
             return false;
